@@ -27,10 +27,13 @@ function getSetupFile(frameworkId) {
 export async function runTestJestRule(context) {
   const { framework, projectDir, pm, force, dryRun } = context
   const deps = ["jest"]
-  if (framework.id === "react") {
-    deps.push("jest-environment-jsdom", "@testing-library/jest-dom")
+  if (framework.testEnvironment === "jsdom") {
+    deps.push("jest-environment-jsdom")
   }
-  installPackages(pm, deps, true, dryRun)
+  if (framework.id === "react") {
+    deps.push("@testing-library/jest-dom")
+  }
+  installPackages(projectDir, pm, deps, true, dryRun)
 
   await writeFile(
     projectDir,

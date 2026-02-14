@@ -1,6 +1,6 @@
 const ALLOWED_COMMANDS = ["init", "add", "list"]
 const ALLOWED_PACKAGE_MANAGERS = ["pnpm", "npm", "yarn", "auto"]
-const ALLOWED_FRAMEWORKS = ["node", "react"]
+const ALLOWED_FRAMEWORKS = ["node", "react", "next", "vue", "svelte", "nuxt"]
 const ALLOWED_FEATURES = ["lint", "format", "typescript", "test", "husky"]
 const ALLOWED_TEST_RUNNERS = ["jest", "vitest"]
 
@@ -12,7 +12,8 @@ Commands:
   list                                List supported frameworks, features, and test runners
 
 Options:
-  --framework <node|react>            Target framework
+  --framework <node|react|next|vue|svelte|nuxt>
+                                      Target framework
   --framework-version <major>         Optional framework major version hint
   --features <lint,format,typescript,test,husky>
                                       Features to install (all selected by default)
@@ -21,6 +22,7 @@ Options:
   --force                             Overwrite existing config files
   --dry-run                           Print planned changes without writing files
   --skip-husky-install                Do not run husky install
+  --skills                            Update AGENTS.md/CLAUDE.md with feature skill guidance
   -h, --help                          Show help
 `
 
@@ -36,6 +38,7 @@ export function parseArgs(argv) {
     force: false,
     dryRun: false,
     skipHuskyInstall: false,
+    skills: false,
     help: false,
   }
 
@@ -81,6 +84,8 @@ export function parseArgs(argv) {
       options.dryRun = true
     } else if (arg === "--skip-husky-install") {
       options.skipHuskyInstall = true
+    } else if (arg === "--skills") {
+      options.skills = true
     } else if (!arg.startsWith("-") && !options.projectDir) {
       options.projectDir = arg
     } else {
@@ -116,6 +121,22 @@ function validateParsedOptions(options) {
     throw new Error(`Unsupported framework: ${options.framework}`)
   }
 
+  if (options.frameworkVersion && !/^\d+$/.test(options.frameworkVersion)) {
+    throw new Error(
+      "Invalid --framework-version: major version must be numeric"
+    )
+  }
+
+  if (
+    options.frameworkVersion &&
+    options.framework &&
+    options.framework !== "react"
+  ) {
+    throw new Error(
+      `Unsupported --framework-version for framework: ${options.framework}`
+    )
+  }
+
   if (!ALLOWED_TEST_RUNNERS.includes(options.testRunner)) {
     throw new Error(`Unsupported test runner: ${options.testRunner}`)
   }
@@ -146,7 +167,7 @@ export function resolveFeatures(options) {
 }
 
 export function printSupportedTargets() {
-  console.log("Frameworks: node, react")
+  console.log("Frameworks: node, react, next, vue, svelte, nuxt")
   console.log("Features: lint, format, typescript, test, husky")
   console.log("Test runners: jest, vitest")
 }

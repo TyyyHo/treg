@@ -26,7 +26,7 @@ export async function runHuskyRule(context) {
   const { projectDir, pm, force, dryRun, skipHuskyInstall, enabledFeatures } =
     context
 
-  installPackages(pm, ["husky"], true, dryRun)
+  installPackages(projectDir, pm, ["husky"], true, dryRun)
   const runner = getRunCommand(pm)
   const { preCommit, prePush } = buildHookCommands(runner, enabledFeatures)
 

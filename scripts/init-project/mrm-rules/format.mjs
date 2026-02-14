@@ -30,7 +30,7 @@ const PRETTIER_IGNORE = [
 
 export async function runFormatRule(context) {
   const { projectDir, pm, force, dryRun } = context
-  installPackages(pm, ["prettier"], true, dryRun)
+  installPackages(projectDir, pm, ["prettier"], true, dryRun)
 
   await writeFile(
     projectDir,

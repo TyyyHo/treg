@@ -3,7 +3,7 @@ import { installPackages, withProjectCwd } from "./shared.mjs"
 
 export async function runLintRule(context) {
   const { projectDir, pm, dryRun } = context
-  installPackages(pm, ["eslint"], true, dryRun)
+  installPackages(projectDir, pm, ["eslint"], true, dryRun)
 
   withProjectCwd(projectDir, () => {
     if (dryRun) {

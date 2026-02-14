@@ -12,7 +12,7 @@ const TS_REQUIRED_OPTIONS = {
 
 export async function runTypescriptRule(context) {
   const { framework, projectDir, pm, dryRun } = context
-  installPackages(pm, ["typescript"], true, dryRun)
+  installPackages(projectDir, pm, ["typescript"], true, dryRun)
 
   withProjectCwd(projectDir, () => {
     if (dryRun) {

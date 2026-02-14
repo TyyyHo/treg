@@ -29,6 +29,7 @@ describe("parseArgs", () => {
       force: true,
       dryRun: true,
       skipHuskyInstall: true,
+      skills: false,
       help: false,
     })
   })
@@ -38,6 +39,21 @@ describe("parseArgs", () => {
     expect(parsed.command).toBe("list")
   })
 
+  it("accepts additional frameworks", () => {
+    const parsed = parseArgs(["init", "--framework", "nuxt"])
+    expect(parsed.framework).toBe("nuxt")
+  })
+
+  it("parses skills flag", () => {
+    const parsed = parseArgs(["add", "--skills"])
+    expect(parsed.skills).toBe(true)
+  })
+
+  it("accepts svelte framework", () => {
+    const parsed = parseArgs(["init", "--framework", "svelte"])
+    expect(parsed.framework).toBe("svelte")
+  })
+
   it("throws when init is missing framework", () => {
     expect(() => parseArgs(["init"])).toThrow(
       "Missing required option: --framework"
@@ -45,8 +61,8 @@ describe("parseArgs", () => {
   })
 
   it("throws for unsupported framework", () => {
-    expect(() => parseArgs(["init", "--framework", "vue"])).toThrow(
-      "Unsupported framework: vue"
+    expect(() => parseArgs(["init", "--framework", "angular"])).toThrow(
+      "Unsupported framework: angular"
     )
   })
 
@@ -54,6 +70,24 @@ describe("parseArgs", () => {
     expect(() =>
       parseArgs(["init", "--framework", "node", "--features", "husky,ai"])
     ).toThrow("Unsupported feature in --features: ai")
+  })
+
+  it("throws for non-numeric framework version", () => {
+    expect(() =>
+      parseArgs([
+        "init",
+        "--framework",
+        "react",
+        "--framework-version",
+        "latest",
+      ])
+    ).toThrow("Invalid --framework-version: major version must be numeric")
+  })
+
+  it("throws when non-react uses framework version", () => {
+    expect(() =>
+      parseArgs(["init", "--framework", "vue", "--framework-version", "3"])
+    ).toThrow("Unsupported --framework-version for framework: vue")
   })
 })
 
