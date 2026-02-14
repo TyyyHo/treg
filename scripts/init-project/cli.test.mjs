@@ -71,6 +71,18 @@ describe("parseArgs", () => {
       parseArgs(["init", "--framework", "node", "--features", "husky,ai"])
     ).toThrow("Unsupported feature in --features: ai")
   })
+
+  it("throws for non-numeric framework version", () => {
+    expect(() =>
+      parseArgs([
+        "init",
+        "--framework",
+        "react",
+        "--framework-version",
+        "latest",
+      ])
+    ).toThrow("Invalid --framework-version: major version must be numeric")
+  })
 })
 
 describe("resolveFeatures", () => {

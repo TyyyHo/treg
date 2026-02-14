@@ -61,6 +61,12 @@ Use Vitest:
 frontend-rules init . --framework node --features test --test-runner vitest
 ```
 
+Set framework major version explicitly (for variant rules):
+
+```bash
+frontend-rules init . --framework react --framework-version 18
+```
+
 Preview changes only:
 
 ```bash

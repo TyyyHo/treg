@@ -17,9 +17,8 @@ describe("frameworks", () => {
   })
 
   it("detects react from dependencies", () => {
-    expect(detectFramework({ dependencies: { react: "19.0.0" } }).id).toBe(
-      "react"
-    )
+    const framework = detectFramework({ dependencies: { react: "19.0.0" } })
+    expect(framework.id).toBe("react")
   })
 
   it("detects vue from dependencies", () => {
@@ -38,11 +37,27 @@ describe("frameworks", () => {
 
   it("resolves explicit framework", () => {
     expect(
-      resolveFramework("node", { dependencies: { react: "19.0.0" } }).id
+      resolveFramework("node", null, { dependencies: { react: "19.0.0" } }).id
     ).toBe("node")
   })
 
   it("resolves explicit nuxt framework", () => {
-    expect(resolveFramework("nuxt", { dependencies: {} }).id).toBe("nuxt")
+    expect(resolveFramework("nuxt", null, { dependencies: {} }).id).toBe("nuxt")
+  })
+
+  it("resolves react v18 from --framework-version", () => {
+    const framework = resolveFramework("react", "18", {
+      dependencies: { react: "^19.0.0" },
+    })
+    expect(framework.id).toBe("react")
+    expect(framework.variant).toBe("v18")
+  })
+
+  it("resolves detected react v19 from package version", () => {
+    const framework = resolveFramework(null, null, {
+      dependencies: { react: "^19.2.0" },
+    })
+    expect(framework.id).toBe("react")
+    expect(framework.variant).toBe("v19")
   })
 })

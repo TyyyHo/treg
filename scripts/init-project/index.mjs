@@ -47,7 +47,11 @@ export async function main(argv = process.argv.slice(2)) {
     !options.pm || options.pm === "auto"
       ? detectPackageManager(projectDir)
       : options.pm
-  const framework = resolveFramework(options.framework, packageJson)
+  const framework = resolveFramework(
+    options.framework,
+    options.frameworkVersion,
+    packageJson
+  )
   const enabledFeatures = resolveFeatures(options)
 
   const context = {
@@ -60,7 +64,7 @@ export async function main(argv = process.argv.slice(2)) {
 
   console.log(formatStep(1, TOTAL_STEPS, "Resolve plan", options.dryRun))
   console.log(
-    `${options.dryRun ? "[dry-run] " : ""}Framework=${framework.id}, features=${Object.entries(
+    `${options.dryRun ? "[dry-run] " : ""}Framework=${framework.id}${framework.variant ? `/${framework.variant}` : ""}, features=${Object.entries(
       enabledFeatures
     )
       .filter(([, enabled]) => enabled)

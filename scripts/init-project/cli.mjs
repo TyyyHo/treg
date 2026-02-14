@@ -121,6 +121,12 @@ function validateParsedOptions(options) {
     throw new Error(`Unsupported framework: ${options.framework}`)
   }
 
+  if (options.frameworkVersion && !/^\d+$/.test(options.frameworkVersion)) {
+    throw new Error(
+      "Invalid --framework-version: major version must be numeric"
+    )
+  }
+
   if (!ALLOWED_TEST_RUNNERS.includes(options.testRunner)) {
     throw new Error(`Unsupported test runner: ${options.testRunner}`)
   }
