@@ -26,11 +26,12 @@
 ## Git & commit rules
 
 - 一律從 `main` 切分支：`feat/<topic>` 或 `fix/<topic>`。
+- 永遠禁止 --no-verify。
+- 使用常規merge，非必要不用-ff-only。
 - 禁止直接改 `main`，一律透過 PR。
 - 每個任務至少一個 commit；大型任務請拆成多個可審查 commit。
 - commit 訊息格式：`<type>: <summary>`。
 - commit 前必看：`git diff --staged`，確保無混入無關變更。
-- 永遠禁止 --no-verify。
 
 ## Validation rules (required before commit)
 
