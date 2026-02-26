@@ -25,7 +25,7 @@
 
 ## Git & commit rules
 
-- 一律從 `main` 切分支：`feat/<topic>` 或 `fix/<topic>`。
+- 一律從 `main` 切分支，分支名稱格式採用：`<類別>/<主題>`，範例：`feat/<topic>` 或 `fix/<topic>`。
 - 永遠禁止 --no-verify。
 - merge時，使用--no-ff。
 - 禁止直接改 `main`，一律透過 PR。
