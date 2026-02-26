@@ -30,6 +30,7 @@
 - 每個任務至少一個 commit；大型任務請拆成多個可審查 commit。
 - commit 訊息格式：`<type>: <summary>`。
 - commit 前必看：`git diff --staged`，確保無混入無關變更。
+- 永遠禁止 --no-verify。
 
 ## Validation rules (required before commit)
 
