@@ -1,5 +1,5 @@
 import { describe, expect, it } from "@jest/globals"
-import { detectFramework, resolveFramework } from "./frameworks/index.mjs"
+import { detectFramework, resolveFramework } from "./frameworks/index.ts"
 
 describe("frameworks", () => {
   it("detects nuxt before next", () => {

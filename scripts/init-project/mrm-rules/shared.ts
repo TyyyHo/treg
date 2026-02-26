@@ -1,6 +1,6 @@
 import { promises as fs } from "node:fs"
 import path from "node:path"
-import { installPackages as installByPackageManager } from "../package-manager.mjs"
+import { installPackages as installByPackageManager } from "../package-manager.ts"
 
 export function withProjectCwd(projectDir, fn) {
   const original = process.cwd()

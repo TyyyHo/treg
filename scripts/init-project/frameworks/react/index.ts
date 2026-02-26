@@ -1,6 +1,6 @@
-import { hasPackage } from "../../utils.mjs"
-import { reactV18Framework } from "./v18/index.mjs"
-import { reactV19Framework } from "./v19/index.mjs"
+import { hasPackage } from "../../utils.ts"
+import { reactV18Framework } from "./v18/index.ts"
+import { reactV19Framework } from "./v19/index.ts"
 
 export const reactFramework = {
   id: "react",

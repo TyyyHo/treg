@@ -1,10 +1,10 @@
-import { runAiSkillsRule } from "./ai-skills.mjs"
-import { runFormatRule } from "./format.mjs"
-import { runHuskyRule } from "./husky.mjs"
-import { runLintRule } from "./lint.mjs"
-import { runTestJestRule } from "./test-jest.mjs"
-import { runTestVitestRule } from "./test-vitest.mjs"
-import { runTypescriptRule } from "./typescript.mjs"
+import { runAiSkillsRule } from "./ai-skills.ts"
+import { runFormatRule } from "./format.ts"
+import { runHuskyRule } from "./husky.ts"
+import { runLintRule } from "./lint.ts"
+import { runTestJestRule } from "./test-jest.ts"
+import { runTestVitestRule } from "./test-vitest.ts"
+import { runTypescriptRule } from "./typescript.ts"
 
 export async function runFeatureRules(context) {
   const { enabledFeatures, skills, testRunner } = context

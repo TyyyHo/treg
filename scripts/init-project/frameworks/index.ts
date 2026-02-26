@@ -1,9 +1,9 @@
-import { nextFramework } from "./next/index.mjs"
-import { nodeFramework } from "./node/index.mjs"
-import { nuxtFramework } from "./nuxt/index.mjs"
-import { reactFramework, resolveReactFramework } from "./react/index.mjs"
-import { svelteFramework } from "./svelte/index.mjs"
-import { vueFramework } from "./vue/index.mjs"
+import { nextFramework } from "./next/index.ts"
+import { nodeFramework } from "./node/index.ts"
+import { nuxtFramework } from "./nuxt/index.ts"
+import { reactFramework, resolveReactFramework } from "./react/index.ts"
+import { svelteFramework } from "./svelte/index.ts"
+import { vueFramework } from "./vue/index.ts"
 
 const FRAMEWORK_REGISTRY = {
   next: nextFramework,

@@ -4,10 +4,10 @@
   "description": "CLI tool for initializing development conventions in existing projects.",
   "license": "MIT",
   "bin": {
-    "treg": "./scripts/init-project.mjs"
+    "treg": "./scripts/init-project.ts"
   },
   "files": [
-    "scripts/init-project.mjs",
+    "scripts/init-project.ts",
     "scripts/init-project"
   ],
   "publishConfig": {

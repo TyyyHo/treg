@@ -6,11 +6,11 @@ import {
   printSupportedTargets,
   resolveFeatures,
   USAGE,
-} from "./cli.mjs"
-import { resolveFramework } from "./frameworks/index.mjs"
-import { runFeatureRules } from "./mrm-rules/index.mjs"
-import { detectPackageManager, runScript } from "./package-manager.mjs"
-import { formatStep } from "./utils.mjs"
+} from "./cli.ts"
+import { resolveFramework } from "./frameworks/index.ts"
+import { runFeatureRules } from "./mrm-rules/index.ts"
+import { detectPackageManager, runScript } from "./package-manager.ts"
+import { formatStep } from "./utils.ts"
 
 const TOTAL_STEPS = 3
 

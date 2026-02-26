@@ -1,5 +1,5 @@
-import { lines, packageJson } from "../mrm-core.mjs"
-import { installPackages, withProjectCwd, writeFile } from "./shared.mjs"
+import { lines, packageJson } from "../mrm-core.ts"
+import { installPackages, withProjectCwd, writeFile } from "./shared.ts"
 
 const PRETTIER_CONFIG = `{
   "semi": false,

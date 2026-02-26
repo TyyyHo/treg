@@ -1,9 +1,9 @@
 import { promises as fs } from "node:fs"
 import path from "node:path"
-import { packageJson } from "../mrm-core.mjs"
+import { packageJson } from "../mrm-core.ts"
 import { existsSync } from "node:fs"
-import { getRunCommand, runCommand } from "../package-manager.mjs"
-import { installPackages, withProjectCwd, writeFile } from "./shared.mjs"
+import { getRunCommand, runCommand } from "../package-manager.ts"
+import { installPackages, withProjectCwd, writeFile } from "./shared.ts"
 
 function buildHookCommands(runner, enabledFeatures) {
   const preCommit = [

@@ -1,5 +1,5 @@
-import { json, packageJson } from "../mrm-core.mjs"
-import { installPackages, withProjectCwd } from "./shared.mjs"
+import { json, packageJson } from "../mrm-core.ts"
+import { installPackages, withProjectCwd } from "./shared.ts"
 
 const TS_REQUIRED_OPTIONS = {
   strict: true,

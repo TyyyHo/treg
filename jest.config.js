@@ -1,7 +1,9 @@
 /** @type {import("jest").Config} */
 const config = {
   testEnvironment: "node",
-  testMatch: ["**/*.test.[jt]s?(x)", "**/*.test.mjs"],
+  extensionsToTreatAsEsm: [".ts"],
+  transform: {},
+  testMatch: ["**/*.test.ts"],
 }
 
 module.exports = config

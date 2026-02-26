@@ -32,7 +32,7 @@ export function parseArgs(argv) {
     projectDir: null,
     framework: null,
     frameworkVersion: null,
-    features: [],
+    features: new Array(),
     testRunner: "jest",
     pm: null,
     force: false,

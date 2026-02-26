@@ -1,5 +1,5 @@
 import { describe, expect, it } from "@jest/globals"
-import { formatStep, hasPackage } from "./utils.mjs"
+import { formatStep, hasPackage } from "./utils.ts"
 
 describe("hasPackage", () => {
   it("checks dependencies and devDependencies", () => {
