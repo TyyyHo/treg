@@ -74,11 +74,11 @@ describe("ai-skills helpers", () => {
       await __testables__.ensureSkillFiles(dir, ["lint", "test"], "jest", false)
 
       const lintSkill = await readFile(
-        path.join(dir, ".treg/skills/lint/SKILL.md"),
+        path.join(dir, "skills/lint/SKILL.md"),
         "utf8"
       )
       const testSkill = await readFile(
-        path.join(dir, ".treg/skills/test/SKILL.md"),
+        path.join(dir, "skills/test/SKILL.md"),
         "utf8"
       )
 

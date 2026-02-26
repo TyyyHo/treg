@@ -4,7 +4,7 @@ import path from "node:path"
 
 const START_MARKER = "<!-- treg:skills:start -->"
 const END_MARKER = "<!-- treg:skills:end -->"
-const SKILLS_BASE_DIR = ".treg/skills"
+const SKILLS_BASE_DIR = "skills"
 
 const FEATURE_SKILLS = {
   format: {
