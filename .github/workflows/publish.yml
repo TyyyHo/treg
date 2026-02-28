@@ -1,0 +1,76 @@
+name: Publish to npm
+
+on:
+  workflow_run:
+    workflows:
+      - CI
+    types:
+      - completed
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout CI commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          fetch-depth: 0
+
+      - name: Resolve release tag
+        id: release_tag
+        run: |
+          tag="$(git tag --points-at "${{ github.event.workflow_run.head_sha }}" | grep -E '^v' | head -n 1 || true)"
+          if [ -z "$tag" ]; then
+            echo "No v* tag for this CI run. Skip publish."
+            echo "tag=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+      - name: Setup pnpm
+        if: steps.release_tag.outputs.tag != ''
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        if: steps.release_tag.outputs.tag != ''
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+          cache: pnpm
+
+      - name: Verify tag matches package version
+        if: steps.release_tag.outputs.tag != ''
+        run: |
+          package_version="$(node -p "require('./package.json').version")"
+          tag_version="${{ steps.release_tag.outputs.tag }}"
+          tag_version="${tag_version#v}"
+          if [ "$package_version" != "$tag_version" ]; then
+            echo "Tag version ($tag_version) does not match package.json version ($package_version)."
+            exit 1
+          fi
+
+      - name: Install dependencies
+        if: steps.release_tag.outputs.tag != ''
+        run: pnpm install --frozen-lockfile
+        env:
+          HUSKY: 0
+
+      - name: Run publish checks
+        if: steps.release_tag.outputs.tag != ''
+        run: pnpm run prepublishOnly
+
+      - name: Publish to npm (Trusted publishing)
+        if: steps.release_tag.outputs.tag != ''
+        run: npm publish --access public --provenance
+        env:
+          HUSKY: 0
