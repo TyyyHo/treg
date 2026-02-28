@@ -54,4 +54,4 @@ jobs:
           cat > "$tmpdir/package.json" <<'JSON'
           { "name": "ci-smoke", "version": "1.0.0" }
           JSON
-          node scripts/init-project.mjs init "$tmpdir" --framework node --dry-run
+          node scripts/init-project.ts init "$tmpdir" --framework node --dry-run
