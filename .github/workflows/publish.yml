@@ -26,8 +26,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          registry-url: https://registry.npmjs.org
           cache: pnpm
+
+      - name: Ensure modern npm
+        run: npm install -g npm@latest
+
+      - name: Clear legacy npm auth token config
+        run: |
+          npm config delete //registry.npmjs.org/:_authToken || true
+          rm -f "$HOME/.npmrc"
 
       - name: Verify tag matches package version
         run: |
@@ -48,6 +55,6 @@ jobs:
         run: pnpm run prepublishOnly
 
       - name: Publish to npm (Trusted publishing)
-        run: npm publish --access public --provenance
+        run: npm publish --registry https://registry.npmjs.org --access public --provenance
         env:
           HUSKY: 0
