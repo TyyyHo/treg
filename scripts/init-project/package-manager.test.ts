@@ -2,7 +2,7 @@ import { mkdtemp, writeFile } from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
 import { describe, expect, it } from "@jest/globals"
-import { detectPackageManager } from "./package-manager.mjs"
+import { detectPackageManager } from "./package-manager.ts"
 
 describe("detectPackageManager", () => {
   it("defaults to npm when no lockfile exists", async () => {

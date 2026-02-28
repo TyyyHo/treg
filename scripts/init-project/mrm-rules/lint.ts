@@ -1,5 +1,5 @@
-import { packageJson } from "../mrm-core.mjs"
-import { installPackages, withProjectCwd } from "./shared.mjs"
+import { packageJson } from "../mrm-core.ts"
+import { installPackages, withProjectCwd } from "./shared.ts"
 
 export async function runLintRule(context) {
   const { projectDir, pm, dryRun } = context

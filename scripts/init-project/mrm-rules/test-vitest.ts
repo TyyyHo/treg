@@ -1,5 +1,5 @@
-import { packageJson } from "../mrm-core.mjs"
-import { installPackages, withProjectCwd, writeFile } from "./shared.mjs"
+import { packageJson } from "../mrm-core.ts"
+import { installPackages, withProjectCwd, writeFile } from "./shared.ts"
 
 function getVitestConfig(framework) {
   return `import { defineConfig } from "vitest/config"
@@ -36,7 +36,7 @@ export async function runTestVitestRule(context) {
 
   await writeFile(
     projectDir,
-    "vitest.config.mjs",
+    "vitest.config.ts",
     getVitestConfig(framework),
     force,
     dryRun

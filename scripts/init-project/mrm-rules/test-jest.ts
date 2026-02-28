@@ -1,12 +1,12 @@
-import { packageJson } from "../mrm-core.mjs"
-import { installPackages, withProjectCwd, writeFile } from "./shared.mjs"
+import { packageJson } from "../mrm-core.ts"
+import { installPackages, withProjectCwd, writeFile } from "./shared.ts"
 
 function getJestConfig(testEnvironment) {
   return `/** @type {import("jest").Config} */
 const config = {
   testEnvironment: "${testEnvironment}",
   setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
-  testMatch: ["**/*.test.[jt]s?(x)", "**/*.test.mjs"],
+  testMatch: ["**/*.test.[jt]s?(x)", "**/*.test.ts"],
 }
 
 module.exports = config

@@ -1,4 +1,4 @@
-import { hasPackage } from "../../utils.mjs"
+import { hasPackage } from "../../utils.ts"
 
 export const vueFramework = {
   id: "vue",

@@ -3,7 +3,7 @@ import { mkdtempSync, rmSync, writeFileSync } from "node:fs"
 import { readFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import path from "node:path"
-import { __testables__ } from "./ai-skills.mjs"
+import { __testables__ } from "./ai-skills.ts"
 
 describe("ai-skills helpers", () => {
   it("builds skill section from enabled features", () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "@jest/globals"
-import { parseArgs, resolveFeatures } from "./cli.mjs"
+import { parseArgs, resolveFeatures } from "./cli.ts"
 
 describe("parseArgs", () => {
   it("parses init command options", () => {
