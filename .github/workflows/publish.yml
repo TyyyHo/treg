@@ -1,11 +1,14 @@
 name: Publish to npm
 
 on:
-  workflow_run:
-    workflows:
-      - CI
-    types:
-      - completed
+  workflow_call:
+    inputs:
+      ref:
+        required: true
+        type: string
+      tag:
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -13,16 +16,12 @@ permissions:
 
 jobs:
   publish:
-    if: >
-      github.event.workflow_run.conclusion == 'success' &&
-      github.event.workflow_run.event == 'push' &&
-      startsWith(github.event.workflow_run.head_branch, 'v')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.workflow_run.head_sha }}
+          ref: ${{ inputs.ref }}
           fetch-depth: 0
 
       - name: Setup pnpm
@@ -47,7 +46,7 @@ jobs:
       - name: Verify tag matches package version
         run: |
           package_version="$(node -p "require('./package.json').version")"
-          tag_version="${{ github.event.workflow_run.head_branch }}"
+          tag_version="${{ inputs.tag }}"
           tag_version="${tag_version#v}"
           if [ "$package_version" != "$tag_version" ]; then
             echo "Tag version ($tag_version) does not match package.json version ($package_version)."
