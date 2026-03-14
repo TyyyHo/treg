@@ -30,7 +30,7 @@ npx @tyyyho/treg <command> [options]
 - `--framework <node|react|next|vue|svelte|nuxt>`: Optional framework override
 - `--features <lint,format,typescript,test,husky>`: Features to install (defaults to all)
 - `--dir <path>`: Target directory (defaults to current directory)
-- `--test-runner <jest|vitest>`: Test runner when test feature is enabled
+- `--test-runner <jest|vitest>`: Optional test runner override when test feature is enabled
 - `--pm <pnpm|npm|yarn|auto>`: Package manager (auto-detected by default)
 - `--force`: Overwrite existing config files
 - `--dry-run`: Print full plan without writing files
@@ -97,6 +97,7 @@ npx @tyyyho/treg init --framework react --dir ./packages/web
 
 - `init` auto-detects framework from repo dependencies.
 - Detection order is `nuxt -> next -> react -> vue -> svelte -> node`.
+- Default test runner is `vitest` for `vue`/`nuxt`, and `jest` for other frameworks.
 - `add` lets you install only the features you specify.
 - Framework setup uses one stable config per framework (no `--framework-version` variants).
 - `--dry-run` prints the full plan and does not write files.

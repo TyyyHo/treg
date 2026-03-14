@@ -1,5 +1,5 @@
 import { describe, expect, it } from "@jest/globals"
-import { parseArgs, resolveFeatures } from "./cli.ts"
+import { parseArgs, resolveFeatures, resolveTestRunner } from "./cli.ts"
 
 describe("parseArgs", () => {
   it("parses init command options", () => {
@@ -62,6 +62,7 @@ describe("parseArgs", () => {
   it("allows init without framework for auto detection", () => {
     const parsed = parseArgs(["init"])
     expect(parsed.framework).toBeNull()
+    expect(parsed.testRunner).toBeNull()
   })
 
   it("throws for unsupported framework", () => {
@@ -108,5 +109,34 @@ describe("resolveFeatures", () => {
       test: false,
       husky: true,
     })
+  })
+})
+
+describe("resolveTestRunner", () => {
+  it("defaults vue and nuxt to vitest", () => {
+    expect(resolveTestRunner("vue", null)).toBe("vitest")
+    expect(resolveTestRunner("nuxt", null)).toBe("vitest")
+  })
+
+  it("defaults other frameworks to jest", () => {
+    expect(resolveTestRunner("node", null)).toBe("jest")
+    expect(resolveTestRunner("react", null)).toBe("jest")
+    expect(resolveTestRunner("next", null)).toBe("jest")
+    expect(resolveTestRunner("svelte", null)).toBe("jest")
+  })
+
+  it("allows each framework to override with --test-runner", () => {
+    const frameworks = [
+      "node",
+      "react",
+      "next",
+      "vue",
+      "svelte",
+      "nuxt",
+    ] as const
+    for (const framework of frameworks) {
+      expect(resolveTestRunner(framework, "jest")).toBe("jest")
+      expect(resolveTestRunner(framework, "vitest")).toBe("vitest")
+    }
   })
 })

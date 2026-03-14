@@ -45,7 +45,7 @@ Options:
   --features <lint,format,typescript,test,husky>
                                       Features to install (all selected by default)
   --dir <path>                        Target directory (defaults to current directory)
-  --test-runner <jest|vitest>         Test runner when test feature is enabled
+  --test-runner <jest|vitest>         Optional test runner override (default: vue/nuxt=vitest, others=jest)
   --pm <pnpm|npm|yarn|auto>           Package manager (auto-detected if omitted)
   --force                             Overwrite existing config files
   --dry-run                           Print planned changes without writing files
@@ -60,7 +60,7 @@ interface RawParsedOptions {
   projectDir: string | null
   framework: string | null
   features: string[]
-  testRunner: string
+  testRunner: string | null
   pm: string | null
   force: boolean
   dryRun: boolean
@@ -102,7 +102,7 @@ export function parseArgs(argv: string[]): ParsedOptions {
     projectDir: null,
     framework: null,
     features: [],
-    testRunner: "jest",
+    testRunner: null,
     pm: null,
     force: false,
     dryRun: false,
@@ -225,7 +225,7 @@ function validateParsedOptions(
     throw new Error(`Unsupported framework: ${options.framework}`)
   }
 
-  if (!isTestRunner(options.testRunner)) {
+  if (options.testRunner && !isTestRunner(options.testRunner)) {
     throw new Error(`Unsupported test runner: ${options.testRunner}`)
   }
 
@@ -256,4 +256,17 @@ export function printSupportedTargets() {
   console.log("Frameworks: node, react, next, vue, svelte, nuxt")
   console.log("Features: lint, format, typescript, test, husky")
   console.log("Test runners: jest, vitest")
+}
+
+export function resolveTestRunner(
+  frameworkId: FrameworkId,
+  testRunner: TestRunner | null
+): TestRunner {
+  if (testRunner) {
+    return testRunner
+  }
+  if (frameworkId === "vue" || frameworkId === "nuxt") {
+    return "vitest"
+  }
+  return "jest"
 }

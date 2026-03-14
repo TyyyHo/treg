@@ -5,6 +5,7 @@ import {
   parseArgs,
   printSupportedTargets,
   resolveFeatures,
+  resolveTestRunner,
   USAGE,
 } from "./cli.ts"
 import { resolveFramework } from "./frameworks/index.ts"
@@ -53,10 +54,12 @@ export async function main(
       ? detectPackageManager(projectDir)
       : options.pm
   const framework = resolveFramework(options.framework, packageJson)
+  const testRunner = resolveTestRunner(framework.id, options.testRunner)
   const enabledFeatures = resolveFeatures(options)
 
   const context: RuleContext = {
     ...options,
+    testRunner,
     projectDir,
     pm,
     framework,
@@ -70,7 +73,7 @@ export async function main(
     )
       .filter(([, enabled]) => enabled)
       .map(([name]) => name)
-      .join(", ")}, testRunner=${options.testRunner}`
+      .join(", ")}, testRunner=${testRunner}`
   )
 
   console.log(formatStep(2, TOTAL_STEPS, "Run mrm rules", options.dryRun))

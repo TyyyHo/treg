@@ -40,7 +40,7 @@ export interface ParsedOptions {
   projectDir: string | null
   framework: FrameworkId | null
   features: FeatureName[]
-  testRunner: TestRunner
+  testRunner: TestRunner | null
   pm: PackageManagerOption | null
   force: boolean
   dryRun: boolean
@@ -51,10 +51,11 @@ export interface ParsedOptions {
 
 export interface RuleContext extends Omit<
   ParsedOptions,
-  "projectDir" | "framework" | "pm"
+  "projectDir" | "framework" | "pm" | "testRunner"
 > {
   projectDir: string
   framework: Framework
   pm: PackageManager
+  testRunner: TestRunner
   enabledFeatures: EnabledFeatures
 }
