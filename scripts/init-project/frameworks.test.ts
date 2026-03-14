@@ -21,8 +21,22 @@ describe("frameworks", () => {
     expect(framework.id).toBe("react")
   })
 
+  it("detects react before vue", () => {
+    const framework = detectFramework({
+      dependencies: { react: "19.0.0", vue: "3.5.0" },
+    })
+    expect(framework.id).toBe("react")
+  })
+
   it("detects vue from dependencies", () => {
     expect(detectFramework({ dependencies: { vue: "3.5.0" } }).id).toBe("vue")
+  })
+
+  it("detects vue before svelte", () => {
+    const framework = detectFramework({
+      dependencies: { vue: "3.5.0", svelte: "5.0.0" },
+    })
+    expect(framework.id).toBe("vue")
   })
 
   it("detects svelte from dependencies", () => {

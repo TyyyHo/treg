@@ -1,6 +1,6 @@
 # @tyyyho/treg
 
-[繁體中文 README](./README.zh-TW.md)
+[繁體中文 README](./README.zh-hant.md)
 
 `treg` is a CLI for quickly setting up project tooling conventions in an existing repository.
 It applies infra setup such as lint, format, TypeScript, test, husky, and AI skill guidance.
@@ -8,12 +8,12 @@ It applies infra setup such as lint, format, TypeScript, test, husky, and AI ski
 ## Quick Start
 
 ```bash
-pnpm dlx @tyyyho/treg init --framework react
+pnpm dlx @tyyyho/treg init
 # or
-npx @tyyyho/treg init --framework react
+npx @tyyyho/treg init
 ```
 
-`init` requires `--framework`.
+`init` auto-detects framework from dependencies.
 
 ## Commands
 
@@ -21,13 +21,13 @@ npx @tyyyho/treg init --framework react
 npx @tyyyho/treg <command> [options]
 ```
 
-- `init`: Initialize infra rules (requires `--framework`)
+- `init`: Initialize infra rules (framework auto-detected from dependencies)
 - `add`: Add selected infra features to an existing project
 - `list`: List supported frameworks, features, and test runners
 
 ## Options
 
-- `--framework <node|react|next|vue|svelte|nuxt>`: Target framework
+- `--framework <node|react|next|vue|svelte|nuxt>`: Optional framework override
 - `--features <lint,format,typescript,test,husky>`: Features to install (defaults to all)
 - `--dir <path>`: Target directory (defaults to current directory)
 - `--test-runner <jest|vitest>`: Test runner when test feature is enabled
@@ -51,7 +51,13 @@ Default feature set:
 
 ## Examples
 
-Initialize a React project:
+Initialize with auto-detected framework:
+
+```bash
+npx @tyyyho/treg init
+```
+
+Initialize with explicit framework override:
 
 ```bash
 npx @tyyyho/treg init --framework react
@@ -89,7 +95,8 @@ npx @tyyyho/treg init --framework react --dir ./packages/web
 
 ## Notes
 
-- `init` requires `--framework`.
+- `init` auto-detects framework from repo dependencies.
+- Detection order is `nuxt -> next -> react -> vue -> svelte -> node`.
 - `add` lets you install only the features you specify.
 - Framework setup uses one stable config per framework (no `--framework-version` variants).
 - `--dry-run` prints the full plan and does not write files.

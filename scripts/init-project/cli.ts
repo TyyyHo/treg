@@ -35,13 +35,13 @@ const ALLOWED_TEST_RUNNERS: readonly TestRunner[] = ["jest", "vitest"]
 export const USAGE = `Usage: treg <command> [options]
 
 Commands:
-  init                                Initialize infra rules in a project (requires --framework)
+  init                                Initialize infra rules in a project (framework auto-detected from dependencies)
   add                                 Add selected infra features to an existing project
   list                                List supported frameworks, features, and test runners
 
 Options:
   --framework <node|react|next|vue|svelte|nuxt>
-                                      Target framework
+                                      Optional framework override (default: auto-detected)
   --features <lint,format,typescript,test,husky>
                                       Features to install (all selected by default)
   --dir <path>                        Target directory (defaults to current directory)
@@ -233,10 +233,6 @@ function validateParsedOptions(
     if (!isFeatureName(feature)) {
       throw new Error(`Unsupported feature in --features: ${feature}`)
     }
-  }
-
-  if (options.command === "init" && !options.help && !options.framework) {
-    throw new Error("Missing required option: --framework")
   }
 }
 

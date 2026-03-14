@@ -6,6 +6,7 @@
 - 僅處理工具鏈與專案規範（lint、format、typescript、test、husky、ai-skills）。
 - 禁止加入產品功能、頁面、API、商業邏輯。
 - 完成功能後Claude會進行code review
+- README跟README.zh-hant要同步修改
 
 ## Architecture rules
 
@@ -55,7 +56,7 @@
 
 ## CLI behavior rules
 
-- `init` 必須要求 `--framework`。
+- `init` 需預設依賴偵測框架（順序：`nuxt -> next -> react -> vue -> svelte -> node`），`--framework` 僅作為覆寫選項。
 - 不支援 `--framework-version`，每個 framework 只使用單一版本規則。
 - `add` 必須允許只安裝指定 features。
 - `test` feature 必須支援 `--test-runner <jest|vitest>`。

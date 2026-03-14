@@ -59,10 +59,9 @@ describe("parseArgs", () => {
     expect(parsed.framework).toBe("svelte")
   })
 
-  it("throws when init is missing framework", () => {
-    expect(() => parseArgs(["init"])).toThrow(
-      "Missing required option: --framework"
-    )
+  it("allows init without framework for auto detection", () => {
+    const parsed = parseArgs(["init"])
+    expect(parsed.framework).toBeNull()
   })
 
   it("throws for unsupported framework", () => {
