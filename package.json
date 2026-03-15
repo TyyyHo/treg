@@ -1,6 +1,6 @@
 {
   "name": "@tyyyho/treg",
-  "version": "0.1.20",
+  "version": "0.1.21",
   "description": "CLI tool for initializing development conventions in existing projects.",
   "license": "MIT",
   "repository": {
