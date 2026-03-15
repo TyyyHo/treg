@@ -35,7 +35,7 @@ npx @tyyyho/treg <command> [options]
 - `--force`：覆寫既有設定檔
 - `--dry-run`：輸出完整執行計畫，但不寫入檔案
 - `--skip-husky-install`：略過 `husky install`
-- `--skills`：更新既有 `AGENTS.md`/`CLAUDE.md` 的 skill 指引（預設啟用）
+- `--skills`：更新既有 `CLAUDE.md`/`AGENTS.md`/`GEMINI.md` 的 skill 指引（預設啟用）
 - `--no-skills`：停用 skill 指引更新
 - `--help`：顯示說明
 

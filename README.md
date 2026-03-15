@@ -35,7 +35,7 @@ npx @tyyyho/treg <command> [options]
 - `--force`: Overwrite existing config files
 - `--dry-run`: Print full plan without writing files
 - `--skip-husky-install`: Skip husky install command
-- `--skills`: Update existing `AGENTS.md`/`CLAUDE.md` with skill guidance (enabled by default)
+- `--skills`: Update existing `CLAUDE.md`/`AGENTS.md`/`GEMINI.md` with skill guidance (enabled by default)
 - `--no-skills`: Disable skill guidance updates
 - `--help`: Show help
 

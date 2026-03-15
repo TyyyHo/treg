@@ -1,9 +1,9 @@
 import { describe, expect, it } from "@jest/globals"
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs"
+import { existsSync, mkdtempSync, rmSync, writeFileSync } from "node:fs"
 import { readFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import path from "node:path"
-import { __testables__ } from "./ai-skills.ts"
+import { __testables__, runAiSkillsRule } from "./ai-skills.ts"
 
 describe("ai-skills helpers", () => {
   it("builds skill section from enabled features", () => {
@@ -19,39 +19,104 @@ describe("ai-skills helpers", () => {
     })
 
     expect(content).toContain("## treg AI Skills")
-    expect(content).toContain("### 執行步驟與 Skill 對應")
+    expect(content).toContain("### Steps and Skill Mapping")
     expect(content).toContain(
-      "1. 格式處理：呼叫 [treg/format](skills/format/SKILL.md)"
+      "1. Formatting: use [treg/format](skills/format/SKILL.md)"
     )
     expect(content).toContain(
-      "2. Lint 規則檢查：呼叫 [treg/lint](skills/lint/SKILL.md)"
+      "2. Lint Validation: use [treg/lint](skills/lint/SKILL.md)"
     )
     expect(content).toContain(
-      "3. 測試規則調整：呼叫 [treg/test](skills/test/SKILL.md)"
+      "3. Test Configuration: use [treg/test](skills/test/SKILL.md)"
     )
-    expect(content).toContain("目前測試工具：`vitest`")
-    expect(content).not.toContain("TypeScript 型別與設定")
+    expect(content).toContain("Current test runner: `vitest`")
+    expect(content).not.toContain("TypeScript Settings")
+    expect(content).not.toContain("<!-- treg:skills:")
   })
 
-  it("upserts an existing skill section", () => {
+  it("upserts an existing skill section with legacy markers", () => {
     const replaced = __testables__.upsertSkillSection(
       "# Header\n\n<!-- treg:skills:start -->\nold\n<!-- treg:skills:end -->\n",
-      "<!-- treg:skills:start -->\nnew\n<!-- treg:skills:end -->"
+      "## treg AI Skills\n\nnew"
     )
 
     expect(replaced).toContain("new")
     expect(replaced).not.toContain("old")
+    expect(replaced).not.toContain("<!-- treg:skills:")
   })
 
-  it("prefers AGENTS.md when both docs exist", () => {
+  it("upserts an existing skill section without markers", () => {
+    const replaced = __testables__.upsertSkillSection(
+      "# Header\n\n## treg AI Skills\n\nold\n\n## Other\n\nkeep",
+      "## treg AI Skills\n\nnew"
+    )
+
+    expect(replaced).toContain("## treg AI Skills\n\nnew")
+    expect(replaced).toContain("## Other\n\nkeep")
+    expect(replaced).not.toContain("old")
+  })
+
+  it("resolves all supported docs when they exist", () => {
     const dir = mkdtempSync(path.join(tmpdir(), "treg-skill-"))
     try {
-      writeFileSync(path.join(dir, "AGENTS.md"), "# Agents\n", "utf8")
       writeFileSync(path.join(dir, "CLAUDE.md"), "# Claude\n", "utf8")
+      writeFileSync(path.join(dir, "AGENTS.md"), "# Agents\n", "utf8")
+      writeFileSync(path.join(dir, "GEMINI.md"), "# Gemini\n", "utf8")
 
-      expect(__testables__.resolveSkillsDoc(dir)).toBe(
-        path.join(dir, "AGENTS.md")
-      )
+      expect(__testables__.resolveSkillsDocs(dir)).toEqual([
+        path.join(dir, "CLAUDE.md"),
+        path.join(dir, "AGENTS.md"),
+        path.join(dir, "GEMINI.md"),
+      ])
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
+    }
+  })
+
+  it("injects guidance into each existing doc and writes skills once", async () => {
+    const dir = mkdtempSync(path.join(tmpdir(), "treg-skill-inject-"))
+    try {
+      writeFileSync(path.join(dir, "CLAUDE.md"), "# Claude\n", "utf8")
+      writeFileSync(path.join(dir, "AGENTS.md"), "# Agents\n", "utf8")
+      writeFileSync(path.join(dir, "GEMINI.md"), "# Gemini\n", "utf8")
+
+      await runAiSkillsRule({
+        command: "add",
+        projectDir: dir,
+        framework: {
+          id: "node",
+          testEnvironment: "node",
+          tsRequiredExcludes: [],
+        },
+        features: [],
+        testRunner: "jest",
+        pm: "pnpm",
+        force: false,
+        dryRun: false,
+        skipHuskyInstall: false,
+        skills: true,
+        help: false,
+        enabledFeatures: {
+          lint: true,
+          format: false,
+          typescript: false,
+          test: false,
+          husky: false,
+        },
+      })
+
+      const claudeDoc = await readFile(path.join(dir, "CLAUDE.md"), "utf8")
+      const agentsDoc = await readFile(path.join(dir, "AGENTS.md"), "utf8")
+      const geminiDoc = await readFile(path.join(dir, "GEMINI.md"), "utf8")
+      const lintSkillPath = path.join(dir, "skills/lint/SKILL.md")
+
+      expect(claudeDoc).toContain("## treg AI Skills")
+      expect(claudeDoc).toContain("[treg/lint](skills/lint/SKILL.md)")
+      expect(agentsDoc).toContain("## treg AI Skills")
+      expect(geminiDoc).toContain("## treg AI Skills")
+      expect(existsSync(lintSkillPath)).toBe(true)
+      expect(existsSync(path.join(dir, "skills/format/SKILL.md"))).toBe(false)
+      expect(existsSync(path.join(dir, "skills/test/SKILL.md"))).toBe(false)
     } finally {
       rmSync(dir, { recursive: true, force: true })
     }
@@ -63,8 +128,11 @@ describe("ai-skills helpers", () => {
       {
         name: "treg/test",
         description: "Validate test runner setup and execution.",
-        when: "新增測試規則或調整測試設定時。",
-        checklist: ["確認 test runner 與專案一致", "執行 test"],
+        when: "When test rules are added or test configuration changes.",
+        checklist: [
+          "Confirm the selected test runner matches the project setup.",
+          "Run `test`.",
+        ],
       },
       "vitest"
     )

@@ -66,5 +66,5 @@
 ## AI skills rules
 
 - 每個 feature 對應一個 skill。
-- 若啟用 skills，僅在 repo root 已存在 `AGENTS.md` 或 `CLAUDE.md` 時更新內容。
+- 若啟用 skills，僅在 repo root 已存在 `CLAUDE.md`、`AGENTS.md` 或 `GEMINI.md` 時更新內容。
 - 若檔案不存在，只輸出 skip 訊息，不自動建立。

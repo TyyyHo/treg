@@ -11,7 +11,9 @@ import path from "node:path"
 
 const START_MARKER = "<!-- treg:skills:start -->"
 const END_MARKER = "<!-- treg:skills:end -->"
+const SKILL_SECTION_HEADING = "## treg AI Skills"
 const SKILLS_BASE_DIR = "skills"
+const SKILLS_DOC_CANDIDATES = ["CLAUDE.md", "AGENTS.md", "GEMINI.md"] as const
 
 interface SkillDefinition {
   name: string
@@ -24,67 +26,67 @@ const FEATURE_SKILLS: Record<FeatureName, SkillDefinition> = {
   format: {
     name: "treg/format",
     description: "Run and verify formatting rules.",
-    when: "在提交前或大範圍改動後，統一格式化程式碼。",
-    checklist: ["執行 format", "執行 format:check", "確認未變動非目標檔案"],
+    when: "Before committing or after broad edits, normalize formatting across the codebase.",
+    checklist: [
+      "Run `format`.",
+      "Run `format:check`.",
+      "Confirm only intended files were changed.",
+    ],
   },
   husky: {
     name: "treg/husky",
     description: "Verify and maintain git hook automation.",
-    when: "需要保證 pre-commit / pre-push 自動檢查時。",
+    when: "When pre-commit and pre-push checks must stay enforced and consistent.",
     checklist: [
-      "確認 hooks 可執行",
-      "確認含 format:check 與 lint:check",
-      "若啟用型別/測試，也要納入 hooks",
+      "Ensure hooks are executable.",
+      "Ensure hooks include `format:check` and `lint:check`.",
+      "If type-checking or tests are enabled, ensure those checks are included.",
     ],
   },
   lint: {
     name: "treg/lint",
     description: "Run and validate lint rules.",
-    when: "新增規則或調整工具鏈後，驗證 lint 一致性。",
-    checklist: ["執行 lint", "執行 lint:check", "修正 max-warnings 問題"],
+    when: "After adding rules or changing tooling, verify lint consistency.",
+    checklist: [
+      "Run `lint`.",
+      "Run `lint:check`.",
+      "Fix max-warnings and remaining lint violations.",
+    ],
   },
   test: {
     name: "treg/test",
     description: "Validate test runner setup and execution.",
-    when: "新增測試規則或調整測試設定時。",
+    when: "When test rules are added or test configuration changes.",
     checklist: [
-      "確認 test runner 與專案一致",
-      "執行 test",
-      "視需要執行 test:coverage",
+      "Confirm the selected test runner matches the project setup.",
+      "Run `test`.",
+      "Run `test:coverage` when coverage validation is needed.",
     ],
   },
   typescript: {
     name: "treg/typescript",
     description: "Validate TypeScript strictness and config.",
-    when: "調整 tsconfig 或型別嚴格度規則時。",
+    when: "When tsconfig or strict typing rules are changed.",
     checklist: [
-      "執行 type:check",
-      "確認 strict 相關選項仍生效",
-      "檢查 exclude 不含產品邏輯路徑",
+      "Run `type:check`.",
+      "Confirm strict compiler options remain enabled.",
+      "Ensure `exclude` does not hide product-logic paths.",
     ],
   },
 }
 
 const FEATURE_STEP_LABELS = {
-  format: "格式處理",
-  husky: "Git hook 維護",
-  lint: "Lint 規則檢查",
-  test: "測試規則調整",
-  typescript: "TypeScript 型別與設定",
+  format: "Formatting",
+  husky: "Git Hook Maintenance",
+  lint: "Lint Validation",
+  test: "Test Configuration",
+  typescript: "TypeScript Settings",
 }
 
-function resolveSkillsDoc(projectDir: string): string | null {
-  const agentsPath = path.join(projectDir, "AGENTS.md")
-  if (existsSync(agentsPath)) {
-    return agentsPath
-  }
-
-  const claudePath = path.join(projectDir, "CLAUDE.md")
-  if (existsSync(claudePath)) {
-    return claudePath
-  }
-
-  return null
+function resolveSkillsDocs(projectDir: string): string[] {
+  return SKILLS_DOC_CANDIDATES.map(fileName =>
+    path.join(projectDir, fileName)
+  ).filter(existsSync)
 }
 
 function getEnabledFeatures(enabledFeatures: EnabledFeatures): FeatureName[] {
@@ -161,18 +163,12 @@ function buildSkillSection(
   const { enabledFeatures, testRunner } = context
   const enabled = getEnabledFeatures(enabledFeatures)
 
-  const lines = [
-    START_MARKER,
-    "## treg AI Skills",
-    "",
-    "### 執行步驟與 Skill 對應",
-    "",
-  ]
+  const lines = [SKILL_SECTION_HEADING, "", "### Steps and Skill Mapping", ""]
 
   if (enabled.length === 0) {
-    lines.push("1. 本次未啟用任何 feature，無需呼叫 skill。")
-    lines.push("")
-    lines.push(END_MARKER)
+    lines.push(
+      "1. No features are enabled in this run, so no skill call is required."
+    )
     lines.push("")
     return lines.join("\n")
   }
@@ -184,29 +180,37 @@ function buildSkillSection(
     const stepLabel = FEATURE_STEP_LABELS[feature] ?? feature
 
     lines.push(
-      `${index + 1}. ${stepLabel}：呼叫 [${skill.name}](${skillRelativePath})`
+      `${index + 1}. ${stepLabel}: use [${skill.name}](${skillRelativePath})`
     )
     if (feature === "test") {
-      lines.push(`   - 目前測試工具：\`${testRunner}\``)
+      lines.push(`   - Current test runner: \`${testRunner}\``)
     }
   })
-  lines.push("")
-
-  lines.push(END_MARKER)
   lines.push("")
   return lines.join("\n")
 }
 
 function upsertSkillSection(content: string, nextSection: string): string {
+  const replaceSection = (start: number, end: number): string => {
+    const before = content.slice(0, start).trimEnd()
+    const after = content.slice(end).trimStart()
+    const rebuilt = `${before}\n\n${nextSection.trim()}\n`
+    return after ? `${rebuilt}\n${after}\n` : `${rebuilt}`
+  }
+
   const start = content.indexOf(START_MARKER)
   const end = content.indexOf(END_MARKER)
 
   if (start !== -1 && end !== -1 && end > start) {
     const suffixStart = end + END_MARKER.length
-    const before = content.slice(0, start).trimEnd()
-    const after = content.slice(suffixStart).trimStart()
-    const rebuilt = `${before}\n\n${nextSection.trim()}\n`
-    return after ? `${rebuilt}\n${after}\n` : `${rebuilt}`
+    return replaceSection(start, suffixStart)
+  }
+
+  const headingStart = content.indexOf(SKILL_SECTION_HEADING)
+  if (headingStart !== -1) {
+    const nextHeading = content.indexOf("\n## ", headingStart + 1)
+    const sectionEnd = nextHeading === -1 ? content.length : nextHeading + 1
+    return replaceSection(headingStart, sectionEnd)
   }
 
   if (!content.trim()) {
@@ -218,10 +222,10 @@ function upsertSkillSection(content: string, nextSection: string): string {
 
 export async function runAiSkillsRule(context: RuleContext): Promise<void> {
   const { projectDir, dryRun } = context
-  const targetFile = resolveSkillsDoc(projectDir)
+  const targetFiles = resolveSkillsDocs(projectDir)
 
-  if (!targetFile) {
-    console.log("Skip ai-skills (AGENTS.md/CLAUDE.md not found)")
+  if (targetFiles.length === 0) {
+    console.log("Skip ai-skills (CLAUDE.md/AGENTS.md/GEMINI.md not found)")
     return
   }
 
@@ -229,25 +233,27 @@ export async function runAiSkillsRule(context: RuleContext): Promise<void> {
   await ensureSkillFiles(projectDir, enabled, context.testRunner, dryRun)
 
   const section = buildSkillSection(context)
-  const current = await fs.readFile(targetFile, "utf8")
-  const updated = upsertSkillSection(current, section)
+  for (const targetFile of targetFiles) {
+    if (dryRun) {
+      console.log(
+        `[dry-run] Would update ${path.basename(targetFile)} with AI skill guidance`
+      )
+      continue
+    }
 
-  if (dryRun) {
+    const current = await fs.readFile(targetFile, "utf8")
+    const updated = upsertSkillSection(current, section)
+
+    if (updated !== current) {
+      await fs.writeFile(targetFile, updated, "utf8")
+      console.log(`Updated ${path.basename(targetFile)} with AI skill guidance`)
+      continue
+    }
+
     console.log(
-      `[dry-run] Would update ${path.basename(targetFile)} with AI skill guidance`
+      `${path.basename(targetFile)} already contains latest AI skill guidance`
     )
-    return
   }
-
-  if (updated !== current) {
-    await fs.writeFile(targetFile, updated, "utf8")
-    console.log(`Updated ${path.basename(targetFile)} with AI skill guidance`)
-    return
-  }
-
-  console.log(
-    `${path.basename(targetFile)} already contains latest AI skill guidance`
-  )
 }
 
 export const __testables__ = {
@@ -256,6 +262,6 @@ export const __testables__ = {
   ensureSkillFiles,
   getEnabledFeatures,
   getSkillRelativePath,
-  resolveSkillsDoc,
+  resolveSkillsDocs,
   upsertSkillSection,
 }

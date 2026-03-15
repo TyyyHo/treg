@@ -50,8 +50,8 @@ Options:
   --force                             Overwrite existing config files
   --dry-run                           Print planned changes without writing files
   --skip-husky-install                Do not run husky install
-  --skills                            Update AGENTS.md/CLAUDE.md with feature skill guidance (default: enabled)
-  --no-skills                         Disable AGENTS.md/CLAUDE.md skill guidance updates
+  --skills                            Update CLAUDE.md/AGENTS.md/GEMINI.md with feature skill guidance (default: enabled)
+  --no-skills                         Disable CLAUDE.md/AGENTS.md/GEMINI.md skill guidance updates
   -h, --help                          Show help
 `
 
