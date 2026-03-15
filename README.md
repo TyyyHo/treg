@@ -119,8 +119,8 @@ Formatter default:
   - `Claude -> CLAUDE.md`
   - `Codex -> AGENTS.md`
   - `Gemini -> GEMINI.md`
-- Files are updated only if they already exist in repo root.
-- Missing files are skipped and never auto-created.
+- Files are updated when they exist in repo root.
+- Missing selected AI docs are auto-created before injecting guidance.
 - Skill files are generated once per enabled feature.
 
 ## Release

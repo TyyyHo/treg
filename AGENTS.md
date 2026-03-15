@@ -1,5 +1,3 @@
-# AGENTS.md
-
 ## Project scope
 
 - 這個專案是 `treg` CLI，定位為「基礎建設工具」。
@@ -70,5 +68,5 @@
 ## AI skills rules
 
 - 每個 feature 對應一個 skill。
-- 若啟用 skills，僅在 repo root 已存在 `CLAUDE.md`、`AGENTS.md` 或 `GEMINI.md` 時更新內容。
-- 若檔案不存在，只輸出 skip 訊息，不自動建立。
+- 若啟用 skills，會依使用者選擇的 AI tools 更新對應檔案（`CLAUDE.md`、`AGENTS.md`、`GEMINI.md`）。
+- 若對應檔案不存在，需先自動建立再注入說明。
