@@ -60,5 +60,8 @@ jobs:
       - name: Build package
         run: pnpm build
 
+      - name: Use npm-specific README
+        run: cp README.npm.md README.md
+
       - name: Publish to npm (Trusted publishing)
         run: npm publish --registry https://registry.npmjs.org --access public --provenance --ignore-scripts

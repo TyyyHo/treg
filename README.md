@@ -2,8 +2,27 @@
 
 [繁體中文 README](./README.zh-hant.md)
 
-`treg` is a CLI for quickly setting up project tooling conventions in an existing repository.
-It applies infra setup such as lint, format, TypeScript, test, husky, and AI skill guidance.
+`treg` is a CLI for applying project tooling standards to an existing repository.
+
+It focuses on infrastructure setup only:
+
+- lint
+- format
+- TypeScript
+- test
+- husky
+- AI skill guidance
+
+## Why Use treg
+
+`treg` helps teams enforce a consistent baseline quickly without manually wiring every tool in each repo.
+
+Use it when you want to:
+
+- bootstrap tooling in an existing project
+- apply only selected setup items
+- keep runs repeatable and safe (`idempotent`)
+- preview changes before writing files (`--dry-run`)
 
 ## Quick Start
 
@@ -15,108 +34,110 @@ npx @tyyyho/treg init
 pnpm dlx @tyyyho/treg init
 ```
 
-`init` auto-detects framework from dependencies.
+## Command Overview
 
-## Commands
+- `init`: Apply infra rules with framework auto-detection.
+- `add`: Apply only selected features.
+- `list`: Show supported frameworks, features, formatters, and test runners.
 
-```bash
-npx @tyyyho/treg <command> [options]
-```
+## Common Usage
 
-- `init`: Initialize infra rules (framework auto-detected from dependencies)
-- `add`: Add selected infra features to an existing project
-- `list`: List supported frameworks, features, formatters, and test runners
-
-## Options
-
-- `--framework <node|react|next|vue|svelte|nuxt>`: Optional framework override
-- `--features <lint,format,typescript,test,husky>`: Features to install (defaults to all)
-- `--no-format`: Skip format feature setup and avoid changing format configs/scripts
-- `--no-test-runner`: Skip test feature setup and avoid changing test runner/config
-- `--dir <path>`: Target directory (defaults to current directory)
-- `--formatter <prettier|oxfmt>`: Formatter for format feature (default: `prettier`)
-- `--test-runner <jest|vitest>`: Optional test runner override when test feature is enabled
-- `--pm <pnpm|npm|yarn|auto>`: Package manager (auto-detected by default)
-- `--force`: Overwrite existing config files
-- `--dry-run`: Print full plan without writing files
-- `--skip-husky-install`: Skip husky install command
-- `--skills`: Update existing `CLAUDE.md`/`AGENTS.md`/`GEMINI.md` with skill guidance (enabled by default)
-- `--no-skills`: Disable skill guidance updates
-- `--help`: Show help
-
-## Features
-
-Default feature set:
-
-- `husky`
-- `typescript`
-- `lint`
-- `format`
-- `test`
-
-## Examples
-
-Initialize with auto-detected framework:
+Initialize with auto-detection:
 
 ```bash
 npx @tyyyho/treg init
 ```
 
-Initialize with explicit framework override:
+Initialize with explicit framework:
 
 ```bash
 npx @tyyyho/treg init --framework react
 ```
 
-Add only lint + format:
+Apply only lint + format:
 
 ```bash
 npx @tyyyho/treg add --features lint,format
 ```
 
-Use oxfmt instead of prettier:
+Use `oxfmt` for formatting:
 
 ```bash
 npx @tyyyho/treg add --features format --formatter oxfmt
 ```
 
-Skip format/test setup to keep existing project rules untouched:
+Skip format/test setup to keep existing project config untouched:
 
 ```bash
 npx @tyyyho/treg add --no-format --no-test-runner
 ```
 
-Use Vitest for test feature:
-
-```bash
-npx @tyyyho/treg init --framework node --features test --test-runner vitest
-```
-
-Preview changes only:
+Preview plan without writing files:
 
 ```bash
 npx @tyyyho/treg init --framework react --dry-run
 ```
 
-Update AI skill guidance:
-
-```bash
-npx @tyyyho/treg add --features lint,format,husky
-```
-
-Target a different directory explicitly:
+Target a specific directory:
 
 ```bash
 npx @tyyyho/treg init --framework react --dir ./packages/web
 ```
 
-## Notes
+## Key Defaults
 
-- `init` auto-detects framework from repo dependencies.
-- Detection order is `nuxt -> next -> react -> vue -> svelte -> node`.
-- Default test runner is `vitest` for `vue`/`nuxt`, and `jest` for other frameworks.
-- Default formatter is `prettier` (`--formatter oxfmt` to override).
-- `--no-format` and `--no-test-runner` let you skip format/test setup to avoid overriding existing project config.
-- `add` lets you install only the features you specify.
-- Framework setup uses one stable config per framework (no `--framework-version` variants).
-- `--dry-run` prints the full plan and does not write files.
+Framework detection order:
+
+`nuxt -> next -> react -> vue -> svelte -> node`
+
+Test runner defaults:
+
+- `vue` / `nuxt`: `vitest`
+- others: `jest`
+
+Formatter default:
+
+- `prettier` (override with `--formatter oxfmt`)
+
+## CLI Options
+
+```text
+--framework <node|react|next|vue|svelte|nuxt>
+--features <lint,format,typescript,test,husky>
+--no-format
+--no-test-runner
+--dir <path>
+--formatter <prettier|oxfmt>
+--test-runner <jest|vitest>
+--pm <pnpm|npm|yarn|auto>
+--force
+--dry-run
+--skip-husky-install
+--skills
+--no-skills
+--help
+```
+
+## AI Skills Behavior
+
+When skills are enabled:
+
+- `treg` updates existing `CLAUDE.md`, `AGENTS.md`, and/or `GEMINI.md` if present.
+- `treg` does not create those files when they do not exist.
+
+## Release
+
+```bash
+pnpm release patch
+```
+
+Supported targets:
+
+- `patch`
+- `minor`
+- `major`
+- `prepatch`
+- `preminor`
+- `premajor`
+- `prerelease`
+- explicit version (`x.y.z`)
