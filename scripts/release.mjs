@@ -17,8 +17,9 @@ const ALLOWED_TARGETS = new Set([
 ])
 const EXACT_SEMVER = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z-.]+)?(?:\+[0-9A-Za-z-.]+)?$/
 
-function run(command, args, { captureOutput = false } = {}) {
+function run(command, args, { captureOutput = false, cwd } = {}) {
   const result = spawnSync(command, args, {
+    cwd,
     encoding: "utf8",
     stdio: captureOutput ? ["ignore", "pipe", "pipe"] : "inherit",
   })
@@ -77,15 +78,12 @@ function runCiValidation() {
       '{ "name": "release-smoke", "version": "1.0.0" }\n',
       "utf8"
     )
-    run("node", [
-      "dist/init-project.js",
-      "init",
-      "--dir",
-      smokeDir,
-      "--framework",
-      "node",
-      "--dry-run",
-    ])
+    const distCliPath = path.resolve("dist/init-project.js")
+    run("node", [distCliPath, "init", "--dry-run"], {
+      cwd: smokeDir,
+      // Run smoke test non-interactively, so init uses defaults instead of prompts.
+      captureOutput: true,
+    })
   } finally {
     rmSync(smokeDir, { recursive: true, force: true })
   }
