@@ -45,7 +45,7 @@ jobs:
         run: pnpm lint:check
 
       - name: Check types
-        run: pnpm type-check
+        run: pnpm type:check
 
       - name: Build (TS to JS)
         run: pnpm build

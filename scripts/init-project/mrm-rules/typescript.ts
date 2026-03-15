@@ -20,7 +20,7 @@ export async function runTypescriptRule(context: RuleContext): Promise<void> {
   withProjectCwd(projectDir, () => {
     if (dryRun) {
       console.log("[dry-run] Would update tsconfig.json")
-      console.log("[dry-run] Would set package script: type-check")
+      console.log("[dry-run] Would set package script: type:check")
       return
     }
 
@@ -42,6 +42,6 @@ export async function runTypescriptRule(context: RuleContext): Promise<void> {
       .set("exclude", Array.from(exclude))
       .save()
 
-    packageJson().setScript("type-check", "tsc --noEmit").save()
+    packageJson().setScript("type:check", "tsc --noEmit").save()
   })
 }

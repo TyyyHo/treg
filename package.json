@@ -27,11 +27,11 @@
     "lint:check": "eslint . --max-warnings 0",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "type-check": "tsc --noEmit",
+    "type:check": "tsc --noEmit",
     "build": "tsc -p tsconfig.build.json && node scripts/write-dist-package-json.mjs",
     "release": "node scripts/release.mjs",
     "prepare": "husky",
-    "prepublishOnly": "pnpm format:check && pnpm lint:check && pnpm type-check && pnpm test && pnpm build"
+    "prepublishOnly": "pnpm format:check && pnpm lint:check && pnpm type:check && pnpm test && pnpm build"
   },
   "dependencies": {
     "mrm-core": "^7.1.22"

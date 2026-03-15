@@ -65,7 +65,7 @@ function runCiValidation() {
   console.log("[release] Running CI validation steps")
   run("pnpm", ["format:check"])
   run("pnpm", ["lint:check"])
-  run("pnpm", ["type-check"])
+  run("pnpm", ["type:check"])
   run("pnpm", ["test"])
   run("pnpm", ["build"])
 

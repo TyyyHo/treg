@@ -58,7 +58,7 @@ const FEATURE_SKILLS: Record<FeatureName, SkillDefinition> = {
     description: "Validate TypeScript strictness and config.",
     when: "調整 tsconfig 或型別嚴格度規則時。",
     checklist: [
-      "執行 type-check",
+      "執行 type:check",
       "確認 strict 相關選項仍生效",
       "檢查 exclude 不含產品邏輯路徑",
     ],

@@ -15,7 +15,7 @@ function buildHookCommands(
     `${runner} lint:check || exit 1`,
   ]
   if (enabledFeatures.typescript) {
-    preCommit.push(`${runner} type-check || exit 1`)
+    preCommit.push(`${runner} type:check || exit 1`)
   }
 
   const prePush = [...preCommit]

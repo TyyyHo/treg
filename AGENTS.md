@@ -40,7 +40,7 @@
 - 必跑：
   - `pnpm format`
   - `pnpm lint:check`
-  - `pnpm type-check`
+  - `pnpm type:check`
   - `pnpm test`
 - 任一失敗必須先修復再 commit。
 
@@ -52,7 +52,7 @@
   - `.github/workflows/_verify.yml`
 - `ci.yml` 僅監聽 `main` branch 的 push。
 - `publish.yml` 僅監聽版本 tag（`v*`）的 push。
-- 安裝與共用驗證步驟（format/lint/type-check/test/build/smoke test）統一放在 reusable workflow `_verify.yml`。
+- 安裝與共用驗證步驟（format/lint/type:check/test/build/smoke test）統一放在 reusable workflow `_verify.yml`。
 
 ## CLI behavior rules
 
