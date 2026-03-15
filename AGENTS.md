@@ -52,6 +52,7 @@
   - `.github/workflows/_verify.yml`
 - `ci.yml` 僅監聽 `main` branch 的 push。
 - `publish.yml` 僅監聽版本 tag（`v*`）的 push。
+- 發版採 Tag-Driven：不提交新版號；於 publish 流程驗證通過後、publish 前執行 `npm version --no-git-tag-version` 同步 tag 版號。
 - 安裝與共用驗證步驟（format/lint/type:check/test/build/smoke test）統一放在 reusable workflow `_verify.yml`。
 
 ## CLI behavior rules

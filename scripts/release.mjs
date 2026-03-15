@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { spawnSync } from "node:child_process"
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs"
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs"
 import { tmpdir } from "node:os"
 import path from "node:path"
 
@@ -16,10 +16,15 @@ const ALLOWED_TARGETS = new Set([
 ])
 const EXACT_SEMVER = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z-.]+)?(?:\+[0-9A-Za-z-.]+)?$/
 
-function run(command, args, { captureOutput = false } = {}) {
+function run(
+  command,
+  args,
+  { captureOutput = false, cwd = process.cwd() } = {}
+) {
   const result = spawnSync(command, args, {
     encoding: "utf8",
     stdio: captureOutput ? ["ignore", "pipe", "pipe"] : "inherit",
+    cwd,
   })
 
   if (result.status !== 0) {
@@ -30,6 +35,14 @@ function run(command, args, { captureOutput = false } = {}) {
   }
 
   return captureOutput ? result.stdout.trim() : ""
+}
+
+function commandStatus(command, args, cwd = process.cwd()) {
+  return spawnSync(command, args, {
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "pipe"],
+    cwd,
+  })
 }
 
 function fail(message) {
@@ -90,6 +103,68 @@ function runCiValidation() {
   }
 }
 
+function resolveReleaseVersion(releaseTarget) {
+  if (EXACT_SEMVER.test(releaseTarget)) {
+    return releaseTarget
+  }
+
+  const currentVersion = JSON.parse(
+    readFileSync("package.json", "utf8")
+  ).version
+  const tmpDir = mkdtempSync(path.join(tmpdir(), "treg-release-version-"))
+
+  try {
+    writeFileSync(
+      path.join(tmpDir, "package.json"),
+      JSON.stringify(
+        {
+          name: "release-version-resolver",
+          version: currentVersion,
+        },
+        null,
+        2
+      ) + "\n",
+      "utf8"
+    )
+    run("npm", ["version", releaseTarget, "--no-git-tag-version"], {
+      cwd: tmpDir,
+    })
+    return JSON.parse(readFileSync(path.join(tmpDir, "package.json"), "utf8"))
+      .version
+  } finally {
+    rmSync(tmpDir, { recursive: true, force: true })
+  }
+}
+
+function ensureTagNotExists(tagName) {
+  const local = commandStatus("git", [
+    "rev-parse",
+    "-q",
+    "--verify",
+    `refs/tags/${tagName}`,
+  ])
+  if (local.status === 0) {
+    fail(`Tag already exists locally: ${tagName}`)
+  }
+
+  const remote = commandStatus("git", [
+    "ls-remote",
+    "--exit-code",
+    "--tags",
+    "origin",
+    `refs/tags/${tagName}`,
+  ])
+  if (remote.status === 0) {
+    fail(`Tag already exists on origin: ${tagName}`)
+  }
+  if (remote.status !== 2) {
+    if (remote.stderr) {
+      process.stderr.write(remote.stderr)
+    }
+    fail("Unable to verify remote tags on origin.")
+  }
+}
+
 const input = process.argv[2]
 if (input === "--help" || input === "-h") {
   printUsage()
@@ -107,14 +182,17 @@ ensureCleanWorkingTree()
 runCiValidation()
 ensureCleanWorkingTree()
 
-console.log(`[release] Bumping version with target: ${releaseTarget}`)
-run("npm", ["version", releaseTarget])
+const version = resolveReleaseVersion(releaseTarget)
+const tagName = `v${version}`
 
-const version = run("node", ["-p", "require('./package.json').version"], {
-  captureOutput: true,
-})
+ensureTagNotExists(tagName)
 
-console.log("[release] Pushing version commit and tag to origin/main")
-run("git", ["push", "origin", "main", "--follow-tags"])
+console.log(`[release] Creating release tag ${tagName}`)
+run("git", ["tag", tagName])
 
-console.log(`[release] Done: pushed commit and tag v${version}`)
+console.log(`[release] Pushing tag ${tagName} to origin`)
+run("git", ["push", "origin", tagName])
+
+console.log(
+  `[release] Done: pushed tag ${tagName}. package.json version will be synced during publish workflow.`
+)
