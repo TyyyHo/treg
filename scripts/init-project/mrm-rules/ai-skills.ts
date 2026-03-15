@@ -11,6 +11,7 @@ import path from "node:path"
 
 const START_MARKER = "<!-- treg:skills:start -->"
 const END_MARKER = "<!-- treg:skills:end -->"
+const SKILL_SECTION_HEADING = "## treg AI Skills"
 const SKILLS_BASE_DIR = "skills"
 
 interface SkillDefinition {
@@ -161,18 +162,10 @@ function buildSkillSection(
   const { enabledFeatures, testRunner } = context
   const enabled = getEnabledFeatures(enabledFeatures)
 
-  const lines = [
-    START_MARKER,
-    "## treg AI Skills",
-    "",
-    "### 執行步驟與 Skill 對應",
-    "",
-  ]
+  const lines = [SKILL_SECTION_HEADING, "", "### 執行步驟與 Skill 對應", ""]
 
   if (enabled.length === 0) {
     lines.push("1. 本次未啟用任何 feature，無需呼叫 skill。")
-    lines.push("")
-    lines.push(END_MARKER)
     lines.push("")
     return lines.join("\n")
   }
@@ -191,22 +184,30 @@ function buildSkillSection(
     }
   })
   lines.push("")
-
-  lines.push(END_MARKER)
-  lines.push("")
   return lines.join("\n")
 }
 
 function upsertSkillSection(content: string, nextSection: string): string {
+  const replaceSection = (start: number, end: number): string => {
+    const before = content.slice(0, start).trimEnd()
+    const after = content.slice(end).trimStart()
+    const rebuilt = `${before}\n\n${nextSection.trim()}\n`
+    return after ? `${rebuilt}\n${after}\n` : `${rebuilt}`
+  }
+
   const start = content.indexOf(START_MARKER)
   const end = content.indexOf(END_MARKER)
 
   if (start !== -1 && end !== -1 && end > start) {
     const suffixStart = end + END_MARKER.length
-    const before = content.slice(0, start).trimEnd()
-    const after = content.slice(suffixStart).trimStart()
-    const rebuilt = `${before}\n\n${nextSection.trim()}\n`
-    return after ? `${rebuilt}\n${after}\n` : `${rebuilt}`
+    return replaceSection(start, suffixStart)
+  }
+
+  const headingStart = content.indexOf(SKILL_SECTION_HEADING)
+  if (headingStart !== -1) {
+    const nextHeading = content.indexOf("\n## ", headingStart + 1)
+    const sectionEnd = nextHeading === -1 ? content.length : nextHeading + 1
+    return replaceSection(headingStart, sectionEnd)
   }
 
   if (!content.trim()) {

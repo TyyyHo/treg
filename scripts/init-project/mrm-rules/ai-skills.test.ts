@@ -31,15 +31,28 @@ describe("ai-skills helpers", () => {
     )
     expect(content).toContain("目前測試工具：`vitest`")
     expect(content).not.toContain("TypeScript 型別與設定")
+    expect(content).not.toContain("<!-- treg:skills:")
   })
 
-  it("upserts an existing skill section", () => {
+  it("upserts an existing skill section with legacy markers", () => {
     const replaced = __testables__.upsertSkillSection(
       "# Header\n\n<!-- treg:skills:start -->\nold\n<!-- treg:skills:end -->\n",
-      "<!-- treg:skills:start -->\nnew\n<!-- treg:skills:end -->"
+      "## treg AI Skills\n\nnew"
     )
 
     expect(replaced).toContain("new")
+    expect(replaced).not.toContain("old")
+    expect(replaced).not.toContain("<!-- treg:skills:")
+  })
+
+  it("upserts an existing skill section without markers", () => {
+    const replaced = __testables__.upsertSkillSection(
+      "# Header\n\n## treg AI Skills\n\nold\n\n## Other\n\nkeep",
+      "## treg AI Skills\n\nnew"
+    )
+
+    expect(replaced).toContain("## treg AI Skills\n\nnew")
+    expect(replaced).toContain("## Other\n\nkeep")
     expect(replaced).not.toContain("old")
   })
 
