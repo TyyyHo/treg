@@ -60,4 +60,7 @@ jobs:
           cat > "$tmpdir/package.json" <<'JSON'
           { "name": "ci-smoke", "version": "1.0.0" }
           JSON
-          node dist/init-project.js init --dir "$tmpdir" --framework node --dry-run
+          (
+            cd "$tmpdir"
+            node "$GITHUB_WORKSPACE/dist/init-project.js" init --dry-run
+          )

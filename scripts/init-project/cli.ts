@@ -264,7 +264,7 @@ export function printSupportedTargets() {
   console.log("Formatters: prettier, oxfmt")
   console.log("Test runners: jest, vitest")
   console.log("Package managers: pnpm, npm, yarn, bun")
-  console.log("AI tools: claude, codex, gemini")
+  console.log("AI tools: Claude, Codex, Gemini")
 }
 
 export function resolveTestRunner(

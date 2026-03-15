@@ -27,7 +27,7 @@ Commands:
 
 1. package manager (`pnpm|npm|yarn|bun`)
 2. features (default: `all`)
-3. test runner (if `test` is selected)
+3. test runner (if `test` is selected, supports `skip`)
 4. formatter (if `format` is selected)
 5. ai tools (`Claude|Codex|Gemini`, multi-select, if AI skill guidance is selected)
 

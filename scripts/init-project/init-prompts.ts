@@ -51,9 +51,12 @@ const PACKAGE_MANAGER_CHOICES: readonly Choice<PackageManager>[] = [
   { value: "bun", label: "bun" },
 ]
 
-const TEST_RUNNER_CHOICES: readonly Choice<TestRunner>[] = [
+type TestRunnerChoice = TestRunner | "skip"
+
+const TEST_RUNNER_CHOICES: readonly Choice<TestRunnerChoice>[] = [
   { value: "jest", label: "jest" },
   { value: "vitest", label: "vitest" },
+  { value: "skip", label: "skip (disable test feature)" },
 ]
 
 const FORMATTER_CHOICES: readonly Choice<Formatter>[] = [
@@ -254,15 +257,23 @@ export async function collectInitPrompts(
     const featureSelection = toFeatureSelection(featureAnswers)
 
     let testRunner = defaults.testRunner
+    const enabledFeatures = { ...featureSelection.enabledFeatures }
     if (featureSelection.enabledFeatures.test) {
       console.log("\n3) Test runner")
       console.log(formatChoices(TEST_RUNNER_CHOICES))
-      testRunner = await askUntilValid(
+      const selectedTestRunner = await askUntilValid(
         rl.question.bind(rl),
-        `Select test runner [default: ${defaults.testRunner}]: `,
+        `Select test runner [default: ${defaults.testRunner}, or skip]: `,
         answer =>
           parseSingleChoice(answer, TEST_RUNNER_CHOICES, defaults.testRunner)
       )
+
+      if (selectedTestRunner === "skip") {
+        enabledFeatures.test = false
+        console.log("Test feature disabled by selection: skip")
+      } else {
+        testRunner = selectedTestRunner
+      }
     } else {
       console.log("\n3) Test runner skipped (test feature not selected)")
     }
@@ -304,7 +315,7 @@ export async function collectInitPrompts(
       pm,
       formatter,
       testRunner,
-      enabledFeatures: featureSelection.enabledFeatures,
+      enabledFeatures,
       skills,
       aiTools,
     }

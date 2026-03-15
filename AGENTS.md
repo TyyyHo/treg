@@ -57,11 +57,12 @@
 
 ## CLI behavior rules
 
-- `init` 需預設依賴偵測框架（順序：`nuxt -> next -> react -> vue -> svelte -> node`），`--framework` 僅作為覆寫選項。
+- `init` 需預設依賴偵測框架（順序：`nuxt -> next -> react -> vue -> svelte -> node`）。
+- `init` 改為問答式流程，依序詢問：package manager、features、test runner（可跳過）、formatter（可跳過）、ai tools（可複選，可跳過）。
+- `init` 僅保留 `--dry-run`（與 `--help`）參數。
 - 不支援 `--framework-version`，每個 framework 只使用單一版本規則。
 - `add` 必須允許只安裝指定 features。
 - `format` feature 必須支援 `--formatter <prettier|oxfmt>`，預設為 `prettier`。
-- 需支援 `--no-format` 與 `--no-test-runner` 以跳過 format/test 安裝，避免覆寫既有設定。
 - 預設測試工具規則：`vue`/`nuxt` 使用 `vitest`，其餘 framework 使用 `jest`。
 - `test` feature 必須支援 `--test-runner <jest|vitest>`。
 - `--dry-run` 必須輸出完整計畫且不寫入檔案。

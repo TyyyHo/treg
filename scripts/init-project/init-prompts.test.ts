@@ -18,6 +18,24 @@ describe("init prompts helpers", () => {
     ).toMatchObject({ ok: true, value: "bun" })
   })
 
+  it("parses test-runner skip choice", () => {
+    const testRunnerChoices = [
+      { value: "jest", label: "jest" },
+      { value: "vitest", label: "vitest" },
+      { value: "skip", label: "skip (disable test feature)" },
+    ] as const
+
+    expect(
+      __testables__.parseSingleChoice("skip", testRunnerChoices, "jest")
+    ).toMatchObject({ ok: true, value: "skip" })
+    expect(
+      __testables__.parseSingleChoice("3", testRunnerChoices, "jest")
+    ).toMatchObject({
+      ok: true,
+      value: "skip",
+    })
+  })
+
   it("parses multi-choice by value and index", () => {
     const choices = [
       { value: "claude", label: "Claude" },

@@ -30,7 +30,7 @@ After `init`, `treg` asks:
 
 1. Package manager (`pnpm|npm|yarn|bun`)
 2. Features (default selected: `all`)
-3. Test runner (only when `test` is selected)
+3. Test runner (only when `test` is selected, supports `skip`)
 4. Formatter (only when `format` is selected)
 5. AI tools (`Claude|Codex|Gemini`, multi-select, only when AI skill guidance is selected)
 
