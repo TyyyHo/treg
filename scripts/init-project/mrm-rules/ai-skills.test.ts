@@ -75,6 +75,17 @@ describe("ai-skills helpers", () => {
     }
   })
 
+  it("resolves selected docs even when files are missing", () => {
+    const dir = mkdtempSync(path.join(tmpdir(), "treg-skill-missing-"))
+    try {
+      expect(__testables__.resolveSkillsDocs(dir, ["codex", "gemini"])).toEqual(
+        [path.join(dir, "AGENTS.md"), path.join(dir, "GEMINI.md")]
+      )
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
+    }
+  })
+
   it("injects guidance into each existing doc and writes skills once", async () => {
     const dir = mkdtempSync(path.join(tmpdir(), "treg-skill-inject-"))
     try {
@@ -167,6 +178,49 @@ describe("ai-skills helpers", () => {
       expect(claudeDoc).not.toContain("## treg AI Skills")
       expect(agentsDoc).toContain("## treg AI Skills")
       expect(geminiDoc).not.toContain("## treg AI Skills")
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
+    }
+  })
+
+  it("creates missing selected ai docs and injects guidance", async () => {
+    const dir = mkdtempSync(path.join(tmpdir(), "treg-skill-create-docs-"))
+    try {
+      await runAiSkillsRule({
+        command: "add",
+        projectDir: dir,
+        framework: {
+          id: "node",
+          testEnvironment: "node",
+          tsRequiredExcludes: [],
+        },
+        formatter: "prettier",
+        features: [],
+        testRunner: "jest",
+        pm: "pnpm",
+        force: false,
+        dryRun: false,
+        skipHuskyInstall: false,
+        skills: true,
+        aiTools: ["codex", "gemini"],
+        help: false,
+        enabledFeatures: {
+          lint: true,
+          format: false,
+          typescript: false,
+          test: false,
+          husky: false,
+        },
+      })
+
+      const agentsDoc = await readFile(path.join(dir, "AGENTS.md"), "utf8")
+      const geminiDoc = await readFile(path.join(dir, "GEMINI.md"), "utf8")
+
+      expect(agentsDoc).toContain("# AGENTS")
+      expect(agentsDoc).toContain("## treg AI Skills")
+      expect(geminiDoc).toContain("# GEMINI")
+      expect(geminiDoc).toContain("## treg AI Skills")
+      expect(existsSync(path.join(dir, "CLAUDE.md"))).toBe(false)
     } finally {
       rmSync(dir, { recursive: true, force: true })
     }

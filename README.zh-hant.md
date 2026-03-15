@@ -119,8 +119,8 @@ formatter 預設：
   - `Claude -> CLAUDE.md`
   - `Codex -> AGENTS.md`
   - `Gemini -> GEMINI.md`
-- 僅更新 repo root 已存在的檔案。
-- 不存在的檔案會跳過，不會自動建立。
+- 若檔案已存在會直接更新。
+- 選擇的 AI 工具對應檔案不存在時，會先自動建立再注入說明。
 - 每個啟用功能的 skill 檔只會建立一次。
 
 ## 發布

@@ -90,9 +90,7 @@ const FEATURE_STEP_LABELS = {
 
 function resolveSkillsDocs(projectDir: string, aiTools: AiTool[]): string[] {
   const docFiles = [...new Set(aiTools.map(tool => AI_TOOL_DOCS[tool]))]
-  return docFiles
-    .map(fileName => path.join(projectDir, fileName))
-    .filter(existsSync)
+  return docFiles.map(fileName => path.join(projectDir, fileName))
 }
 
 function getEnabledFeatures(enabledFeatures: EnabledFeatures): FeatureName[] {
@@ -226,14 +224,14 @@ function upsertSkillSection(content: string, nextSection: string): string {
   return `${content.trimEnd()}\n\n${nextSection.trim()}\n`
 }
 
+function buildInitialAiDocContent(fileName: string): string {
+  const baseName = path.basename(fileName, path.extname(fileName))
+  return `# ${baseName}\n`
+}
+
 export async function runAiSkillsRule(context: RuleContext): Promise<void> {
   const { projectDir, dryRun, aiTools } = context
   const targetFiles = resolveSkillsDocs(projectDir, aiTools)
-
-  if (targetFiles.length === 0) {
-    console.log("Skip ai-skills (selected AI docs not found)")
-    return
-  }
 
   const enabled = getEnabledFeatures(context.enabledFeatures)
   await ensureSkillFiles(projectDir, enabled, context.testRunner, dryRun)
@@ -241,18 +239,25 @@ export async function runAiSkillsRule(context: RuleContext): Promise<void> {
   const section = buildSkillSection(context)
   for (const targetFile of targetFiles) {
     if (dryRun) {
+      const action = existsSync(targetFile) ? "update" : "create"
       console.log(
-        `[dry-run] Would update ${path.basename(targetFile)} with AI skill guidance`
+        `[dry-run] Would ${action} ${path.basename(targetFile)} with AI skill guidance`
       )
       continue
     }
 
-    const current = await fs.readFile(targetFile, "utf8")
+    const exists = existsSync(targetFile)
+    const current = exists
+      ? await fs.readFile(targetFile, "utf8")
+      : buildInitialAiDocContent(targetFile)
     const updated = upsertSkillSection(current, section)
 
     if (updated !== current) {
+      await fs.mkdir(path.dirname(targetFile), { recursive: true })
       await fs.writeFile(targetFile, updated, "utf8")
-      console.log(`Updated ${path.basename(targetFile)} with AI skill guidance`)
+      console.log(
+        `${exists ? "Updated" : "Created"} ${path.basename(targetFile)} with AI skill guidance`
+      )
       continue
     }
 
