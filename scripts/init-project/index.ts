@@ -73,7 +73,7 @@ export async function main(
     )
       .filter(([, enabled]) => enabled)
       .map(([name]) => name)
-      .join(", ")}, testRunner=${testRunner}`
+      .join(", ")}, formatter=${options.formatter}, testRunner=${testRunner}`
   )
 
   console.log(formatStep(2, TOTAL_STEPS, "Run mrm rules", options.dryRun))

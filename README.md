@@ -8,9 +8,11 @@ It applies infra setup such as lint, format, TypeScript, test, husky, and AI ski
 ## Quick Start
 
 ```bash
-pnpm dlx @tyyyho/treg init
-# or
 npx @tyyyho/treg init
+```
+
+```bash
+pnpm dlx @tyyyho/treg init
 ```
 
 `init` auto-detects framework from dependencies.
@@ -23,13 +25,16 @@ npx @tyyyho/treg <command> [options]
 
 - `init`: Initialize infra rules (framework auto-detected from dependencies)
 - `add`: Add selected infra features to an existing project
-- `list`: List supported frameworks, features, and test runners
+- `list`: List supported frameworks, features, formatters, and test runners
 
 ## Options
 
 - `--framework <node|react|next|vue|svelte|nuxt>`: Optional framework override
 - `--features <lint,format,typescript,test,husky>`: Features to install (defaults to all)
+- `--no-format`: Skip format feature setup and avoid changing format configs/scripts
+- `--no-test-runner`: Skip test feature setup and avoid changing test runner/config
 - `--dir <path>`: Target directory (defaults to current directory)
+- `--formatter <prettier|oxfmt>`: Formatter for format feature (default: `prettier`)
 - `--test-runner <jest|vitest>`: Optional test runner override when test feature is enabled
 - `--pm <pnpm|npm|yarn|auto>`: Package manager (auto-detected by default)
 - `--force`: Overwrite existing config files
@@ -69,6 +74,18 @@ Add only lint + format:
 npx @tyyyho/treg add --features lint,format
 ```
 
+Use oxfmt instead of prettier:
+
+```bash
+npx @tyyyho/treg add --features format --formatter oxfmt
+```
+
+Skip format/test setup to keep existing project rules untouched:
+
+```bash
+npx @tyyyho/treg add --no-format --no-test-runner
+```
+
 Use Vitest for test feature:
 
 ```bash
@@ -98,6 +115,8 @@ npx @tyyyho/treg init --framework react --dir ./packages/web
 - `init` auto-detects framework from repo dependencies.
 - Detection order is `nuxt -> next -> react -> vue -> svelte -> node`.
 - Default test runner is `vitest` for `vue`/`nuxt`, and `jest` for other frameworks.
+- Default formatter is `prettier` (`--formatter oxfmt` to override).
+- `--no-format` and `--no-test-runner` let you skip format/test setup to avoid overriding existing project config.
 - `add` lets you install only the features you specify.
 - Framework setup uses one stable config per framework (no `--framework-version` variants).
 - `--dry-run` prints the full plan and does not write files.

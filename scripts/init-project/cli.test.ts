@@ -9,6 +9,8 @@ describe("parseArgs", () => {
       "demo-app",
       "--framework",
       "react",
+      "--formatter",
+      "oxfmt",
       "--features",
       "lint,test",
       "--test-runner",
@@ -23,11 +25,14 @@ describe("parseArgs", () => {
       command: "init",
       projectDir: "demo-app",
       framework: "react",
+      formatter: "oxfmt",
       features: ["lint", "test"],
       testRunner: "vitest",
       pm: "npm",
       force: true,
       dryRun: true,
+      noFormat: false,
+      noTestRunner: false,
       skipHuskyInstall: true,
       skills: true,
       help: false,
@@ -37,6 +42,9 @@ describe("parseArgs", () => {
   it("parses list command", () => {
     const parsed = parseArgs(["list"])
     expect(parsed.command).toBe("list")
+    expect(parsed.formatter).toBe("prettier")
+    expect(parsed.noFormat).toBe(false)
+    expect(parsed.noTestRunner).toBe(false)
   })
 
   it("accepts additional frameworks", () => {
@@ -62,12 +70,30 @@ describe("parseArgs", () => {
   it("allows init without framework for auto detection", () => {
     const parsed = parseArgs(["init"])
     expect(parsed.framework).toBeNull()
+    expect(parsed.formatter).toBe("prettier")
     expect(parsed.testRunner).toBeNull()
+  })
+
+  it("accepts oxfmt formatter override", () => {
+    const parsed = parseArgs(["add", "--formatter", "oxfmt"])
+    expect(parsed.formatter).toBe("oxfmt")
+  })
+
+  it("supports disabling format and test setup via no flags", () => {
+    const parsed = parseArgs(["add", "--no-format", "--no-test-runner"])
+    expect(parsed.noFormat).toBe(true)
+    expect(parsed.noTestRunner).toBe(true)
   })
 
   it("throws for unsupported framework", () => {
     expect(() => parseArgs(["init", "--framework", "angular"])).toThrow(
       "Unsupported framework: angular"
+    )
+  })
+
+  it("throws for unsupported formatter", () => {
+    expect(() => parseArgs(["init", "--formatter", "biome"])).toThrow(
+      "Unsupported formatter: biome"
     )
   })
 
@@ -108,6 +134,46 @@ describe("resolveFeatures", () => {
       typescript: false,
       test: false,
       husky: true,
+    })
+  })
+
+  it("disables format feature when --no-format is provided", () => {
+    expect(resolveFeatures(parseArgs(["add", "--no-format"]))).toEqual({
+      lint: true,
+      format: false,
+      typescript: true,
+      test: true,
+      husky: true,
+    })
+  })
+
+  it("disables test feature when --no-test-runner is provided", () => {
+    expect(resolveFeatures(parseArgs(["add", "--no-test-runner"]))).toEqual({
+      lint: true,
+      format: true,
+      typescript: true,
+      test: false,
+      husky: true,
+    })
+  })
+
+  it("keeps no flags taking precedence over --features", () => {
+    expect(
+      resolveFeatures(
+        parseArgs([
+          "add",
+          "--features",
+          "format,test",
+          "--no-format",
+          "--no-test-runner",
+        ])
+      )
+    ).toEqual({
+      lint: false,
+      format: false,
+      typescript: false,
+      test: false,
+      husky: false,
     })
   })
 })

@@ -4,6 +4,7 @@ export type PackageManager = "pnpm" | "npm" | "yarn"
 export type PackageManagerOption = PackageManager | "auto"
 
 export type FrameworkId = "node" | "react" | "next" | "vue" | "svelte" | "nuxt"
+export type Formatter = "prettier" | "oxfmt"
 
 export type FeatureName = "lint" | "format" | "typescript" | "test" | "husky"
 export type TestRunner = "jest" | "vitest"
@@ -39,11 +40,14 @@ export interface ParsedOptions {
   command: CommandName
   projectDir: string | null
   framework: FrameworkId | null
+  formatter: Formatter
   features: FeatureName[]
   testRunner: TestRunner | null
   pm: PackageManagerOption | null
   force: boolean
   dryRun: boolean
+  noFormat: boolean
+  noTestRunner: boolean
   skipHuskyInstall: boolean
   skills: boolean
   help: boolean
