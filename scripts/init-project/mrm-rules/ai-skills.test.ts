@@ -88,6 +88,7 @@ describe("ai-skills helpers", () => {
           testEnvironment: "node",
           tsRequiredExcludes: [],
         },
+        formatter: "prettier",
         features: [],
         testRunner: "jest",
         pm: "pnpm",

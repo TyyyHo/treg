@@ -2,6 +2,7 @@ import type {
   CommandName,
   EnabledFeatures,
   FeatureName,
+  Formatter,
   FrameworkId,
   PackageManagerOption,
   ParsedOptions,
@@ -31,13 +32,14 @@ const ALLOWED_FEATURES: readonly FeatureName[] = [
   "husky",
 ]
 const ALLOWED_TEST_RUNNERS: readonly TestRunner[] = ["jest", "vitest"]
+const ALLOWED_FORMATTERS: readonly Formatter[] = ["prettier", "oxfmt"]
 
 export const USAGE = `Usage: treg <command> [options]
 
 Commands:
   init                                Initialize infra rules in a project (framework auto-detected from dependencies)
   add                                 Add selected infra features to an existing project
-  list                                List supported frameworks, features, and test runners
+  list                                List supported frameworks, features, formatters, and test runners
 
 Options:
   --framework <node|react|next|vue|svelte|nuxt>
@@ -45,6 +47,7 @@ Options:
   --features <lint,format,typescript,test,husky>
                                       Features to install (all selected by default)
   --dir <path>                        Target directory (defaults to current directory)
+  --formatter <prettier|oxfmt>        Formatter for format feature (default: prettier)
   --test-runner <jest|vitest>         Optional test runner override (default: vue/nuxt=vitest, others=jest)
   --pm <pnpm|npm|yarn|auto>           Package manager (auto-detected if omitted)
   --force                             Overwrite existing config files
@@ -59,6 +62,7 @@ interface RawParsedOptions {
   command: string
   projectDir: string | null
   framework: string | null
+  formatter: string
   features: string[]
   testRunner: string | null
   pm: string | null
@@ -96,11 +100,16 @@ function isTestRunner(value: string): value is TestRunner {
   return includes(ALLOWED_TEST_RUNNERS, value)
 }
 
+function isFormatter(value: string): value is Formatter {
+  return includes(ALLOWED_FORMATTERS, value)
+}
+
 export function parseArgs(argv: string[]): ParsedOptions {
   const options: RawParsedOptions = {
     command: "init",
     projectDir: null,
     framework: null,
+    formatter: "prettier",
     features: [],
     testRunner: null,
     pm: null,
@@ -143,6 +152,11 @@ export function parseArgs(argv: string[]): ParsedOptions {
       i += 1
     } else if (arg.startsWith("--dir=")) {
       options.projectDir = readInlineFlagValue(arg, "--dir")
+    } else if (arg === "--formatter") {
+      options.formatter = readFlagValue(argv, i, "--formatter")
+      i += 1
+    } else if (arg.startsWith("--formatter=")) {
+      options.formatter = readInlineFlagValue(arg, "--formatter")
     } else if (arg === "--test-runner") {
       options.testRunner = readFlagValue(argv, i, "--test-runner")
       i += 1
@@ -225,6 +239,10 @@ function validateParsedOptions(
     throw new Error(`Unsupported framework: ${options.framework}`)
   }
 
+  if (!isFormatter(options.formatter)) {
+    throw new Error(`Unsupported formatter: ${options.formatter}`)
+  }
+
   if (options.testRunner && !isTestRunner(options.testRunner)) {
     throw new Error(`Unsupported test runner: ${options.testRunner}`)
   }
@@ -255,6 +273,7 @@ export function resolveFeatures(
 export function printSupportedTargets() {
   console.log("Frameworks: node, react, next, vue, svelte, nuxt")
   console.log("Features: lint, format, typescript, test, husky")
+  console.log("Formatters: prettier, oxfmt")
   console.log("Test runners: jest, vitest")
 }
 

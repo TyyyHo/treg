@@ -9,6 +9,8 @@ describe("parseArgs", () => {
       "demo-app",
       "--framework",
       "react",
+      "--formatter",
+      "oxfmt",
       "--features",
       "lint,test",
       "--test-runner",
@@ -23,6 +25,7 @@ describe("parseArgs", () => {
       command: "init",
       projectDir: "demo-app",
       framework: "react",
+      formatter: "oxfmt",
       features: ["lint", "test"],
       testRunner: "vitest",
       pm: "npm",
@@ -37,6 +40,7 @@ describe("parseArgs", () => {
   it("parses list command", () => {
     const parsed = parseArgs(["list"])
     expect(parsed.command).toBe("list")
+    expect(parsed.formatter).toBe("prettier")
   })
 
   it("accepts additional frameworks", () => {
@@ -62,12 +66,24 @@ describe("parseArgs", () => {
   it("allows init without framework for auto detection", () => {
     const parsed = parseArgs(["init"])
     expect(parsed.framework).toBeNull()
+    expect(parsed.formatter).toBe("prettier")
     expect(parsed.testRunner).toBeNull()
+  })
+
+  it("accepts oxfmt formatter override", () => {
+    const parsed = parseArgs(["add", "--formatter", "oxfmt"])
+    expect(parsed.formatter).toBe("oxfmt")
   })
 
   it("throws for unsupported framework", () => {
     expect(() => parseArgs(["init", "--framework", "angular"])).toThrow(
       "Unsupported framework: angular"
+    )
+  })
+
+  it("throws for unsupported formatter", () => {
+    expect(() => parseArgs(["init", "--formatter", "biome"])).toThrow(
+      "Unsupported formatter: biome"
     )
   })
 
