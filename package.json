@@ -1,5 +1,5 @@
 {
-  "name": "@tyyyho/Treg",
+  "name": "@tyyyho/treg",
   "version": "0.1.24",
   "description": "Treg (Regulatory T Cell) is a CLI tool that injects an engineering \"immune system\" into existing projects.",
   "license": "MIT",

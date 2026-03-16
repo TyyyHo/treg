@@ -1,4 +1,4 @@
-# @tyyyho/Treg
+# @tyyyho/treg
 
 [![npm version](https://img.shields.io/npm/v/%40tyyyho%2Ftreg)](https://www.npmjs.com/package/%40tyyyho%2Ftreg)
 [![License](https://img.shields.io/npm/l/%40tyyyho%2Ftreg)](https://www.npmjs.com/package/%40tyyyho%2Ftreg)
@@ -23,7 +23,7 @@ It only handles infrastructure setup:
 ## Quick Start
 
 ```bash
-npx @tyyyho/Treg init
+npx @tyyyho/treg init
 ```
 
 ## Commands
@@ -56,31 +56,31 @@ Default selected features include:
 Initialize with interactive prompts:
 
 ```bash
-npx @tyyyho/Treg init
+npx @tyyyho/treg init
 ```
 
 Preview init plan only:
 
 ```bash
-npx @tyyyho/Treg init --dry-run
+npx @tyyyho/treg init --dry-run
 ```
 
 Add only lint + format:
 
 ```bash
-npx @tyyyho/Treg add --features lint,format
+npx @tyyyho/treg add --features lint,format
 ```
 
 Add format using `oxfmt`:
 
 ```bash
-npx @tyyyho/Treg add --features format --formatter oxfmt
+npx @tyyyho/treg add --features format --formatter oxfmt
 ```
 
 Add test using `vitest`:
 
 ```bash
-npx @tyyyho/Treg add --features test --test-runner vitest
+npx @tyyyho/treg add --features test --test-runner vitest
 ```
 
 ## CLI Options

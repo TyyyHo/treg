@@ -1,4 +1,4 @@
-# @tyyyho/Treg（繁體中文）
+# @tyyyho/treg（繁體中文）
 
 [![npm version](https://img.shields.io/npm/v/%40tyyyho%2Ftreg)](https://www.npmjs.com/package/%40tyyyho%2Ftreg)
 [![License](https://img.shields.io/npm/l/%40tyyyho%2Ftreg)](https://www.npmjs.com/package/%40tyyyho%2Ftreg)
@@ -23,7 +23,7 @@ Treg（Regulatory T Cell）是一個為專案注入「免疫系統」的 CLI 工
 ## 快速開始
 
 ```bash
-npx @tyyyho/Treg init
+npx @tyyyho/treg init
 ```
 
 ## 指令總覽
@@ -56,31 +56,31 @@ npx @tyyyho/Treg init
 初始化：
 
 ```bash
-npx @tyyyho/Treg init
+npx @tyyyho/treg init
 ```
 
 只預覽 init 計畫：
 
 ```bash
-npx @tyyyho/Treg init --dry-run
+npx @tyyyho/treg init --dry-run
 ```
 
 只加入 lint + format：
 
 ```bash
-npx @tyyyho/Treg add --features lint,format
+npx @tyyyho/treg add --features lint,format
 ```
 
 format 使用 `oxfmt`：
 
 ```bash
-npx @tyyyho/Treg add --features format --formatter oxfmt
+npx @tyyyho/treg add --features format --formatter oxfmt
 ```
 
 test 使用 `vitest`：
 
 ```bash
-npx @tyyyho/Treg add --features test --test-runner vitest
+npx @tyyyho/treg add --features test --test-runner vitest
 ```
 
 ## CLI 參數

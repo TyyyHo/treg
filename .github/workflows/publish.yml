@@ -32,16 +32,19 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          # npm trusted publishing requires Node >= 22.14
+          node-version: 24
           cache: pnpm
 
-      - name: Ensure modern npm
-        run: npm install -g npm@latest
+      - name: Show Node and npm versions
+        run: |
+          node -v
+          npm -v
 
       - name: Clear legacy npm auth token config
         run: |
           npm config delete //registry.npmjs.org/:_authToken || true
-          rm -f "$HOME/.npmrc"
+          rm -f "$HOME/.npmrc" ".npmrc"
 
       - name: Verify tag matches package version
         run: |
@@ -62,6 +65,13 @@ jobs:
 
       - name: Use npm-specific README
         run: cp README.npm.md README.md
+
+      - name: Verify OIDC token environment
+        run: |
+          if [ -z "${ACTIONS_ID_TOKEN_REQUEST_URL:-}" ] || [ -z "${ACTIONS_ID_TOKEN_REQUEST_TOKEN:-}" ]; then
+            echo "OIDC token env is missing. Check `permissions.id-token: write` and runner type."
+            exit 1
+          fi
 
       - name: Publish to npm (Trusted publishing)
         run: npm publish --registry https://registry.npmjs.org --access public --provenance --ignore-scripts
