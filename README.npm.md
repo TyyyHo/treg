@@ -1,70 +1,154 @@
 # @tyyyho/treg
 
-Treg (Regulatory T Cell) injects an "immune system" into existing repositories.
-It keeps code quality and consistency stable during fast human-AI collaboration by enforcing a clean, maintainable, and extensible engineering baseline.
+[![npm
+version](https://img.shields.io/npm/v/%40tyyyho%2Ftreg)](https://www.npmjs.com/package/%40tyyyho%2Ftreg)
+[![npm
+downloads](https://img.shields.io/npm/dm/%40tyyyho%2Ftreg)](https://www.npmjs.com/package/%40tyyyho%2Ftreg)
+[![License](https://img.shields.io/npm/l/%40tyyyho%2Ftreg)](https://www.npmjs.com/package/%40tyyyho%2Ftreg)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)
 
-Scope:
+[繁體中文 README](./README.zh-hant.md)
 
-- lint
-- format
-- TypeScript
-- test
-- husky
-- AI skill guidance
+## Overview
 
-Quick start:
+**treg** is a CLI tool that injects an **engineering
+"immune system"** into your project.
+
+When humans and AI collaborate and iterate rapidly, repositories often
+accumulate inconsistent tooling, style drift, and fragile workflows.\
+`treg` helps maintain balance by establishing a clean and consistent
+development baseline.
+
+It focuses only on **infrastructure setup**, not application logic.
+
+---
+
+## Features
+
+`treg` can configure:
+
+- **TypeScript**
+- **ESLint**
+- **Prettier / Oxfmt**
+- **Jest / Vitest**
+- **Husky git hooks**
+- **AI skill guidance**
+
+These guardrails help maintain long‑term code health during fast
+iteration.
+
+---
+
+## Quick Start
+
+Initialize a project interactively:
 
 ```bash
 npx @tyyyho/treg init
 ```
 
-Commands:
+Preview changes:
 
-- `init`
-- `add`
-- `list`
+```bash
+npx @tyyyho/treg init --dry-run
+```
 
-`init` interactive questions:
+---
 
-1. package manager (`pnpm|npm|yarn|bun`)
-2. features (default: `all`)
-3. test runner (if `test` is selected, supports `skip`)
-4. formatter (if `format` is selected)
-5. ai tools (`Claude|Codex|Gemini`, multi-select, if AI skill guidance is selected)
+## Commands
 
-`add` examples:
+Command Description
+
+---
+
+`init` Initialize project with interactive setup
+`add` Add selected features
+`list` Show supported frameworks and tools
+
+---
+
+## Common Usage
+
+Add lint and format:
 
 ```bash
 npx @tyyyho/treg add --features lint,format
+```
+
+Add format with `oxfmt`:
+
+```bash
 npx @tyyyho/treg add --features format --formatter oxfmt
+```
+
+Add test with `vitest`:
+
+```bash
 npx @tyyyho/treg add --features test --test-runner vitest
 ```
 
-Options:
+---
 
-`init`:
+## Defaults
 
-```text
---dry-run
---help
+Framework detection order:
+
+    nuxt -> next -> react -> vue -> svelte -> node
+
+Default test runner:
+
+- `vue` / `nuxt`: `vitest`
+- others: `jest`
+
+Default formatter:
+
+    prettier
+
+---
+
+## AI Skills
+
+`treg` can update AI guidance files for development tools.
+
+Tool File
+
+---
+
+Claude `CLAUDE.md`
+Codex `AGENTS.md`
+Gemini `GEMINI.md`
+
+Behavior:
+
+- only selected tools are updated
+- missing files are created automatically
+- updates occur in the repository root
+
+---
+
+## Philosophy
+
+`treg` is intentionally minimal.
+
+It does not generate application architecture.\
+It focuses only on establishing the engineering infrastructure that
+keeps repositories healthy during rapid development.
+
+---
+
+## Release
+
+```bash
+npm run release -- patch
 ```
 
-`add`:
+Supported targets:
 
-```text
---framework <node|react|next|vue|svelte|nuxt>
---features <lint,format,typescript,test,husky>
---dir <path>
---formatter <prettier|oxfmt>
---test-runner <jest|vitest>
---force
---dry-run
---skip-husky-install
---help
-```
-
-Defaults:
-
-- framework detect order: `nuxt -> next -> react -> vue -> svelte -> node`
-- test runner: `vue/nuxt = vitest`, others = `jest`
-- formatter: `prettier`
+    patch
+    minor
+    major
+    prepatch
+    preminor
+    premajor
+    prerelease
+    x.y.z

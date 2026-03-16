@@ -1,59 +1,131 @@
+<div align="center">
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0F172A,30:1D4ED8,70:7C3AED,100:22C55E&height=260&section=header&text=treg&fontSize=72&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=Inject%20an%20immune%20system%20into%20your%20codebase&descSize=20&descAlignY=58" width="100%" />
+
 # @tyyyho/treg
 
-[![npm version](https://img.shields.io/npm/v/%40tyyyho%2Ftreg)](https://www.npmjs.com/package/%40tyyyho%2Ftreg)
-[![License](https://img.shields.io/npm/l/%40tyyyho%2Ftreg)](https://www.npmjs.com/package/%40tyyyho%2Ftreg)
-[![npm downloads](https://img.shields.io/npm/dm/%40tyyyho%2Ftreg)](https://www.npmjs.com/package/%40tyyyho%2Ftreg)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)
+[![npm version](https://img.shields.io/npm/v/%40tyyyho%2Ftreg?style=for-the-badge)](https://www.npmjs.com/package/%40tyyyho%2Ftreg)
+[![License](https://img.shields.io/npm/l/%40tyyyho%2Ftreg?style=for-the-badge)](https://www.npmjs.com/package/%40tyyyho%2Ftreg)
+[![npm downloads](https://img.shields.io/npm/dm/%40tyyyho%2Ftreg?style=for-the-badge)](https://www.npmjs.com/package/%40tyyyho%2Ftreg)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![CLI](https://img.shields.io/badge/CLI-Interactive-111827?style=for-the-badge&logo=gnubash&logoColor=white)
 
 [繁體中文 README](./README.zh-hant.md)
 
-Treg (Regulatory T Cell) is a CLI tool that injects an "immune system" into your project.
-When people and AI collaborate and iterate quickly, code can easily lose order and consistency; `treg` acts like biological T cells to maintain balance and suppress chaos, so your project stays clean, maintainable, and extensible during rapid iteration.
+</div>
 
-With one-time initialization, `treg` establishes a stable engineering baseline for existing repositories, including TypeScript, ESLint, Prettier, Husky, and standardized conventions. This gives your workflow foundational "immune protection" and prevents errors and style drift from continuously accumulating.
-It only handles infrastructure setup:
+---
 
-- lint
-- format
-- TypeScript
-- test
-- husky
-- AI skill guidance
+## Overview
+
+**treg**
+
+It is a CLI tool designed to inject an **"immune system"** into your project.  
+When Developer and AI collaborate at high speed, codebases can drift into inconsistency, duplicated rules, and fragile workflows.  
+`treg` plays the role of a regulatory T cell: it helps restore balance, suppress avoidable chaos, and keep the repository **clean, maintainable, and extensible**.
+
+Instead of generating app logic, `treg` focuses on the engineering baseline that protects a project from long-term entropy.
+
+> **Regulate the workflow before the workflow regulates you.**
+
+---
+
+## Why treg
+
+Modern projects can move fast, especially with AI-assisted coding.  
+But speed without constraints often creates invisible damage:
+
+- style drift
+- inconsistent tooling
+- weak commit hygiene
+- missing tests
+- unclear AI usage rules
+
+`treg` solves that by applying a consistent baseline to an existing repository with a single initialization flow.
+
+---
+
+## What treg Sets Up
+
+`treg` can configure:
+
+- **TypeScript**
+- **Linting** with ESLint
+- **Formatting** with Prettier or Oxfmt
+- **Testing** with Jest or Vitest
+- **Git hooks** with Husky
+- **AI skill guidance** for supported tools
+
+This keeps the project stable without forcing application-level architecture decisions.
+
+---
 
 ## Quick Start
+
+Initialize interactively:
 
 ```bash
 npx @tyyyho/treg init
 ```
 
+Preview changes only:
+
+```bash
+npx @tyyyho/treg init --dry-run
+```
+
+Add features to an existing project:
+
+```bash
+npx @tyyyho/treg add --features lint,format
+```
+
+---
+
 ## Commands
 
-- `init`: Initialize.
-- `add`: Add selected features to an existing project.
-- `list`: Show supported frameworks/features/formatters/test runners.
+| Command | Description                                                       |
+| ------- | ----------------------------------------------------------------- |
+| `init`  | Initialize the project with an interactive setup flow             |
+| `add`   | Add selected features to an existing project                      |
+| `list`  | Show supported frameworks, features, formatters, and test runners |
+
+---
 
 ## Init Interactive Flow
 
-After `init`, `treg` asks:
+During `init`, `treg` asks for:
 
-1. Package manager (`pnpm|npm|yarn|bun`)
-2. Features (multi-select, all options selected by default)
-3. Test runner (only when `test` is selected, supports `skip`)
-4. Formatter (only when `format` is selected)
-5. AI tools (`Claude|Codex|Gemini`, multi-select, only when AI skill guidance is selected)
+1. **Package manager**  
+   `pnpm | npm | yarn | bun`
 
-Default selected features include:
+2. **Features** (multi-select, selected by default)
+   - lint
+   - format
+   - TypeScript
+   - test
+   - husky
+   - AI skill guidance
 
-- lint
-- format
-- TypeScript
-- test
-- husky
-- AI skill guidance
+3. **Test runner** (only when `test` is selected)
+   - `jest`
+   - `vitest`
+   - `skip`
+
+4. **Formatter** (only when `format` is selected)
+   - `prettier`
+   - `oxfmt`
+
+5. **AI tools** (only when AI skill guidance is selected)
+   - Claude
+   - Codex
+   - Gemini
+
+---
 
 ## Common Usage
 
-Initialize with interactive prompts:
+Initialize project:
 
 ```bash
 npx @tyyyho/treg init
@@ -83,16 +155,18 @@ Add test using `vitest`:
 npx @tyyyho/treg add --features test --test-runner vitest
 ```
 
+---
+
 ## CLI Options
 
-`init` options:
+### `init`
 
 ```text
 --dry-run
 --help
 ```
 
-`add` options:
+### `add`
 
 ```text
 --framework <node|react|next|vue|svelte|nuxt>
@@ -106,30 +180,59 @@ npx @tyyyho/treg add --features test --test-runner vitest
 --help
 ```
 
+---
+
 ## Defaults
 
-Framework detection order:
+### Framework Detection
 
-`nuxt -> next -> react -> vue -> svelte -> node`
+Detection order:
 
-Test runner default:
+```text
+nuxt -> next -> react -> vue -> svelte -> node
+```
+
+### Test Runner
 
 - `vue` / `nuxt`: `vitest`
 - others: `jest`
 
-Formatter default:
+### Formatter
 
 - `prettier`
 
+---
+
 ## AI Skills Behavior
 
-- AI guidance updates only selected tools' files:
-  - `Claude -> CLAUDE.md`
-  - `Codex -> AGENTS.md`
-  - `Gemini -> GEMINI.md`
-- Files are updated when they exist in repo root.
-- Missing selected AI docs are auto-created before injecting guidance.
-- Skill files are generated once per enabled feature.
+`treg` can update AI guidance files for selected tools:
+
+| Tool   | File        |
+| ------ | ----------- |
+| Claude | `CLAUDE.md` |
+| Codex  | `AGENTS.md` |
+| Gemini | `GEMINI.md` |
+
+Behavior:
+
+- only selected tools are updated
+- selected docs are created automatically when missing
+- updates happen in the repository root
+- skill files are generated once per enabled feature
+
+---
+
+## Philosophy
+
+`treg` is intentionally narrow in scope.
+
+It does **not** try to be a full project generator.  
+It does **not** replace team judgment.  
+It does **not** force product architecture.
+
+It exists to establish the engineering immune layer that keeps rapid iteration from degrading the codebase over time.
+
+---
 
 ## Release
 
@@ -139,11 +242,21 @@ npm run release -- patch
 
 Supported targets:
 
-- `patch`
-- `minor`
-- `major`
-- `prepatch`
-- `preminor`
-- `premajor`
-- `prerelease`
-- explicit version (`x.y.z`)
+```text
+patch
+minor
+major
+prepatch
+preminor
+premajor
+prerelease
+x.y.z
+```
+
+---
+
+<div align="center">
+  <sub>Built to regulate chaotic iteration and protect long-term codebase health.</sub>
+  <br />
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:22C55E,40:06B6D4,75:3B82F6,100:7C3AED&height=120&section=footer" width="100%" />
+</div>
