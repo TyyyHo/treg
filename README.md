@@ -1,5 +1,10 @@
 # @tyyyho/Treg
 
+[![npm version](https://img.shields.io/npm/v/%40tyyyho%2Ftreg)](https://www.npmjs.com/package/%40tyyyho%2Ftreg)
+[![License](https://img.shields.io/npm/l/%40tyyyho%2Ftreg)](https://www.npmjs.com/package/%40tyyyho%2Ftreg)
+[![npm downloads](https://img.shields.io/npm/dm/%40tyyyho%2Ftreg)](https://www.npmjs.com/package/%40tyyyho%2Ftreg)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)
+
 [繁體中文 README](./README.zh-hant.md)
 
 Treg (Regulatory T Cell) is a CLI tool that injects an "immune system" into your project.

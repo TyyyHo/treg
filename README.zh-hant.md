@@ -1,5 +1,10 @@
 # @tyyyho/Treg（繁體中文）
 
+[![npm version](https://img.shields.io/npm/v/%40tyyyho%2Ftreg)](https://www.npmjs.com/package/%40tyyyho%2Ftreg)
+[![License](https://img.shields.io/npm/l/%40tyyyho%2Ftreg)](https://www.npmjs.com/package/%40tyyyho%2Ftreg)
+[![npm downloads](https://img.shields.io/npm/dm/%40tyyyho%2Ftreg)](https://www.npmjs.com/package/%40tyyyho%2Ftreg)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)
+
 [English README](./README.md)
 
 Treg（Regulatory T Cell）是一個為專案注入「免疫系統」的 CLI 工具。
