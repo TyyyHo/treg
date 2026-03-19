@@ -18,16 +18,16 @@ describe("ai-skills helpers", () => {
       testRunner: "vitest",
     })
 
-    expect(content).toContain("## treg AI Skills")
+    expect(content).toContain("## Treg AI Skills")
     expect(content).toContain("### Steps and Skill Mapping")
     expect(content).toContain(
-      "1. Formatting: use [treg/format](skills/format/SKILL.md)"
+      "1. Formatting: use [Treg/format](skills/format/SKILL.md)"
     )
     expect(content).toContain(
-      "2. Lint Validation: use [treg/lint](skills/lint/SKILL.md)"
+      "2. Lint Validation: use [Treg/lint](skills/lint/SKILL.md)"
     )
     expect(content).toContain(
-      "3. Test Configuration: use [treg/test](skills/test/SKILL.md)"
+      "3. Test Configuration: use [Treg/test](skills/test/SKILL.md)"
     )
     expect(content).toContain("Current test runner: `vitest`")
     expect(content).not.toContain("TypeScript Settings")
@@ -37,7 +37,7 @@ describe("ai-skills helpers", () => {
   it("appends skill section when no existing section is present", () => {
     const replaced = __testables__.upsertSkillSection(
       "# Header\n\nSome existing content.",
-      "## treg AI Skills\n\nnew"
+      "## Treg AI Skills\n\nnew"
     )
 
     expect(replaced).toContain("# Header")
@@ -47,11 +47,11 @@ describe("ai-skills helpers", () => {
 
   it("upserts an existing skill section without markers", () => {
     const replaced = __testables__.upsertSkillSection(
-      "# Header\n\n## treg AI Skills\n\nold\n\n## Other\n\nkeep",
-      "## treg AI Skills\n\nnew"
+      "# Header\n\n## Treg AI Skills\n\nold\n\n## Other\n\nkeep",
+      "## Treg AI Skills\n\nnew"
     )
 
-    expect(replaced).toContain("## treg AI Skills\n\nnew")
+    expect(replaced).toContain("## Treg AI Skills\n\nnew")
     expect(replaced).toContain("## Other\n\nkeep")
     expect(replaced).not.toContain("old")
   })
@@ -125,10 +125,10 @@ describe("ai-skills helpers", () => {
       const geminiDoc = await readFile(path.join(dir, "GEMINI.md"), "utf8")
       const lintSkillPath = path.join(dir, "skills/lint/SKILL.md")
 
-      expect(claudeDoc).toContain("## treg AI Skills")
-      expect(claudeDoc).toContain("[treg/lint](skills/lint/SKILL.md)")
-      expect(agentsDoc).toContain("## treg AI Skills")
-      expect(geminiDoc).toContain("## treg AI Skills")
+      expect(claudeDoc).toContain("## Treg AI Skills")
+      expect(claudeDoc).toContain("[Treg/lint](skills/lint/SKILL.md)")
+      expect(agentsDoc).toContain("## Treg AI Skills")
+      expect(geminiDoc).toContain("## Treg AI Skills")
       expect(existsSync(lintSkillPath)).toBe(true)
       expect(existsSync(path.join(dir, "skills/format/SKILL.md"))).toBe(false)
       expect(existsSync(path.join(dir, "skills/test/SKILL.md"))).toBe(false)
@@ -175,9 +175,9 @@ describe("ai-skills helpers", () => {
       const agentsDoc = await readFile(path.join(dir, "AGENTS.md"), "utf8")
       const geminiDoc = await readFile(path.join(dir, "GEMINI.md"), "utf8")
 
-      expect(claudeDoc).not.toContain("## treg AI Skills")
-      expect(agentsDoc).toContain("## treg AI Skills")
-      expect(geminiDoc).not.toContain("## treg AI Skills")
+      expect(claudeDoc).not.toContain("## Treg AI Skills")
+      expect(agentsDoc).toContain("## Treg AI Skills")
+      expect(geminiDoc).not.toContain("## Treg AI Skills")
     } finally {
       rmSync(dir, { recursive: true, force: true })
     }
@@ -217,9 +217,9 @@ describe("ai-skills helpers", () => {
       const geminiDoc = await readFile(path.join(dir, "GEMINI.md"), "utf8")
 
       expect(agentsDoc).not.toContain("# AGENTS")
-      expect(agentsDoc).toContain("## treg AI Skills")
+      expect(agentsDoc).toContain("## Treg AI Skills")
       expect(geminiDoc).not.toContain("# GEMINI")
-      expect(geminiDoc).toContain("## treg AI Skills")
+      expect(geminiDoc).toContain("## Treg AI Skills")
       expect(existsSync(path.join(dir, "CLAUDE.md"))).toBe(false)
     } finally {
       rmSync(dir, { recursive: true, force: true })
@@ -230,7 +230,7 @@ describe("ai-skills helpers", () => {
     const content = __testables__.buildSkillFile(
       "test",
       {
-        name: "treg/test",
+        name: "Treg/test",
         description: "Validate test runner setup and execution.",
         when: "When test rules are added or test configuration changes.",
         checklist: [
@@ -241,7 +241,7 @@ describe("ai-skills helpers", () => {
       "vitest"
     )
 
-    expect(content).toContain("name: treg/test")
+    expect(content).toContain("name: Treg/test")
     expect(content).toContain("description: Validate test runner setup")
     expect(content).toContain("## Current Test Runner")
     expect(content).toContain("`vitest`")
@@ -261,7 +261,7 @@ describe("ai-skills helpers", () => {
         "utf8"
       )
 
-      expect(lintSkill).toContain("name: treg/lint")
+      expect(lintSkill).toContain("name: Treg/lint")
       expect(testSkill).toContain("## Current Test Runner")
     } finally {
       rmSync(dir, { recursive: true, force: true })

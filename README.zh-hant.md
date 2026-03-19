@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0F172A,30:1D4ED8,70:7C3AED,100:22C55E&height=260&section=header&text=treg&fontSize=72&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=Inject%20an%20immune%20system%20into%20your%20codebase&descSize=20&descAlignY=58" width="100%" />
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0F172A,30:1D4ED8,70:7C3AED,100:22C55E&height=260&section=header&text=Treg&fontSize=72&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=Inject%20an%20immune%20system%20into%20your%20codebase&descSize=20&descAlignY=58" width="100%" />
 
 # @tyyyho/treg（繁體中文）
 
@@ -18,19 +18,19 @@
 
 ## 概覽
 
-**treg**
+**Treg**
 
 它是一個為專案注入「免疫系統」的 CLI 工具。  
 當開發者與 AI 高速協作時，程式碼庫很容易出現規範不一致、規則重複、流程脆弱等問題。  
-`treg` 的角色就像調節型 T 細胞：協助恢復平衡、抑制可避免的混亂，讓專案維持 **乾淨、可維護、可擴展**。
+`Treg` 的角色就像調節型 T 細胞：協助恢復平衡、抑制可避免的混亂，讓專案維持 **乾淨、可維護、可擴展**。
 
-`treg` 不產生產品商業邏輯，而是專注於建立可長期保持穩定的工程基線。
+`Treg` 不產生產品商業邏輯，而是專注於建立可長期保持穩定的工程基線。
 
 > **先規範開發流程，才不會被流程反過來牽制。**
 
 ---
 
-## 為什麼需要 treg
+## 為什麼需要 Treg
 
 在 AI 輔助開發時代，專案速度可以很快。  
 但速度若缺少約束，通常會留下看不見的技術債：
@@ -41,13 +41,13 @@
 - 測試覆蓋缺漏
 - AI 使用規則不清
 
-`treg` 透過一次初始化流程，把一致的工程基線套用到既有 repository。
+`Treg` 透過一次初始化流程，把一致的工程基線套用到既有 repository。
 
 ---
 
-## treg 會建立什麼
+## Treg 會建立什麼
 
-`treg` 可配置：
+`Treg` 可配置：
 
 - **TypeScript**
 - **Linting**（ESLint）
@@ -94,7 +94,7 @@ npx @tyyyho/treg add --features lint,format
 
 ## init 互動流程
 
-執行 `init` 時，`treg` 會依序詢問：
+執行 `init` 時，`Treg` 會依序詢問：
 
 1. **Package manager**  
    `pnpm | npm | yarn | bun`
@@ -205,7 +205,7 @@ nuxt -> next -> react -> vue -> svelte -> node
 
 ## AI Skills 行為
 
-`treg` 可更新所選 AI 工具的說明文件：
+`Treg` 可更新所選 AI 工具的說明文件：
 
 | Tool   | File        |
 | ------ | ----------- |
@@ -224,7 +224,7 @@ nuxt -> next -> react -> vue -> svelte -> node
 
 ## 核心理念
 
-`treg` 的設計刻意保持單一職責。
+`Treg` 的設計刻意保持單一職責。
 
 它 **不** 是完整專案產生器。  
 它 **不** 取代團隊判斷。  

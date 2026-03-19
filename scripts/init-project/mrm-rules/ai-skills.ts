@@ -10,7 +10,7 @@ import { existsSync } from "node:fs"
 import { promises as fs } from "node:fs"
 import path from "node:path"
 
-const SKILL_SECTION_HEADING = "## treg AI Skills"
+const SKILL_SECTION_HEADING = "## Treg AI Skills"
 const SKILLS_BASE_DIR = "skills"
 const AI_TOOL_DOCS: Record<AiTool, string> = {
   claude: "CLAUDE.md",
@@ -27,7 +27,7 @@ interface SkillDefinition {
 
 const FEATURE_SKILLS: Record<FeatureName, SkillDefinition> = {
   format: {
-    name: "treg/format",
+    name: "Treg/format",
     description: "Run and verify formatting rules.",
     when: "Before committing or after broad edits, normalize formatting across the codebase.",
     checklist: [
@@ -37,7 +37,7 @@ const FEATURE_SKILLS: Record<FeatureName, SkillDefinition> = {
     ],
   },
   husky: {
-    name: "treg/husky",
+    name: "Treg/husky",
     description: "Verify and maintain git hook automation.",
     when: "When pre-commit and pre-push checks must stay enforced and consistent.",
     checklist: [
@@ -47,7 +47,7 @@ const FEATURE_SKILLS: Record<FeatureName, SkillDefinition> = {
     ],
   },
   lint: {
-    name: "treg/lint",
+    name: "Treg/lint",
     description: "Run and validate lint rules.",
     when: "After adding rules or changing tooling, verify lint consistency.",
     checklist: [
@@ -57,7 +57,7 @@ const FEATURE_SKILLS: Record<FeatureName, SkillDefinition> = {
     ],
   },
   test: {
-    name: "treg/test",
+    name: "Treg/test",
     description: "Validate test runner setup and execution.",
     when: "When test rules are added or test configuration changes.",
     checklist: [
@@ -67,7 +67,7 @@ const FEATURE_SKILLS: Record<FeatureName, SkillDefinition> = {
     ],
   },
   typescript: {
-    name: "treg/typescript",
+    name: "Treg/typescript",
     description: "Validate TypeScript strictness and config.",
     when: "When tsconfig or strict typing rules are changed.",
     checklist: [
