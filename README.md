@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0F172A,30:1D4ED8,70:7C3AED,100:22C55E&height=260&section=header&text=treg&fontSize=72&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=Inject%20an%20immune%20system%20into%20your%20codebase&descSize=20&descAlignY=58" width="100%" />
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0F172A,30:1D4ED8,70:7C3AED,100:22C55E&height=260&section=header&text=Treg&fontSize=72&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=Inject%20an%20immune%20system%20into%20your%20codebase&descSize=20&descAlignY=58" width="100%" />
 
 # @tyyyho/treg
 
@@ -18,19 +18,19 @@
 
 ## Overview
 
-**treg**
+**Treg**
 
 It is a CLI tool designed to inject an **immune system** into your project.  
 When Developer and AI collaborate at high speed, codebases can drift into inconsistency, duplicated rules, and fragile workflows.  
-`treg` plays the role of a regulatory T cell: it helps restore balance, suppress avoidable chaos, and keep the repository **clean, maintainable, and extensible**.
+`Treg` plays the role of a regulatory T cell: it helps restore balance, suppress avoidable chaos, and keep the repository **clean, maintainable, and extensible**.
 
-Instead of generating app logic, `treg` focuses on the engineering baseline that protects a project from long-term entropy.
+Instead of generating app logic, `Treg` focuses on the engineering baseline that protects a project from long-term entropy.
 
 > **Regulate the workflow before the workflow regulates you.**
 
 ---
 
-## Why treg
+## Why Treg
 
 Modern projects can move fast, especially with AI-assisted coding.  
 But speed without constraints often creates invisible damage:
@@ -41,13 +41,13 @@ But speed without constraints often creates invisible damage:
 - missing tests
 - unclear AI usage rules
 
-`treg` solves that by applying a consistent baseline to an existing repository with a single initialization flow.
+`Treg` solves that by applying a consistent baseline to an existing repository with a single initialization flow.
 
 ---
 
-## What treg Sets Up
+## What Treg Sets Up
 
-`treg` can configure:
+`Treg` can configure:
 
 - **TypeScript**
 - **Linting** with ESLint
@@ -94,7 +94,7 @@ npx @tyyyho/treg add --features lint,format
 
 ## Init Interactive Flow
 
-During `init`, `treg` asks for:
+During `init`, `Treg` asks for:
 
 1. **Package manager**  
    `pnpm | npm | yarn | bun`
@@ -205,7 +205,7 @@ nuxt -> next -> react -> vue -> svelte -> node
 
 ## AI Skills Behavior
 
-`treg` can update AI guidance files for selected tools:
+`Treg` can update AI guidance files for selected tools:
 
 | Tool   | File        |
 | ------ | ----------- |
@@ -224,7 +224,7 @@ Behavior:
 
 ## Philosophy
 
-`treg` is intentionally narrow in scope.
+`Treg` is intentionally narrow in scope.
 
 It does **not** try to be a full project generator.  
 It does **not** replace team judgment.  

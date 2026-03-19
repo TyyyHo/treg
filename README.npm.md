@@ -9,11 +9,11 @@ downloads](https://img.shields.io/npm/dm/%40tyyyho%2Ftreg)](https://www.npmjs.co
 
 ## Overview
 
-**treg** is a CLI tool that injects an **engineering immune system** into your project.
+**Treg** is a CLI tool that injects an **engineering immune system** into your project.
 
 When humans and AI collaborate and iterate rapidly, repositories often
 accumulate inconsistent tooling, style drift, and fragile workflows.\
-`treg` helps maintain balance by establishing a clean and consistent
+`Treg` helps maintain balance by establishing a clean and consistent
 development baseline.
 
 It focuses only on **infrastructure setup**, not application logic.
@@ -22,7 +22,7 @@ It focuses only on **infrastructure setup**, not application logic.
 
 ## Features
 
-`treg` can configure:
+`Treg` can configure:
 
 - **TypeScript**
 - **ESLint**
@@ -105,7 +105,7 @@ Default formatter:
 
 ## AI Skills
 
-`treg` can update AI guidance files for development tools.
+`Treg` can update AI guidance files for development tools.
 
 Tool File
 
@@ -125,7 +125,7 @@ Behavior:
 
 ## Philosophy
 
-`treg` is intentionally minimal.
+`Treg` is intentionally minimal.
 
 It does not generate application architecture.\
 It focuses only on establishing the engineering infrastructure that
