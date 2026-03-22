@@ -10,7 +10,8 @@ import { existsSync } from "node:fs"
 import { promises as fs } from "node:fs"
 import path from "node:path"
 
-const SKILL_SECTION_HEADING = "## Treg AI Skills"
+const SKILL_SECTION_HEADING = "## Treg AI Rules"
+const LEGACY_SKILL_SECTION_HEADINGS = ["## Treg AI Guide", "## Treg AI Skills"]
 const SKILLS_BASE_DIR = "skills"
 const AI_TOOL_DOCS: Record<AiTool, string> = {
   claude: "CLAUDE.md",
@@ -165,7 +166,17 @@ function buildSkillSection(
   const { enabledFeatures, testRunner } = context
   const enabled = getEnabledFeatures(enabledFeatures)
 
-  const lines = [SKILL_SECTION_HEADING, "", "### Steps and Skill Mapping", ""]
+  const lines = [
+    SKILL_SECTION_HEADING,
+    "",
+    "### Git rules",
+    "",
+    "1. Never use --verify",
+    "2. Unless the user asks, never relax TypeScript, lint, or format constraints, and never skip tests.",
+    "",
+    "### Steps and Skill Mapping",
+    "",
+  ]
 
   if (enabled.length === 0) {
     lines.push(
@@ -200,7 +211,12 @@ function upsertSkillSection(content: string, nextSection: string): string {
     return after ? `${rebuilt}\n${after}\n` : `${rebuilt}`
   }
 
-  const headingStart = content.indexOf(SKILL_SECTION_HEADING)
+  const headingStart =
+    [SKILL_SECTION_HEADING, ...LEGACY_SKILL_SECTION_HEADINGS]
+      .map(heading => content.indexOf(heading))
+      .filter(index => index !== -1)
+      .sort((a, b) => a - b)[0] ?? -1
+
   if (headingStart !== -1) {
     const nextHeading = content.indexOf("\n## ", headingStart + 1)
     const sectionEnd = nextHeading === -1 ? content.length : nextHeading + 1
@@ -226,7 +242,7 @@ export async function runAiSkillsRule(context: RuleContext): Promise<void> {
     if (dryRun) {
       const action = existsSync(targetFile) ? "update" : "create"
       console.log(
-        `[dry-run] Would ${action} ${path.basename(targetFile)} with AI skill guidance`
+        `[dry-run] Would ${action} ${path.basename(targetFile)} with AI rules content`
       )
       continue
     }
@@ -239,13 +255,13 @@ export async function runAiSkillsRule(context: RuleContext): Promise<void> {
       await fs.mkdir(path.dirname(targetFile), { recursive: true })
       await fs.writeFile(targetFile, updated, "utf8")
       console.log(
-        `${exists ? "Updated" : "Created"} ${path.basename(targetFile)} with AI skill guidance`
+        `${exists ? "Updated" : "Created"} ${path.basename(targetFile)} with AI rules content`
       )
       continue
     }
 
     console.log(
-      `${path.basename(targetFile)} already contains latest AI skill guidance`
+      `${path.basename(targetFile)} already contains latest AI rules content`
     )
   }
 }
