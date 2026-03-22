@@ -1,6 +1,6 @@
 {
   "name": "@tylercore/treg",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Treg is a CLI tool that injects an engineering immune system into existing projects.",
   "license": "MIT",
   "repository": {
