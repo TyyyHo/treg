@@ -63,7 +63,7 @@ const AI_TOOL_CHOICES: readonly Choice<AiToolChoice>[] = [
   { value: "claude", label: "Claude" },
   { value: "codex", label: "Codex" },
   { value: "gemini", label: "Gemini" },
-  { value: "skip", label: "skip (disable AI skill guidance)" },
+  { value: "skip", label: "skip (disable AI rules guidance)" },
 ]
 
 const FEATURE_CHOICES: readonly Choice<InitPromptFeature>[] = [
@@ -72,7 +72,7 @@ const FEATURE_CHOICES: readonly Choice<InitPromptFeature>[] = [
   { value: "typescript", label: "TypeScript" },
   { value: "test", label: "test" },
   { value: "husky", label: "husky" },
-  { value: "skills", label: "AI skill guidance" },
+  { value: "skills", label: "AI rules guidance" },
 ]
 
 let promptsModulePromise: Promise<ClackPrompts> | null = null
@@ -253,10 +253,10 @@ export async function collectInitPrompts(
     skills = aiToolSelection.skills
     aiTools = aiToolSelection.aiTools
     if (!skills) {
-      console.log("AI skill guidance disabled by selection: skip")
+      console.log("AI rules guidance disabled by selection: skip")
     }
   } else {
-    console.log("5) AI tools skipped (AI skill guidance not selected)")
+    console.log("5) AI tools skipped (AI rules guidance not selected)")
   }
 
   return {

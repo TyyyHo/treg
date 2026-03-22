@@ -2,7 +2,7 @@ import { describe, expect, it } from "@jest/globals"
 import { __testables__ } from "./init-prompts.ts"
 
 describe("init prompts helpers", () => {
-  it("maps selected features and skills", () => {
+  it("maps selected features and AI rules toggle", () => {
     expect(
       __testables__.toFeatureSelection(["lint", "test", "skills"])
     ).toEqual({
@@ -39,7 +39,7 @@ describe("init prompts helpers", () => {
     })
   })
 
-  it("disables AI skills when skip is selected", () => {
+  it("disables AI rules when skip is selected", () => {
     expect(__testables__.resolveAiToolSelection(["skip"])).toEqual({
       skills: false,
       aiTools: [],

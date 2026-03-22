@@ -1,4 +1,4 @@
-import { runAiSkillsRule } from "./ai-skills.ts"
+import { runAiRulesRule } from "./ai-rules.ts"
 import { runFormatRule } from "./format.ts"
 import { runHuskyRule } from "./husky.ts"
 import { runLintRule } from "./lint.ts"
@@ -31,6 +31,6 @@ export async function runFeatureRules(context: RuleContext): Promise<void> {
   }
 
   if (skills) {
-    await runAiSkillsRule(context)
+    await runAiRulesRule(context)
   }
 }

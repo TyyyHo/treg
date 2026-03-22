@@ -1,7 +1,7 @@
 ## Project scope
 
 - 這個專案是 `Treg` CLI，定位為「基礎建設工具」。
-- 僅處理工具鏈與專案規範（lint、format、typescript、test、husky、ai-skills）。
+- 僅處理工具鏈與專案規範（lint、format、typescript、test、husky、ai-rules）。
 - 禁止加入產品功能、頁面、API、商業邏輯。
 - 完成功能後Claude會進行code review
 - 開發跟部署相關的內容寫進AGENTS.md，使用相關的說明寫進README.md
@@ -65,8 +65,8 @@
 - `test` feature 必須支援 `--test-runner <jest|vitest>`。
 - `--dry-run` 必須輸出完整計畫且不寫入檔案。
 
-## AI skills rules
+## AI rules
 
 - 每個 feature 對應一個 skill。
-- 若啟用 skills，會依使用者選擇的 AI tools 更新對應檔案（`CLAUDE.md`、`AGENTS.md`、`GEMINI.md`）。
+- 若啟用 ai-rules（`skills` 選項），會依使用者選擇的 AI tools 更新對應檔案（`CLAUDE.md`、`AGENTS.md`、`GEMINI.md`）。
 - 若對應檔案不存在，需先自動建立再注入說明。

@@ -54,7 +54,7 @@
 - **Formatting**（Prettier 或 Oxfmt）
 - **Testing**（Jest 或 Vitest）
 - **Git hooks**（Husky）
-- **AI skill guidance**（支援的 AI 工具說明）
+- **AI rules guidance**（支援的 AI 工具說明）
 
 這能穩定專案品質，同時不強制你採用特定產品架構。
 
@@ -105,7 +105,7 @@ npx @tylercore/treg add --features lint,format
    - TypeScript
    - test
    - husky
-   - AI skill guidance
+   - AI rules guidance
 
 3. **Test runner**（僅在選到 `test` 時詢問）
    - `jest`
@@ -116,7 +116,7 @@ npx @tylercore/treg add --features lint,format
    - `prettier`
    - `oxfmt`
 
-5. **AI tools**（僅在選到 AI skill guidance 時詢問）
+5. **AI tools**（僅在選到 AI rules guidance 時詢問）
    - Claude
    - Codex
    - Gemini
@@ -203,7 +203,7 @@ nuxt -> next -> react -> vue -> svelte -> node
 
 ---
 
-## AI Skills 行為
+## AI Rules 行為
 
 `Treg` 可更新所選 AI 工具的說明文件：
 
@@ -231,29 +231,6 @@ nuxt -> next -> react -> vue -> svelte -> node
 它 **不** 強制產品架構。
 
 它的目標是建立工程免疫層，避免快速迭代持續侵蝕程式碼品質。
-
----
-
-## 發布
-
-發布套件 `@tylercore/treg`：
-
-```bash
-npm run release -- patch
-```
-
-支援目標：
-
-```text
-patch
-minor
-major
-prepatch
-preminor
-premajor
-prerelease
-x.y.z
-```
 
 ---
 

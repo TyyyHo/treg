@@ -171,7 +171,7 @@ function buildSkillSection(
     "",
     "### Git rules",
     "",
-    "1. Never use --verify",
+    "1. Never use --no-verify",
     "2. Unless the user asks, never relax TypeScript, lint, or format constraints, and never skip tests.",
     "",
     "### Steps and Skill Mapping",
@@ -230,7 +230,7 @@ function upsertSkillSection(content: string, nextSection: string): string {
   return `${content.trimEnd()}\n\n${nextSection.trim()}\n`
 }
 
-export async function runAiSkillsRule(context: RuleContext): Promise<void> {
+export async function runAiRulesRule(context: RuleContext): Promise<void> {
   const { projectDir, dryRun, aiTools } = context
   const targetFiles = resolveSkillsDocs(projectDir, aiTools)
 

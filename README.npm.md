@@ -29,7 +29,7 @@ It focuses only on **infrastructure setup**, not application logic.
 - **Prettier / Oxfmt**
 - **Jest / Vitest**
 - **Husky git hooks**
-- **AI skill guidance**
+- **AI rules guidance**
 
 These guardrails help maintain long‑term code health during fast
 iteration.
@@ -103,7 +103,7 @@ Default formatter:
 
 ---
 
-## AI Skills
+## AI Rules
 
 `Treg` can update AI guidance files for development tools.
 
@@ -130,24 +130,3 @@ Behavior:
 It does not generate application architecture.\
 It focuses only on establishing the engineering infrastructure that
 keeps repositories healthy during rapid development.
-
----
-
-## Release
-
-Release package `@tylercore/treg`:
-
-```bash
-npm run release -- patch
-```
-
-Supported targets:
-
-    patch
-    minor
-    major
-    prepatch
-    preminor
-    premajor
-    prerelease
-    x.y.z

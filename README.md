@@ -54,7 +54,7 @@ But speed without constraints often creates invisible damage:
 - **Formatting** with Prettier or Oxfmt
 - **Testing** with Jest or Vitest
 - **Git hooks** with Husky
-- **AI skill guidance** for supported tools
+- **AI rules guidance** for supported tools
 
 This keeps the project stable without forcing application-level architecture decisions.
 
@@ -105,7 +105,7 @@ During `init`, `Treg` asks for:
    - TypeScript
    - test
    - husky
-   - AI skill guidance
+   - AI rules guidance
 
 3. **Test runner** (only when `test` is selected)
    - `jest`
@@ -116,7 +116,7 @@ During `init`, `Treg` asks for:
    - `prettier`
    - `oxfmt`
 
-5. **AI tools** (only when AI skill guidance is selected)
+5. **AI tools** (only when AI rules guidance is selected)
    - Claude
    - Codex
    - Gemini
@@ -203,7 +203,7 @@ nuxt -> next -> react -> vue -> svelte -> node
 
 ---
 
-## AI Skills Behavior
+## AI Rules Behavior
 
 `Treg` can update AI guidance files for selected tools:
 
@@ -231,29 +231,6 @@ It does **not** replace team judgment.
 It does **not** force product architecture.
 
 It exists to establish the engineering immune layer that keeps rapid iteration from degrading the codebase over time.
-
----
-
-## Release
-
-Release package `@tylercore/treg`:
-
-```bash
-npm run release -- patch
-```
-
-Supported targets:
-
-```text
-patch
-minor
-major
-prepatch
-preminor
-premajor
-prerelease
-x.y.z
-```
 
 ---
 

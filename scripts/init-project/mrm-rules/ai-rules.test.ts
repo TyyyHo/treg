@@ -3,9 +3,9 @@ import { existsSync, mkdtempSync, rmSync, writeFileSync } from "node:fs"
 import { readFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import path from "node:path"
-import { __testables__, runAiSkillsRule } from "./ai-skills.ts"
+import { __testables__, runAiRulesRule } from "./ai-rules.ts"
 
-describe("ai-skills helpers", () => {
+describe("ai-rules helpers", () => {
   it("builds skill section from enabled features", () => {
     const content = __testables__.buildSkillSection({
       enabledFeatures: {
@@ -20,7 +20,7 @@ describe("ai-skills helpers", () => {
 
     expect(content).toContain("## Treg AI Rules")
     expect(content).toContain("### Git rules")
-    expect(content).toContain("1. Never use --verify")
+    expect(content).toContain("1. Never use --no-verify")
     expect(content).toContain(
       "2. Unless the user asks, never relax TypeScript, lint, or format constraints, and never skip tests."
     )
@@ -98,7 +98,7 @@ describe("ai-skills helpers", () => {
       writeFileSync(path.join(dir, "AGENTS.md"), "# Agents\n", "utf8")
       writeFileSync(path.join(dir, "GEMINI.md"), "# Gemini\n", "utf8")
 
-      await runAiSkillsRule({
+      await runAiRulesRule({
         command: "add",
         projectDir: dir,
         framework: {
@@ -149,7 +149,7 @@ describe("ai-skills helpers", () => {
       writeFileSync(path.join(dir, "AGENTS.md"), "# Agents\n", "utf8")
       writeFileSync(path.join(dir, "GEMINI.md"), "# Gemini\n", "utf8")
 
-      await runAiSkillsRule({
+      await runAiRulesRule({
         command: "add",
         projectDir: dir,
         framework: {
@@ -191,7 +191,7 @@ describe("ai-skills helpers", () => {
   it("creates missing selected ai docs and injects guidance", async () => {
     const dir = mkdtempSync(path.join(tmpdir(), "treg-skill-create-docs-"))
     try {
-      await runAiSkillsRule({
+      await runAiRulesRule({
         command: "add",
         projectDir: dir,
         framework: {
