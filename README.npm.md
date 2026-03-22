@@ -1,10 +1,10 @@
-# @tyyyho/treg
+# @tylercore/treg
 
 [![npm
-version](https://img.shields.io/npm/v/%40tyyyho%2Ftreg)](https://www.npmjs.com/package/%40tyyyho%2Ftreg)
+version](https://img.shields.io/npm/v/%40tylercore%2Ftreg)](https://www.npmjs.com/package/%40tylercore%2Ftreg)
 [![npm
-downloads](https://img.shields.io/npm/dm/%40tyyyho%2Ftreg)](https://www.npmjs.com/package/%40tyyyho%2Ftreg)
-[![License](https://img.shields.io/npm/l/%40tyyyho%2Ftreg)](https://www.npmjs.com/package/%40tyyyho%2Ftreg)
+downloads](https://img.shields.io/npm/dm/%40tylercore%2Ftreg)](https://www.npmjs.com/package/%40tylercore%2Ftreg)
+[![License](https://img.shields.io/npm/l/%40tylercore%2Ftreg)](https://www.npmjs.com/package/%40tylercore%2Ftreg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)
 
 ## Overview
@@ -41,13 +41,13 @@ iteration.
 Initialize a project interactively:
 
 ```bash
-npx @tyyyho/treg init
+npx @tylercore/treg init
 ```
 
 Preview changes:
 
 ```bash
-npx @tyyyho/treg init --dry-run
+npx @tylercore/treg init --dry-run
 ```
 
 ---
@@ -69,19 +69,19 @@ Command Description
 Add lint and format:
 
 ```bash
-npx @tyyyho/treg add --features lint,format
+npx @tylercore/treg add --features lint,format
 ```
 
 Add format with `oxfmt`:
 
 ```bash
-npx @tyyyho/treg add --features format --formatter oxfmt
+npx @tylercore/treg add --features format --formatter oxfmt
 ```
 
 Add test with `vitest`:
 
 ```bash
-npx @tyyyho/treg add --features test --test-runner vitest
+npx @tylercore/treg add --features test --test-runner vitest
 ```
 
 ---
@@ -134,6 +134,8 @@ keeps repositories healthy during rapid development.
 ---
 
 ## Release
+
+Release package `@tylercore/treg`:
 
 ```bash
 npm run release -- patch

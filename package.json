@@ -1,11 +1,11 @@
 {
-  "name": "@tyyyho/treg",
+  "name": "@tylercore/treg",
   "version": "1.0.3",
   "description": "Treg is a CLI tool that injects an engineering immune system into existing projects.",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/TyyyHo/Treg"
+    "url": "https://github.com/tylercore/treg"
   },
   "bin": {
     "treg": "dist/init-project.js"

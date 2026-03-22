@@ -2,11 +2,11 @@
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0F172A,30:1D4ED8,70:7C3AED,100:22C55E&height=260&section=header&text=Treg&fontSize=72&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=Inject%20an%20immune%20system%20into%20your%20codebase&descSize=20&descAlignY=58" width="100%" />
 
-# @tyyyho/treg
+# @tylercore/treg
 
-[![npm version](https://img.shields.io/npm/v/%40tyyyho%2Ftreg?style=for-the-badge)](https://www.npmjs.com/package/%40tyyyho%2Ftreg)
-[![License](https://img.shields.io/npm/l/%40tyyyho%2Ftreg?style=for-the-badge)](https://www.npmjs.com/package/%40tyyyho%2Ftreg)
-[![npm downloads](https://img.shields.io/npm/dm/%40tyyyho%2Ftreg?style=for-the-badge)](https://www.npmjs.com/package/%40tyyyho%2Ftreg)
+[![npm version](https://img.shields.io/npm/v/%40tylercore%2Ftreg?style=for-the-badge)](https://www.npmjs.com/package/%40tylercore%2Ftreg)
+[![License](https://img.shields.io/npm/l/%40tylercore%2Ftreg?style=for-the-badge)](https://www.npmjs.com/package/%40tylercore%2Ftreg)
+[![npm downloads](https://img.shields.io/npm/dm/%40tylercore%2Ftreg?style=for-the-badge)](https://www.npmjs.com/package/%40tylercore%2Ftreg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 ![CLI](https://img.shields.io/badge/CLI-Interactive-111827?style=for-the-badge&logo=gnubash&logoColor=white)
 
@@ -65,19 +65,19 @@ This keeps the project stable without forcing application-level architecture dec
 Initialize interactively:
 
 ```bash
-npx @tyyyho/treg init
+npx @tylercore/treg init
 ```
 
 Preview changes only:
 
 ```bash
-npx @tyyyho/treg init --dry-run
+npx @tylercore/treg init --dry-run
 ```
 
 Add features to an existing project:
 
 ```bash
-npx @tyyyho/treg add --features lint,format
+npx @tylercore/treg add --features lint,format
 ```
 
 ---
@@ -128,31 +128,31 @@ During `init`, `Treg` asks for:
 Initialize project:
 
 ```bash
-npx @tyyyho/treg init
+npx @tylercore/treg init
 ```
 
 Preview init plan only:
 
 ```bash
-npx @tyyyho/treg init --dry-run
+npx @tylercore/treg init --dry-run
 ```
 
 Add only lint + format:
 
 ```bash
-npx @tyyyho/treg add --features lint,format
+npx @tylercore/treg add --features lint,format
 ```
 
 Add format using `oxfmt`:
 
 ```bash
-npx @tyyyho/treg add --features format --formatter oxfmt
+npx @tylercore/treg add --features format --formatter oxfmt
 ```
 
 Add test using `vitest`:
 
 ```bash
-npx @tyyyho/treg add --features test --test-runner vitest
+npx @tylercore/treg add --features test --test-runner vitest
 ```
 
 ---
@@ -235,6 +235,8 @@ It exists to establish the engineering immune layer that keeps rapid iteration f
 ---
 
 ## Release
+
+Release package `@tylercore/treg`:
 
 ```bash
 npm run release -- patch

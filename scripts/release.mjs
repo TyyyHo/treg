@@ -16,6 +16,7 @@ const ALLOWED_TARGETS = new Set([
   "prerelease",
 ])
 const EXACT_SEMVER = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z-.]+)?(?:\+[0-9A-Za-z-.]+)?$/
+const EXPECTED_PACKAGE_NAME = "@tylercore/treg"
 const NPM_ENV_KEYS_TO_STRIP = new Set([
   "npm_config_npm_globalconfig",
   "npm_config_verify_deps_before_run",
@@ -77,6 +78,17 @@ function ensureMainBranch() {
   }
 }
 
+function ensurePackageName() {
+  const packageName = run("node", ["-p", "require('./package.json').name"], {
+    captureOutput: true,
+  })
+  if (packageName !== EXPECTED_PACKAGE_NAME) {
+    fail(
+      `package.json name must be ${EXPECTED_PACKAGE_NAME} for release. Current name: ${packageName}`
+    )
+  }
+}
+
 function ensureCleanWorkingTree() {
   const status = run("git", ["status", "--porcelain"], {
     captureOutput: true,
@@ -125,6 +137,7 @@ if (!ALLOWED_TARGETS.has(releaseTarget) && !EXACT_SEMVER.test(releaseTarget)) {
 }
 
 ensureMainBranch()
+ensurePackageName()
 ensureCleanWorkingTree()
 runCiValidation()
 ensureCleanWorkingTree()
