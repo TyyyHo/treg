@@ -16,14 +16,33 @@ const ALLOWED_TARGETS = new Set([
   "prerelease",
 ])
 const EXACT_SEMVER = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z-.]+)?(?:\+[0-9A-Za-z-.]+)?$/
+const NPM_ENV_KEYS_TO_STRIP = new Set([
+  "npm_config_npm_globalconfig",
+  "npm_config_verify_deps_before_run",
+  "npm_config__jsr_registry",
+  "NPM_CONFIG_NPM_GLOBALCONFIG",
+  "NPM_CONFIG_VERIFY_DEPS_BEFORE_RUN",
+  "NPM_CONFIG__JSR_REGISTRY",
+])
+
+function sanitizeEnvForNpm(env) {
+  const nextEnv = { ...env }
+  for (const key of NPM_ENV_KEYS_TO_STRIP) {
+    delete nextEnv[key]
+  }
+  return nextEnv
+}
 
 function run(command, args, { captureOutput = false, cwd, env } = {}) {
+  const mergedEnv = {
+    ...process.env,
+    ...env,
+  }
+  const childEnv = command === "npm" ? sanitizeEnvForNpm(mergedEnv) : mergedEnv
+
   const result = spawnSync(command, args, {
     cwd,
-    env: {
-      ...process.env,
-      ...env,
-    },
+    env: childEnv,
     encoding: "utf8",
     stdio: captureOutput ? ["ignore", "pipe", "pipe"] : "inherit",
   })

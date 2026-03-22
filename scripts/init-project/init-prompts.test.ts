@@ -29,4 +29,27 @@ describe("init prompts helpers", () => {
       skills: false,
     })
   })
+
+  it("keeps selected AI tools when skip is not selected", () => {
+    expect(
+      __testables__.resolveAiToolSelection(["claude", "codex", "gemini"])
+    ).toEqual({
+      skills: true,
+      aiTools: ["claude", "codex", "gemini"],
+    })
+  })
+
+  it("disables AI skills when skip is selected", () => {
+    expect(__testables__.resolveAiToolSelection(["skip"])).toEqual({
+      skills: false,
+      aiTools: [],
+    })
+
+    expect(
+      __testables__.resolveAiToolSelection(["claude", "skip", "gemini"])
+    ).toEqual({
+      skills: false,
+      aiTools: [],
+    })
+  })
 })
