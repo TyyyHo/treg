@@ -11,6 +11,7 @@ import type {
 const DEFAULT_AI_TOOLS: readonly AiTool[] = ["claude", "codex", "gemini"]
 
 type InitPromptFeature = FeatureName | "skills"
+type AiToolChoice = AiTool | "skip"
 type ClackPrompts = typeof import("@clack/prompts")
 
 interface Choice<T extends string> {
@@ -58,10 +59,11 @@ const FORMATTER_CHOICES: readonly Choice<Formatter>[] = [
   { value: "oxfmt", label: "oxfmt" },
 ]
 
-const AI_TOOL_CHOICES: readonly Choice<AiTool>[] = [
+const AI_TOOL_CHOICES: readonly Choice<AiToolChoice>[] = [
   { value: "claude", label: "Claude" },
   { value: "codex", label: "Codex" },
   { value: "gemini", label: "Gemini" },
+  { value: "skip", label: "skip (disable AI skill guidance)" },
 ]
 
 const FEATURE_CHOICES: readonly Choice<InitPromptFeature>[] = [
@@ -133,10 +135,28 @@ async function promptSingleChoice<T extends string>(
   return unwrapPromptResult(result, prompts).value
 }
 
+function resolveAiToolSelection(selected: readonly AiToolChoice[]): {
+  skills: boolean
+  aiTools: AiTool[]
+} {
+  if (selected.includes("skip")) {
+    return {
+      skills: false,
+      aiTools: [],
+    }
+  }
+
+  return {
+    skills: selected.length > 0,
+    aiTools: selected as AiTool[],
+  }
+}
+
 async function promptMultiChoice<T extends string>(
   message: string,
   choices: readonly Choice<T>[],
-  defaultValues: readonly T[]
+  defaultValues: readonly T[],
+  required = false
 ): Promise<T[]> {
   const prompts = await getPrompts()
 
@@ -146,7 +166,7 @@ async function promptMultiChoice<T extends string>(
     initialValues: choices.filter(choice =>
       defaultValues.includes(choice.value)
     ),
-    required: false,
+    required,
   })
 
   return unwrapPromptResult(result, prompts).map(choice => choice.value)
@@ -223,10 +243,17 @@ export async function collectInitPrompts(
   let skills = featureSelection.skills
 
   if (skills) {
-    aiTools = await promptMultiChoice("5) AI tools", AI_TOOL_CHOICES, [])
-
-    if (aiTools.length === 0) {
-      skills = false
+    const aiToolAnswers = await promptMultiChoice(
+      "5) AI tools (Space to select, A to toggle all)",
+      AI_TOOL_CHOICES,
+      [],
+      true
+    )
+    const aiToolSelection = resolveAiToolSelection(aiToolAnswers)
+    skills = aiToolSelection.skills
+    aiTools = aiToolSelection.aiTools
+    if (!skills) {
+      console.log("AI skill guidance disabled by selection: skip")
     }
   } else {
     console.log("5) AI tools skipped (AI skill guidance not selected)")
@@ -244,4 +271,5 @@ export async function collectInitPrompts(
 
 export const __testables__ = {
   toFeatureSelection,
+  resolveAiToolSelection,
 }
