@@ -1,7 +1,8 @@
 import { execSync } from "node:child_process"
 import { existsSync } from "node:fs"
+import { readFileSync } from "node:fs"
 import path from "node:path"
-import type { PackageManager } from "./types.ts"
+import type { PackageJson, PackageManager } from "./types.ts"
 
 export function detectPackageManager(projectDir: string): PackageManager {
   if (existsSync(path.join(projectDir, "pnpm-lock.yaml"))) {
@@ -77,11 +78,75 @@ export function installPackages(
   } else if (pm === "yarn") {
     command = `yarn add ${isDev ? "-D " : ""}${list}`
   } else {
-    command = `npm install ${isDev ? "-D " : ""}${list}`
+    const useLegacyPeerDeps = shouldUseNpmLegacyPeerDeps(projectDir)
+    if (useLegacyPeerDeps) {
+      console.log(
+        `${dryRun ? "[dry-run] " : ""}Detected react-scripts with TypeScript >= 5; using --legacy-peer-deps for npm compatibility`
+      )
+    }
+    command = `npm install ${isDev ? "-D " : ""}${list}${useLegacyPeerDeps ? " --legacy-peer-deps" : ""}`
   }
 
   console.log(
     `${dryRun ? "[dry-run] " : ""}Installing ${isDev ? "dev " : ""}dependencies: ${packages.join(", ")}`
   )
   runCommand(command, projectDir, dryRun)
+}
+
+function shouldUseNpmLegacyPeerDeps(projectDir: string): boolean {
+  const packageJson = readPackageJson(projectDir)
+  if (!packageJson) return false
+
+  const reactScriptsVersion = getDeclaredVersion(packageJson, "react-scripts")
+  if (!reactScriptsVersion) return false
+
+  const typescriptVersion = getDeclaredVersion(packageJson, "typescript")
+  if (!typescriptVersion) return false
+
+  const major = extractMajorVersion(typescriptVersion)
+  return major !== null && major >= 5
+}
+
+function readPackageJson(projectDir: string): PackageJson | null {
+  const packageJsonPath = path.join(projectDir, "package.json")
+  if (!existsSync(packageJsonPath)) return null
+
+  try {
+    return JSON.parse(readFileSync(packageJsonPath, "utf8")) as PackageJson
+  } catch {
+    return null
+  }
+}
+
+function getDeclaredVersion(
+  packageJson: PackageJson,
+  packageName: string
+): string | null {
+  const fromDependencies = packageJson.dependencies?.[packageName]
+  if (fromDependencies) return fromDependencies
+
+  const fromDevDependencies = packageJson.devDependencies?.[packageName]
+  if (fromDevDependencies) return fromDevDependencies
+
+  const fromPeerDependencies = packageJson.peerDependencies?.[packageName]
+  if (fromPeerDependencies) return fromPeerDependencies
+
+  const fromOptionalDependencies =
+    packageJson.optionalDependencies?.[packageName]
+  if (fromOptionalDependencies) return fromOptionalDependencies
+
+  return null
+}
+
+function extractMajorVersion(rawVersion: string): number | null {
+  const match = rawVersion.match(/\d+/)
+  if (!match) return null
+
+  const major = Number.parseInt(match[0], 10)
+  return Number.isNaN(major) ? null : major
+}
+
+export const __testables__ = {
+  shouldUseNpmLegacyPeerDeps,
+  extractMajorVersion,
 }
