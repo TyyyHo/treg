@@ -29,7 +29,7 @@ interface SkillDefinition {
 const FEATURE_SKILLS: Record<FeatureName, SkillDefinition> = {
   format: {
     name: "format",
-    description: "Run and verify formatting rules.",
+    description: "Apply and verify formatting rule.",
     when: "Before committing or after broad edits, normalize formatting across the codebase.",
     checklist: [
       "Run `format`.",
@@ -39,7 +39,7 @@ const FEATURE_SKILLS: Record<FeatureName, SkillDefinition> = {
   },
   husky: {
     name: "husky",
-    description: "Verify and maintain git hook automation.",
+    description: "Apply and verify git hook rule.",
     when: "When pre-commit and pre-push checks must stay enforced and consistent.",
     checklist: [
       "Ensure hooks are executable.",
@@ -49,7 +49,7 @@ const FEATURE_SKILLS: Record<FeatureName, SkillDefinition> = {
   },
   lint: {
     name: "lint",
-    description: "Run and validate lint rules.",
+    description: "Run and validate lint rule.",
     when: "After adding rules or changing tooling, verify lint consistency.",
     checklist: [
       "Run `lint`.",
@@ -174,13 +174,13 @@ function buildSkillSection(
     "1. Never use --no-verify",
     "2. Unless the user asks, never relax TypeScript, lint, or format constraints, and never skip tests.",
     "",
-    "### Steps and Skill Mapping",
+    "### Steps and Rule Mapping",
     "",
   ]
 
   if (enabled.length === 0) {
     lines.push(
-      "1. No features are enabled in this run, so no skill call is required."
+      "1. No features are enabled in this run, so no rule call is required."
     )
     lines.push("")
     return lines.join("\n")

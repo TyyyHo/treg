@@ -6,7 +6,7 @@ import path from "node:path"
 import { __testables__, runAiRulesRule } from "./ai-rules.ts"
 
 describe("ai-rules helpers", () => {
-  it("builds skill section from enabled features", () => {
+  it("builds rule section from enabled features", () => {
     const content = __testables__.buildSkillSection({
       enabledFeatures: {
         lint: true,
@@ -24,7 +24,7 @@ describe("ai-rules helpers", () => {
     expect(content).toContain(
       "2. Unless the user asks, never relax TypeScript, lint, or format constraints, and never skip tests."
     )
-    expect(content).toContain("### Steps and Skill Mapping")
+    expect(content).toContain("### Steps and Rule Mapping")
     expect(content).toContain(
       "1. Formatting: use [format](skills/format/SKILL.md)"
     )
@@ -39,7 +39,7 @@ describe("ai-rules helpers", () => {
     expect(content).not.toContain("<!-- treg:skills:")
   })
 
-  it("appends skill section when no existing section is present", () => {
+  it("appends rule section when no existing section is present", () => {
     const replaced = __testables__.upsertSkillSection(
       "# Header\n\nSome existing content.",
       "## Treg AI Rules\n\nnew"
@@ -50,7 +50,7 @@ describe("ai-rules helpers", () => {
     expect(replaced).toContain("Some existing content.")
   })
 
-  it("upserts an existing skill section without markers", () => {
+  it("upserts an existing rule section without markers", () => {
     const replaced = __testables__.upsertSkillSection(
       "# Header\n\n## Treg AI Skills\n\nold\n\n## Other\n\nkeep",
       "## Treg AI Rules\n\nnew"
@@ -231,12 +231,12 @@ describe("ai-rules helpers", () => {
     }
   })
 
-  it("builds skill file content with frontmatter", () => {
+  it("builds rule file content with frontmatter", () => {
     const content = __testables__.buildSkillFile(
       "test",
       {
         name: "test",
-        description: "Validate test runner setup and execution.",
+        description: "Apply and verify test runner rule.",
         when: "When test rules are added or test configuration changes.",
         checklist: [
           "Confirm the selected test runner matches the project setup.",
@@ -247,7 +247,7 @@ describe("ai-rules helpers", () => {
     )
 
     expect(content).toContain("name: test")
-    expect(content).toContain("description: Validate test runner setup")
+    expect(content).toContain("description: Apply and verify test runner rule.")
     expect(content).toContain("## Current Test Runner")
     expect(content).toContain("`vitest`")
   })
