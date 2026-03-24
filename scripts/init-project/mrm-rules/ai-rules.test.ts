@@ -26,13 +26,13 @@ describe("ai-rules helpers", () => {
     )
     expect(content).toContain("### Steps and Skill Mapping")
     expect(content).toContain(
-      "1. Formatting: use [Treg/format](skills/format/SKILL.md)"
+      "1. Formatting: use [format](skills/format/SKILL.md)"
     )
     expect(content).toContain(
-      "2. Lint Validation: use [Treg/lint](skills/lint/SKILL.md)"
+      "2. Lint Validation: use [lint](skills/lint/SKILL.md)"
     )
     expect(content).toContain(
-      "3. Test Configuration: use [Treg/test](skills/test/SKILL.md)"
+      "3. Test Configuration: use [test](skills/test/SKILL.md)"
     )
     expect(content).toContain("Current test runner: `vitest`")
     expect(content).not.toContain("TypeScript Settings")
@@ -131,7 +131,7 @@ describe("ai-rules helpers", () => {
       const lintSkillPath = path.join(dir, "skills/lint/SKILL.md")
 
       expect(claudeDoc).toContain("## Treg AI Rules")
-      expect(claudeDoc).toContain("[Treg/lint](skills/lint/SKILL.md)")
+      expect(claudeDoc).toContain("[lint](skills/lint/SKILL.md)")
       expect(agentsDoc).toContain("## Treg AI Rules")
       expect(geminiDoc).toContain("## Treg AI Rules")
       expect(existsSync(lintSkillPath)).toBe(true)
@@ -235,7 +235,7 @@ describe("ai-rules helpers", () => {
     const content = __testables__.buildSkillFile(
       "test",
       {
-        name: "Treg/test",
+        name: "test",
         description: "Validate test runner setup and execution.",
         when: "When test rules are added or test configuration changes.",
         checklist: [
@@ -246,7 +246,7 @@ describe("ai-rules helpers", () => {
       "vitest"
     )
 
-    expect(content).toContain("name: Treg/test")
+    expect(content).toContain("name: test")
     expect(content).toContain("description: Validate test runner setup")
     expect(content).toContain("## Current Test Runner")
     expect(content).toContain("`vitest`")
@@ -266,7 +266,7 @@ describe("ai-rules helpers", () => {
         "utf8"
       )
 
-      expect(lintSkill).toContain("name: Treg/lint")
+      expect(lintSkill).toContain("name: lint")
       expect(testSkill).toContain("## Current Test Runner")
     } finally {
       rmSync(dir, { recursive: true, force: true })

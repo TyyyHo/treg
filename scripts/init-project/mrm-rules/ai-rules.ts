@@ -28,7 +28,7 @@ interface SkillDefinition {
 
 const FEATURE_SKILLS: Record<FeatureName, SkillDefinition> = {
   format: {
-    name: "Treg/format",
+    name: "format",
     description: "Run and verify formatting rules.",
     when: "Before committing or after broad edits, normalize formatting across the codebase.",
     checklist: [
@@ -38,7 +38,7 @@ const FEATURE_SKILLS: Record<FeatureName, SkillDefinition> = {
     ],
   },
   husky: {
-    name: "Treg/husky",
+    name: "husky",
     description: "Verify and maintain git hook automation.",
     when: "When pre-commit and pre-push checks must stay enforced and consistent.",
     checklist: [
@@ -48,7 +48,7 @@ const FEATURE_SKILLS: Record<FeatureName, SkillDefinition> = {
     ],
   },
   lint: {
-    name: "Treg/lint",
+    name: "lint",
     description: "Run and validate lint rules.",
     when: "After adding rules or changing tooling, verify lint consistency.",
     checklist: [
@@ -58,7 +58,7 @@ const FEATURE_SKILLS: Record<FeatureName, SkillDefinition> = {
     ],
   },
   test: {
-    name: "Treg/test",
+    name: "test",
     description: "Validate test runner setup and execution.",
     when: "When test rules are added or test configuration changes.",
     checklist: [
@@ -68,7 +68,7 @@ const FEATURE_SKILLS: Record<FeatureName, SkillDefinition> = {
     ],
   },
   typescript: {
-    name: "Treg/typescript",
+    name: "typescript",
     description: "Validate TypeScript strictness and config.",
     when: "When tsconfig or strict typing rules are changed.",
     checklist: [
