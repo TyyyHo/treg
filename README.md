@@ -4,11 +4,11 @@
 
 # @tylercore/treg
 
-[![npm version](https://img.shields.io/npm/v/%40tylercore%2Ftreg?style=for-the-badge)](https://www.npmjs.com/package/%40tylercore%2Ftreg)
-[![License](https://img.shields.io/npm/l/%40tylercore%2Ftreg?style=for-the-badge)](https://www.npmjs.com/package/%40tylercore%2Ftreg)
-[![npm downloads](https://img.shields.io/npm/dm/%40tylercore%2Ftreg?style=for-the-badge)](https://www.npmjs.com/package/%40tylercore%2Ftreg)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![CLI](https://img.shields.io/badge/CLI-Interactive-111827?style=for-the-badge&logo=gnubash&logoColor=white)
+[![npm version](https://img.shields.io/npm/v/%40tylercore%2Ftreg?style=flat-square)](https://www.npmjs.com/package/%40tylercore%2Ftreg)
+[![License](https://img.shields.io/npm/l/%40tylercore%2Ftreg?style=flat-square)](https://www.npmjs.com/package/%40tylercore%2Ftreg)
+[![npm downloads](https://img.shields.io/npm/dm/%40tylercore%2Ftreg?style=flat-square)](https://www.npmjs.com/package/%40tylercore%2Ftreg)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![CLI](https://img.shields.io/badge/CLI-Interactive-111827?style=flat-square&logo=gnubash&logoColor=white)
 
 [中文 README](./README.zh-hant.md)
 
