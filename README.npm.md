@@ -1,24 +1,20 @@
 # @tylercore/treg
 
-[![npm
-version](https://img.shields.io/npm/v/%40tylercore%2Ftreg)](https://www.npmjs.com/package/%40tylercore%2Ftreg)
-[![npm
-downloads](https://img.shields.io/npm/dm/%40tylercore%2Ftreg)](https://www.npmjs.com/package/%40tylercore%2Ftreg)
+[![npm version](https://img.shields.io/npm/v/%40tylercore%2Ftreg)](https://www.npmjs.com/package/%40tylercore%2Ftreg)
+[![npm downloads](https://img.shields.io/npm/dm/%40tylercore%2Ftreg)](https://www.npmjs.com/package/%40tylercore%2Ftreg)
 [![License](https://img.shields.io/npm/l/%40tylercore%2Ftreg)](https://www.npmjs.com/package/%40tylercore%2Ftreg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)
 
-## Overview
-
 ## What is Treg?
 
-Treg is a CLI tool for setting up code quality, tooling, and project standards.
+Treg is a CLI tool that sets up code quality, tooling, and project standards for modern applications.
 
 It injects an **engineering immune system** into your project.
 
-When developers and AI collaborate under fast iteration, codebases tend to drift—introducing inconsistency and fragile workflows.  
-Treg restores balance and keeps your project **clean, maintainable, and scalable**.
+When developers and AI collaborate under fast iteration, codebases tend to drift, leading to inconsistent tooling, duplicated rules, and fragile workflows.
+Treg restores balance and keeps your repository **clean, maintainable, and extensible**.
 
-It focuses on infrastructure setup (ESLint, Prettier, TypeScript), not application logic.
+Treg focuses on infrastructure setup (ESLint, Prettier, TypeScript, testing, hooks, AI guidance), not product logic.
 
 ---
 
@@ -27,60 +23,61 @@ It focuses on infrastructure setup (ESLint, Prettier, TypeScript), not applicati
 `Treg` can configure:
 
 - **TypeScript**
-- **ESLint**
-- **Prettier / Oxfmt**
-- **Jest / Vitest**
-- **Husky git hooks**
-- **AI rules guidance**
-
-These guardrails help maintain long‑term code health during fast
-iteration.
+- **Linting** with ESLint
+- **Formatting** with Prettier or Oxfmt
+- **Testing** with Jest or Vitest
+- **Git hooks** with Husky
+- **AI rules guidance** for supported tools
 
 ---
 
 ## Quick Start
 
-Initialize a project interactively:
+Initialize interactively:
 
 ```bash
 npx @tylercore/treg init
 ```
 
-Preview changes:
+Preview changes only:
 
 ```bash
 npx @tylercore/treg init --dry-run
+```
+
+Add selected features to an existing project:
+
+```bash
+npx @tylercore/treg add --features lint,format
 ```
 
 ---
 
 ## Commands
 
-Command Description
-
----
-
-`init` Initialize project with interactive setup
-`add` Add selected features
-`list` Show supported frameworks and tools
+| Command | Description                                                       |
+| ------- | ----------------------------------------------------------------- |
+| `init`  | Initialize the project with an interactive setup flow             |
+| `add`   | Add selected features to an existing project                      |
+| `list`  | Show supported frameworks, features, formatters, and test runners |
 
 ---
 
 ## Common Usage
 
-Add lint and format:
+Add only lint + format:
 
 ```bash
 npx @tylercore/treg add --features lint,format
 ```
 
-Add format with `oxfmt`:
+Add format using `oxfmt`:
 
 ```bash
 npx @tylercore/treg add --features format --formatter oxfmt
 ```
 
-Add test with `vitest`:
+Add test using `vitest`:
 
 ```bash
 npx @tylercore/treg add --features test --test-runner vitest
@@ -92,7 +89,9 @@ npx @tylercore/treg add --features test --test-runner vitest
 
 Framework detection order:
 
-    nuxt -> next -> react -> vue -> svelte -> node
+```text
+nuxt -> next -> react -> vue -> svelte -> node
+```
 
 Default test runner:
 
@@ -101,34 +100,33 @@ Default test runner:
 
 Default formatter:
 
-    prettier
+```text
+prettier
+```
 
 ---
 
-## AI Rules
+## AI Rules Behavior
 
-`Treg` can update AI guidance files for development tools.
+`Treg` can update AI guidance files for selected tools:
 
-Tool File
-
----
-
-Claude `CLAUDE.md`
-Codex `AGENTS.md`
-Gemini `GEMINI.md`
+| Tool   | File        |
+| ------ | ----------- |
+| Claude | `CLAUDE.md` |
+| Codex  | `AGENTS.md` |
+| Gemini | `GEMINI.md` |
 
 Behavior:
 
 - only selected tools are updated
 - missing files are created automatically
-- updates occur in the repository root
+- updates happen in the repository root
 
 ---
 
 ## Philosophy
 
-`Treg` is intentionally minimal.
+`Treg` is intentionally narrow in scope.
 
-It does not generate application architecture.\
-It focuses only on establishing the engineering infrastructure that
-keeps repositories healthy during rapid development.
+It does not generate product architecture.
+It establishes an engineering baseline that keeps repositories healthy during rapid iteration.
