@@ -1,10 +1,7 @@
 import { json, packageJson } from "../mrm-core.ts"
 import { installPackages, withProjectCwd } from "./shared.ts"
 import type { RuleContext } from "../types.ts"
-import {
-  mergeCompilerOptions,
-  resolveTsconfigTargets,
-} from "./typescript-options.ts"
+import { mergeCompilerOptions, resolveTsconfigTargets } from "./typescript-options.ts"
 
 export async function runTypescriptRule(context: RuleContext): Promise<void> {
   const { framework, projectDir, pm, dryRun } = context
@@ -44,10 +41,7 @@ export async function runTypescriptRule(context: RuleContext): Promise<void> {
               exclude: [],
             })
       const mergedCompilerOptions = mergeCompilerOptions(
-        (targetTsconfig.get("compilerOptions") ?? {}) as Record<
-          string,
-          unknown
-        >,
+        (targetTsconfig.get("compilerOptions") ?? {}) as Record<string, unknown>,
         target.includeNodeTypes
       )
       const exclude = new Set(targetTsconfig.get("exclude", []))

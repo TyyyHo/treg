@@ -17,9 +17,7 @@ import type { PackageJson, ParsedOptions, RuleContext } from "./types.ts"
 
 const TOTAL_STEPS = 3
 
-export async function main(
-  argv: string[] = process.argv.slice(2)
-): Promise<void> {
+export async function main(argv: string[] = process.argv.slice(2)): Promise<void> {
   let options: ParsedOptions
   try {
     options = parseArgs(argv)
@@ -47,9 +45,7 @@ export async function main(
     return
   }
 
-  const packageJson = JSON.parse(
-    await fs.readFile(packageJsonPath, "utf8")
-  ) as PackageJson
+  const packageJson = JSON.parse(await fs.readFile(packageJsonPath, "utf8")) as PackageJson
   const framework = resolveFramework(options.framework, packageJson)
   let pm = detectPackageManager(projectDir)
   let formatter = options.formatter

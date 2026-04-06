@@ -3,24 +3,23 @@
   "version": "1.0.10",
   "description": "Treg is a CLI tool that injects an engineering immune system into existing projects.",
   "keywords": [
-    "treg",
+    "ai-rules",
     "cli",
-    "tooling",
-    "infrastructure",
-    "project-setup",
     "code-quality",
-    "lint",
     "formatting",
-    "typescript",
+    "infrastructure",
+    "lint",
+    "project-setup",
     "testing",
-    "ai-rules"
+    "treg",
+    "typescript"
   ],
-  "author": "tylercore <ty.ho1126@gmail.com>",
-  "license": "MIT",
   "homepage": "https://github.com/tylercore/treg#readme",
   "bugs": {
     "url": "https://github.com/tylercore/treg/issues"
   },
+  "license": "MIT",
+  "author": "tylercore <ty.ho1126@gmail.com>",
   "repository": {
     "type": "git",
     "url": "https://github.com/tylercore/treg.git"
@@ -34,17 +33,14 @@
   "publishConfig": {
     "access": "public"
   },
-  "engines": {
-    "node": ">=18.0.0"
-  },
   "scripts": {
     "lint": "eslint .",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest --passWithNoTests",
     "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
     "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
     "lint:check": "eslint . --max-warnings 0",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "format": "oxfmt .",
+    "format:check": "oxfmt . --check",
     "type:check": "tsc --noEmit",
     "build": "tsc -p tsconfig.build.json && node scripts/write-dist-package-json.mjs",
     "release": "node scripts/release.mjs",
@@ -60,7 +56,10 @@
     "eslint": "^9",
     "husky": "^9.1.7",
     "jest": "^30.2.0",
-    "prettier": "^3.8.0",
+    "oxfmt": "^0.43.0",
     "typescript": "^5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

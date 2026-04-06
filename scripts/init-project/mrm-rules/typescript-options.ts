@@ -29,10 +29,7 @@ function hasReferencePath(value: unknown): value is { path: string } {
   )
 }
 
-export function isSolutionStyleTsconfig(
-  files: unknown,
-  references: unknown
-): boolean {
+export function isSolutionStyleTsconfig(files: unknown, references: unknown): boolean {
   if (!Array.isArray(files) || files.length !== 0) {
     return false
   }

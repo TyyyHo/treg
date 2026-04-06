@@ -15,8 +15,6 @@ describe("hasPackage", () => {
 
 describe("formatStep", () => {
   it("appends dry-run suffix when needed", () => {
-    expect(formatStep(2, 3, "Run mrm rules", true)).toBe(
-      "[2/3] Run mrm rules [dry-run]"
-    )
+    expect(formatStep(2, 3, "Run mrm rules", true)).toBe("[2/3] Run mrm rules [dry-run]")
   })
 })

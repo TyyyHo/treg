@@ -64,9 +64,7 @@ describe("ai-rules helpers", () => {
       writeFileSync(path.join(dir, "AGENTS.md"), "# Agents\n", "utf8")
       writeFileSync(path.join(dir, "GEMINI.md"), "# Gemini\n", "utf8")
 
-      expect(
-        __testables__.resolveAiRulesDocs(dir, ["claude", "codex", "gemini"])
-      ).toEqual([
+      expect(__testables__.resolveAiRulesDocs(dir, ["claude", "codex", "gemini"])).toEqual([
         path.join(dir, "CLAUDE.md"),
         path.join(dir, "AGENTS.md"),
         path.join(dir, "GEMINI.md"),
@@ -79,9 +77,10 @@ describe("ai-rules helpers", () => {
   it("resolves selected docs even when files are missing", () => {
     const dir = mkdtempSync(path.join(tmpdir(), "treg-ai-rules-missing-"))
     try {
-      expect(
-        __testables__.resolveAiRulesDocs(dir, ["codex", "gemini"])
-      ).toEqual([path.join(dir, "AGENTS.md"), path.join(dir, "GEMINI.md")])
+      expect(__testables__.resolveAiRulesDocs(dir, ["codex", "gemini"])).toEqual([
+        path.join(dir, "AGENTS.md"),
+        path.join(dir, "GEMINI.md"),
+      ])
     } finally {
       rmSync(dir, { recursive: true, force: true })
     }

@@ -10,10 +10,7 @@ function buildHookCommands(
   runner: ReturnType<typeof getRunCommand>,
   enabledFeatures: EnabledFeatures
 ): { preCommit: string[]; prePush: string[] } {
-  const preCommit = [
-    `${runner} format:check || exit 1`,
-    `${runner} lint:check || exit 1`,
-  ]
+  const preCommit = [`${runner} format:check || exit 1`, `${runner} lint:check || exit 1`]
   if (enabledFeatures.typescript) {
     preCommit.push(`${runner} type:check || exit 1`)
   }
@@ -27,8 +24,7 @@ function buildHookCommands(
 }
 
 export async function runHuskyRule(context: RuleContext): Promise<void> {
-  const { projectDir, pm, force, dryRun, skipHuskyInstall, enabledFeatures } =
-    context
+  const { projectDir, pm, force, dryRun, skipHuskyInstall, enabledFeatures } = context
 
   installPackages(projectDir, pm, ["husky"], true, dryRun)
   const runner = getRunCommand(pm)

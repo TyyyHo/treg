@@ -69,9 +69,7 @@ describe("parseArgs", () => {
   })
 
   it("throws for unsupported formatter", () => {
-    expect(() => parseArgs(["add", "--formatter", "biome"])).toThrow(
-      "Unsupported formatter: biome"
-    )
+    expect(() => parseArgs(["add", "--formatter", "biome"])).toThrow("Unsupported formatter: biome")
   })
 
   it("throws for positional dir argument", () => {
@@ -79,9 +77,9 @@ describe("parseArgs", () => {
   })
 
   it("throws for unsupported feature", () => {
-    expect(() =>
-      parseArgs(["add", "--framework", "node", "--features", "husky,ai"])
-    ).toThrow("Unsupported feature in --features: ai")
+    expect(() => parseArgs(["add", "--framework", "node", "--features", "husky,ai"])).toThrow(
+      "Unsupported feature in --features: ai"
+    )
   })
 
   it("throws when init receives removed flags", () => {
@@ -91,15 +89,11 @@ describe("parseArgs", () => {
   })
 
   it("throws when add receives removed pm flag", () => {
-    expect(() => parseArgs(["add", "--pm", "npm"])).toThrow(
-      "Unknown argument: --pm"
-    )
+    expect(() => parseArgs(["add", "--pm", "npm"])).toThrow("Unknown argument: --pm")
   })
 
   it("throws for removed no flags", () => {
-    expect(() => parseArgs(["add", "--no-format"])).toThrow(
-      "Unknown argument: --no-format"
-    )
+    expect(() => parseArgs(["add", "--no-format"])).toThrow("Unknown argument: --no-format")
     expect(() => parseArgs(["add", "--no-test-runner"])).toThrow(
       "Unknown argument: --no-test-runner"
     )
@@ -118,9 +112,7 @@ describe("resolveFeatures", () => {
   })
 
   it("uses selected features", () => {
-    expect(
-      resolveFeatures(parseArgs(["add", "--features", "lint,format,husky"]))
-    ).toEqual({
+    expect(resolveFeatures(parseArgs(["add", "--features", "lint,format,husky"]))).toEqual({
       lint: true,
       format: true,
       typescript: false,
@@ -144,14 +136,7 @@ describe("resolveTestRunner", () => {
   })
 
   it("allows each framework to override with --test-runner", () => {
-    const frameworks = [
-      "node",
-      "react",
-      "next",
-      "vue",
-      "svelte",
-      "nuxt",
-    ] as const
+    const frameworks = ["node", "react", "next", "vue", "svelte", "nuxt"] as const
     for (const framework of frameworks) {
       expect(resolveTestRunner(framework, "jest")).toBe("jest")
       expect(resolveTestRunner(framework, "vitest")).toBe("vitest")

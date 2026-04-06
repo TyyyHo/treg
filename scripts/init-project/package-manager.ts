@@ -118,10 +118,7 @@ function readPackageJson(projectDir: string): PackageJson | null {
   }
 }
 
-function getDeclaredVersion(
-  packageJson: PackageJson,
-  packageName: string
-): string | null {
+function getDeclaredVersion(packageJson: PackageJson, packageName: string): string | null {
   const fromDependencies = packageJson.dependencies?.[packageName]
   if (fromDependencies) return fromDependencies
 
@@ -131,8 +128,7 @@ function getDeclaredVersion(
   const fromPeerDependencies = packageJson.peerDependencies?.[packageName]
   if (fromPeerDependencies) return fromPeerDependencies
 
-  const fromOptionalDependencies =
-    packageJson.optionalDependencies?.[packageName]
+  const fromOptionalDependencies = packageJson.optionalDependencies?.[packageName]
   if (fromOptionalDependencies) return fromOptionalDependencies
 
   return null

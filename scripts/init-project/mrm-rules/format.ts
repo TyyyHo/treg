@@ -1,11 +1,7 @@
 import { lines, packageJson } from "../mrm-core.ts"
 import { installPackages, withProjectCwd, writeFile } from "./shared.ts"
 import type { RuleContext } from "../types.ts"
-import {
-  FORMAT_IGNORE,
-  getFormatterFiles,
-  getFormatterScripts,
-} from "./format-options.ts"
+import { FORMAT_IGNORE, getFormatterFiles, getFormatterScripts } from "./format-options.ts"
 
 export async function runFormatRule(context: RuleContext): Promise<void> {
   const { projectDir, pm, force, dryRun, formatter } = context
@@ -30,9 +26,6 @@ export async function runFormatRule(context: RuleContext): Promise<void> {
     if (ignorePath) {
       lines(ignorePath).add(FORMAT_IGNORE).save()
     }
-    packageJson()
-      .setScript("format", format)
-      .setScript("format:check", formatCheck)
-      .save()
+    packageJson().setScript("format", format).setScript("format:check", formatCheck).save()
   })
 }

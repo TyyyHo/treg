@@ -1,9 +1,4 @@
-import type {
-  AiTool,
-  EnabledFeatures,
-  FeatureName,
-  RuleContext,
-} from "../types.ts"
+import type { AiTool, EnabledFeatures, FeatureName, RuleContext } from "../types.ts"
 
 import { existsSync } from "node:fs"
 import { promises as fs } from "node:fs"
@@ -79,8 +74,8 @@ const FEATURE_STEP_LABELS: Record<FeatureName, string> = {
 }
 
 function resolveAiRulesDocs(projectDir: string, aiTools: AiTool[]): string[] {
-  const docFiles = [...new Set(aiTools.map(tool => AI_TOOL_DOCS[tool]))]
-  return docFiles.map(fileName => path.join(projectDir, fileName))
+  const docFiles = [...new Set(aiTools.map((tool) => AI_TOOL_DOCS[tool]))]
+  return docFiles.map((fileName) => path.join(projectDir, fileName))
 }
 
 function getEnabledFeatures(enabledFeatures: EnabledFeatures): FeatureName[] {
@@ -90,9 +85,7 @@ function getEnabledFeatures(enabledFeatures: EnabledFeatures): FeatureName[] {
     .sort((a, b) => a.localeCompare(b))
 }
 
-function buildRuleSection(
-  context: Pick<RuleContext, "enabledFeatures" | "testRunner">
-): string {
+function buildRuleSection(context: Pick<RuleContext, "enabledFeatures" | "testRunner">): string {
   const { enabledFeatures, testRunner } = context
   const enabled = getEnabledFeatures(enabledFeatures)
 
@@ -107,9 +100,7 @@ function buildRuleSection(
   ]
 
   if (enabled.length === 0) {
-    lines.push(
-      "1. No features are enabled in this run, so no rule call is required."
-    )
+    lines.push("1. No features are enabled in this run, so no rule call is required.")
     lines.push("")
     return lines.join("\n")
   }
@@ -125,7 +116,7 @@ function buildRuleSection(
       lines.push(`   - Current test runner: \`${testRunner}\``)
     }
     lines.push("   - Checklist:")
-    guidance.checklist.forEach(item => {
+    guidance.checklist.forEach((item) => {
       lines.push(`     - ${item}`)
     })
     lines.push("")
@@ -165,9 +156,7 @@ export async function runAiRulesRule(context: RuleContext): Promise<void> {
   for (const targetFile of targetFiles) {
     if (dryRun) {
       const action = existsSync(targetFile) ? "update" : "create"
-      console.log(
-        `[dry-run] Would ${action} ${path.basename(targetFile)} with AI rules content`
-      )
+      console.log(`[dry-run] Would ${action} ${path.basename(targetFile)} with AI rules content`)
       continue
     }
 
@@ -184,9 +173,7 @@ export async function runAiRulesRule(context: RuleContext): Promise<void> {
       continue
     }
 
-    console.log(
-      `${path.basename(targetFile)} already contains latest AI rules content`
-    )
+    console.log(`${path.basename(targetFile)} already contains latest AI rules content`)
   }
 }
 

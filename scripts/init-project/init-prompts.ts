@@ -77,9 +77,7 @@ const FEATURE_CHOICES: readonly Choice<InitPromptFeature>[] = [
 
 let promptsModulePromise: Promise<ClackPrompts> | null = null
 
-function toFeatureSelection(
-  selected: readonly InitPromptFeature[]
-): InitFeatureSelection {
+function toFeatureSelection(selected: readonly InitPromptFeature[]): InitFeatureSelection {
   return {
     enabledFeatures: {
       lint: selected.includes("lint"),
@@ -93,7 +91,7 @@ function toFeatureSelection(
 }
 
 function mapChoiceOptions<T extends string>(choices: readonly Choice<T>[]) {
-  return choices.map(choice => ({ value: choice, label: choice.label }))
+  return choices.map((choice) => ({ value: choice, label: choice.label }))
 }
 
 function unwrapPromptResult<T>(
@@ -122,7 +120,7 @@ async function promptSingleChoice<T extends string>(
   defaultValue: T
 ): Promise<T> {
   const prompts = await getPrompts()
-  const defaultChoice = choices.find(choice => choice.value === defaultValue)
+  const defaultChoice = choices.find((choice) => choice.value === defaultValue)
   const options = {
     message,
     options: mapChoiceOptions(choices),
@@ -163,18 +161,14 @@ async function promptMultiChoice<T extends string>(
   const result = await prompts.multiselect<Choice<T>>({
     message,
     options: mapChoiceOptions(choices),
-    initialValues: choices.filter(choice =>
-      defaultValues.includes(choice.value)
-    ),
+    initialValues: choices.filter((choice) => defaultValues.includes(choice.value)),
     required,
   })
 
-  return unwrapPromptResult(result, prompts).map(choice => choice.value)
+  return unwrapPromptResult(result, prompts).map((choice) => choice.value)
 }
 
-export async function collectInitPrompts(
-  defaults: InitPromptDefaults
-): Promise<InitPromptResult> {
+export async function collectInitPrompts(defaults: InitPromptDefaults): Promise<InitPromptResult> {
   if (!input.isTTY || !output.isTTY) {
     console.log("Non-interactive shell detected. Use init defaults.")
     return {
@@ -195,16 +189,12 @@ export async function collectInitPrompts(
 
   console.log("\nInit setup")
 
-  const pm = await promptSingleChoice(
-    "1) Package manager",
-    PACKAGE_MANAGER_CHOICES,
-    defaults.pm
-  )
+  const pm = await promptSingleChoice("1) Package manager", PACKAGE_MANAGER_CHOICES, defaults.pm)
 
   const featureAnswers = await promptMultiChoice(
     "2) Features",
     FEATURE_CHOICES,
-    FEATURE_CHOICES.map(choice => choice.value)
+    FEATURE_CHOICES.map((choice) => choice.value)
   )
   const featureSelection = toFeatureSelection(featureAnswers)
 
@@ -230,11 +220,7 @@ export async function collectInitPrompts(
 
   let formatter = defaults.formatter
   if (featureSelection.enabledFeatures.format) {
-    formatter = await promptSingleChoice(
-      "4) Formatter",
-      FORMATTER_CHOICES,
-      defaults.formatter
-    )
+    formatter = await promptSingleChoice("4) Formatter", FORMATTER_CHOICES, defaults.formatter)
   } else {
     console.log("4) Formatter skipped (format feature not selected)")
   }

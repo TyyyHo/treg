@@ -4,12 +4,7 @@ import { nuxtFramework } from "./nuxt/index.ts"
 import { reactFramework } from "./react/index.ts"
 import { svelteFramework } from "./svelte/index.ts"
 import { vueFramework } from "./vue/index.ts"
-import type {
-  DetectableFramework,
-  Framework,
-  FrameworkId,
-  PackageJson,
-} from "../types.ts"
+import type { DetectableFramework, Framework, FrameworkId, PackageJson } from "../types.ts"
 
 const FRAMEWORK_REGISTRY: Record<FrameworkId, DetectableFramework> = {
   next: nextFramework,
@@ -41,8 +36,6 @@ export function resolveFramework(
 }
 
 export function detectFramework(packageJson: PackageJson): DetectableFramework {
-  const matched = FRAMEWORK_DETECT_ORDER.find(framework =>
-    framework.matches(packageJson)
-  )
+  const matched = FRAMEWORK_DETECT_ORDER.find((framework) => framework.matches(packageJson))
   return matched ?? nodeFramework
 }

@@ -1,9 +1,5 @@
 import { describe, expect, it } from "@jest/globals"
-import {
-  FORMAT_IGNORE,
-  getFormatterFiles,
-  getFormatterScripts,
-} from "./format-options.ts"
+import { FORMAT_IGNORE, getFormatterFiles, getFormatterScripts } from "./format-options.ts"
 
 const EXPECTED_OXFMT_CONFIG = {
   $schema: "./node_modules/oxfmt/configuration_schema.json",
