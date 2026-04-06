@@ -35,26 +35,12 @@ export async function runTestVitestRule(context: RuleContext): Promise<void> {
   }
   installPackages(projectDir, pm, deps, true, dryRun)
 
-  await writeFile(
-    projectDir,
-    "vitest.config.ts",
-    getVitestConfig(framework),
-    force,
-    dryRun
-  )
-  await writeFile(
-    projectDir,
-    "vitest.setup.js",
-    getVitestSetup(framework),
-    force,
-    dryRun
-  )
+  await writeFile(projectDir, "vitest.config.ts", getVitestConfig(framework), force, dryRun)
+  await writeFile(projectDir, "vitest.setup.js", getVitestSetup(framework), force, dryRun)
 
   withProjectCwd(projectDir, () => {
     if (dryRun) {
-      console.log(
-        "[dry-run] Would set package scripts: test, test:watch, test:coverage"
-      )
+      console.log("[dry-run] Would set package scripts: test, test:watch, test:coverage")
       return
     }
     packageJson()

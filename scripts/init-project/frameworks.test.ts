@@ -40,9 +40,7 @@ describe("frameworks", () => {
   })
 
   it("detects svelte from dependencies", () => {
-    expect(detectFramework({ dependencies: { svelte: "5.0.0" } }).id).toBe(
-      "svelte"
-    )
+    expect(detectFramework({ dependencies: { svelte: "5.0.0" } }).id).toBe("svelte")
   })
 
   it("falls back to node", () => {
@@ -50,9 +48,7 @@ describe("frameworks", () => {
   })
 
   it("resolves explicit framework", () => {
-    expect(
-      resolveFramework("node", { dependencies: { react: "19.0.0" } }).id
-    ).toBe("node")
+    expect(resolveFramework("node", { dependencies: { react: "19.0.0" } }).id).toBe("node")
   })
 
   it("resolves explicit nuxt framework", () => {

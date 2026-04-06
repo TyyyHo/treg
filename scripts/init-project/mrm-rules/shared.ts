@@ -37,24 +37,19 @@ export function installPackages(
     return
   }
   if (missingPackages.length !== packages.length) {
-    const installedPackages = packages.filter(
-      candidate => !missingPackages.includes(candidate)
-    )
+    const installedPackages = packages.filter((candidate) => !missingPackages.includes(candidate))
     console.log(`Skip already installed: ${installedPackages.join(", ")}`)
   }
   installByPackageManager(pm, projectDir, missingPackages, dev, dryRun)
 }
 
-export function filterUninstalledPackages(
-  projectDir: string,
-  packages: string[]
-): string[] {
+export function filterUninstalledPackages(projectDir: string, packages: string[]): string[] {
   if (packages.length === 0) return []
 
   const installed = getInstalledPackageNames(projectDir)
   if (installed.size === 0) return packages
 
-  return packages.filter(pkg => !installed.has(getPackageName(pkg)))
+  return packages.filter((pkg) => !installed.has(getPackageName(pkg)))
 }
 
 function getInstalledPackageNames(projectDir: string): Set<string> {
@@ -62,9 +57,7 @@ function getInstalledPackageNames(projectDir: string): Set<string> {
   if (!existsSync(packageJsonPath)) return new Set()
 
   try {
-    const packageJson = JSON.parse(
-      readFileSync(packageJsonPath, "utf8")
-    ) as PackageJson
+    const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8")) as PackageJson
     return new Set<string>([
       ...Object.keys(packageJson.dependencies ?? {}),
       ...Object.keys(packageJson.devDependencies ?? {}),
@@ -107,9 +100,7 @@ export async function writeFile(
   }
 
   if (dryRun) {
-    console.log(
-      `[dry-run] Would ${force ? "update" : "create"} ${relativePath}`
-    )
+    console.log(`[dry-run] Would ${force ? "update" : "create"} ${relativePath}`)
     return true
   }
 

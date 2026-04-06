@@ -39,11 +39,7 @@ describe("lint rule helpers", () => {
   it("does not create eslint.config.mjs when another config exists", async () => {
     const dir = mkdtempSync(path.join(tmpdir(), "treg-lint-skip-"))
     try {
-      writeFileSync(
-        path.join(dir, "eslint.config.js"),
-        "export default []\n",
-        "utf8"
-      )
+      writeFileSync(path.join(dir, "eslint.config.js"), "export default []\n", "utf8")
 
       await ensureEslintConfig(dir, false)
 

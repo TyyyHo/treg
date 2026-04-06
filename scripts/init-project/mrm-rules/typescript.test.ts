@@ -73,10 +73,7 @@ describe("typescript rule helpers", () => {
   })
 
   it("filters non-string values in types", () => {
-    expect(normalizeTypesValue(["node", 1, null, "vite/client"])).toEqual([
-      "node",
-      "vite/client",
-    ])
+    expect(normalizeTypesValue(["node", 1, null, "vite/client"])).toEqual(["node", "vite/client"])
   })
 
   it("enables node types only for node framework", () => {
@@ -98,12 +95,8 @@ describe("typescript rule helpers", () => {
   })
 
   it("does not treat regular tsconfig as solution-style", () => {
-    expect(
-      isSolutionStyleTsconfig(undefined, [{ path: "./tsconfig.app.json" }])
-    ).toBe(false)
-    expect(
-      isSolutionStyleTsconfig([], [{ notPath: "./tsconfig.app.json" }])
-    ).toBe(false)
+    expect(isSolutionStyleTsconfig(undefined, [{ path: "./tsconfig.app.json" }])).toBe(false)
+    expect(isSolutionStyleTsconfig([], [{ notPath: "./tsconfig.app.json" }])).toBe(false)
     expect(isSolutionStyleTsconfig([], [])).toBe(false)
   })
 
@@ -143,8 +136,6 @@ describe("typescript rule helpers", () => {
   })
 
   it("returns empty targets when solution-style has no node/app reference", () => {
-    expect(
-      resolveTsconfigTargets("vue", [], [{ path: "./tsconfig.vitest.json" }])
-    ).toEqual([])
+    expect(resolveTsconfigTargets("vue", [], [{ path: "./tsconfig.vitest.json" }])).toEqual([])
   })
 })

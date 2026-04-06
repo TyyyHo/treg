@@ -44,34 +44,17 @@ export async function runTestJestRule(context: RuleContext): Promise<void> {
     force,
     dryRun
   )
-  await writeFile(
-    projectDir,
-    "jest.setup.js",
-    getSetupFile(framework.id),
-    force,
-    dryRun
-  )
+  await writeFile(projectDir, "jest.setup.js", getSetupFile(framework.id), force, dryRun)
 
   withProjectCwd(projectDir, () => {
     if (dryRun) {
-      console.log(
-        "[dry-run] Would set package scripts: test, test:watch, test:coverage"
-      )
+      console.log("[dry-run] Would set package scripts: test, test:watch, test:coverage")
       return
     }
     packageJson()
-      .setScript(
-        "test",
-        "NODE_OPTIONS=--experimental-vm-modules jest --passWithNoTests"
-      )
-      .setScript(
-        "test:watch",
-        "NODE_OPTIONS=--experimental-vm-modules jest --watch"
-      )
-      .setScript(
-        "test:coverage",
-        "NODE_OPTIONS=--experimental-vm-modules jest --coverage"
-      )
+      .setScript("test", "NODE_OPTIONS=--experimental-vm-modules jest --passWithNoTests")
+      .setScript("test:watch", "NODE_OPTIONS=--experimental-vm-modules jest --watch")
+      .setScript("test:coverage", "NODE_OPTIONS=--experimental-vm-modules jest --coverage")
       .save()
   })
 }

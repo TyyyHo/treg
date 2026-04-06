@@ -18,13 +18,7 @@ const ALLOWED_FRAMEWORKS: readonly FrameworkId[] = [
   "svelte",
   "nuxt",
 ]
-const ALLOWED_FEATURES: readonly FeatureName[] = [
-  "lint",
-  "format",
-  "typescript",
-  "test",
-  "husky",
-]
+const ALLOWED_FEATURES: readonly FeatureName[] = ["lint", "format", "typescript", "test", "husky"]
 const ALLOWED_TEST_RUNNERS: readonly TestRunner[] = ["jest", "vitest"]
 const ALLOWED_FORMATTERS: readonly Formatter[] = ["prettier", "oxfmt"]
 const DEFAULT_AI_TOOLS: readonly AiTool[] = ["claude", "codex", "gemini"]
@@ -67,10 +61,7 @@ interface RawParsedOptions {
   help: boolean
 }
 
-function includes<T extends string>(
-  allowed: readonly T[],
-  value: string
-): value is T {
+function includes<T extends string>(allowed: readonly T[], value: string): value is T {
   return allowed.includes(value as T)
 }
 
@@ -147,9 +138,7 @@ export function parseArgs(argv: string[]): ParsedOptions {
       options.features.push(...parseCsvValue(argv[i + 1], "--features"))
       i += 1
     } else if (arg.startsWith("--features=")) {
-      options.features.push(
-        ...parseCsvValue(readInlineFlagValue(arg, "--features"), "--features")
-      )
+      options.features.push(...parseCsvValue(readInlineFlagValue(arg, "--features"), "--features"))
     } else if (arg === "--dir") {
       options.projectDir = readFlagValue(argv, i, "--dir")
       i += 1
@@ -178,11 +167,7 @@ export function parseArgs(argv: string[]): ParsedOptions {
   return options
 }
 
-function readFlagValue(
-  argv: string[],
-  index: number,
-  flagName: string
-): string {
+function readFlagValue(argv: string[], index: number, flagName: string): string {
   const value = argv[index + 1]
   if (!value) {
     throw new Error(`Missing value for ${flagName}`)
@@ -198,23 +183,18 @@ function readInlineFlagValue(arg: string, flagName: string): string {
   return rawValue
 }
 
-function parseCsvValue(
-  rawValue: string | undefined,
-  flagName: string
-): string[] {
+function parseCsvValue(rawValue: string | undefined, flagName: string): string[] {
   if (!rawValue) {
     throw new Error(`Missing value for ${flagName}`)
   }
 
   return rawValue
     .split(",")
-    .map(item => item.trim())
+    .map((item) => item.trim())
     .filter(Boolean)
 }
 
-function validateParsedOptions(
-  options: RawParsedOptions
-): asserts options is ParsedOptions {
+function validateParsedOptions(options: RawParsedOptions): asserts options is ParsedOptions {
   if (!isCommandName(options.command)) {
     throw new Error(`Unsupported command: ${options.command}`)
   }
@@ -242,9 +222,7 @@ function validateParsedOptions(
   }
 }
 
-export function resolveFeatures(
-  options: Pick<ParsedOptions, "features">
-): EnabledFeatures {
+export function resolveFeatures(options: Pick<ParsedOptions, "features">): EnabledFeatures {
   const selected = new Set<FeatureName>(
     options.features.length > 0 ? options.features : ALLOWED_FEATURES
   )

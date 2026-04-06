@@ -6,8 +6,6 @@ export const reactFramework: DetectableFramework = {
   testEnvironment: "jsdom",
   tsRequiredExcludes: ["dist", "coverage", "jest.config.js", "public"],
   matches(packageJson: PackageJson) {
-    return (
-      hasPackage(packageJson, "react") || hasPackage(packageJson, "react-dom")
-    )
+    return hasPackage(packageJson, "react") || hasPackage(packageJson, "react-dom")
   },
 }

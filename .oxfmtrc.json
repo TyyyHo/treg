@@ -1,0 +1,25 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "semi": false,
+  "trailingComma": "es5",
+  "lineWidth": 80,
+  "indentWidth": 2,
+  "useTabs": false,
+  "quotes": "double",
+  "ignorePatterns": [
+    "node_modules",
+    ".next",
+    ".git",
+    ".agents",
+    ".claude",
+    "dist",
+    "build",
+    "coverage",
+    "*.log",
+    ".env*",
+    ".vercel",
+    "pnpm-lock.yaml",
+    "package-lock.json",
+    "yarn.lock"
+  ]
+}

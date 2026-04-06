@@ -20,11 +20,5 @@
     "types": ["node"]
   },
   "include": ["scripts/**/*.ts"],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "build",
-    "coverage",
-    "scripts/**/*.test.ts"
-  ]
+  "exclude": ["node_modules", "dist", "build", "coverage", "scripts/**/*.test.ts"]
 }

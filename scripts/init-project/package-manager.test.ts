@@ -12,10 +12,7 @@ describe("detectPackageManager", () => {
 
   it("detects pnpm from lockfile", async () => {
     const baseDir = await mkdtemp(path.join(os.tmpdir(), "treg-pm-"))
-    await writeFile(
-      path.join(baseDir, "pnpm-lock.yaml"),
-      "lockfileVersion: 9\n"
-    )
+    await writeFile(path.join(baseDir, "pnpm-lock.yaml"), "lockfileVersion: 9\n")
     expect(detectPackageManager(baseDir)).toBe("pnpm")
   })
 

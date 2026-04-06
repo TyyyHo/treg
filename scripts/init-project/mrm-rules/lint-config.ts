@@ -33,21 +33,12 @@ export function findExistingEslintConfig(projectDir: string): string | null {
   return null
 }
 
-export async function ensureEslintConfig(
-  projectDir: string,
-  dryRun: boolean
-): Promise<void> {
+export async function ensureEslintConfig(projectDir: string, dryRun: boolean): Promise<void> {
   const existing = findExistingEslintConfig(projectDir)
   if (existing) {
     console.log(`Skip eslint config creation (${existing} already exists)`)
     return
   }
 
-  await writeFile(
-    projectDir,
-    "eslint.config.mjs",
-    DEFAULT_ESLINT_CONFIG,
-    false,
-    dryRun
-  )
+  await writeFile(projectDir, "eslint.config.mjs", DEFAULT_ESLINT_CONFIG, false, dryRun)
 }
