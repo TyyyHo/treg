@@ -8,6 +8,16 @@ on:
         required: false
         type: string
         default: "20"
+      run-checks:
+        description: Whether to run format/lint/type-check/test steps.
+        required: false
+        type: boolean
+        default: true
+      run-build:
+        description: Whether to run build step.
+        required: false
+        type: boolean
+        default: true
       run-smoke-test:
         description: Whether to run CLI dry-run smoke test.
         required: false
@@ -39,18 +49,23 @@ jobs:
           HUSKY: 0
 
       - name: Check format
+        if: ${{ inputs.run-checks }}
         run: pnpm format:check
 
       - name: Check lint
+        if: ${{ inputs.run-checks }}
         run: pnpm lint:check
 
       - name: Check types
+        if: ${{ inputs.run-checks }}
         run: pnpm type:check
 
       - name: Build (TS to JS)
+        if: ${{ inputs.run-build }}
         run: pnpm build
 
       - name: Run tests
+        if: ${{ inputs.run-checks }}
         run: pnpm test
 
       - name: CLI smoke test (dry run)

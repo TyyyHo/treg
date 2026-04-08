@@ -8,6 +8,16 @@ on:
 jobs:
   verify:
     if: "${{ !startsWith(github.event.head_commit.message, 'chore: release') }}"
+    uses: ./.github/workflows/_verify.yml
+    with:
+      node-version: "20"
+      run-checks: true
+      run-build: true
+      run-smoke-test: false
+
+  smoke-test:
+    if: "${{ !startsWith(github.event.head_commit.message, 'chore: release') }}"
+    needs: verify
     strategy:
       fail-fast: false
       matrix:
@@ -15,3 +25,6 @@ jobs:
     uses: ./.github/workflows/_verify.yml
     with:
       node-version: ${{ matrix.node-version }}
+      run-checks: false
+      run-build: false
+      run-smoke-test: true
