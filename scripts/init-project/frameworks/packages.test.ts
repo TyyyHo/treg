@@ -16,6 +16,13 @@ describe("framework package presets", () => {
     expect(ids).toEqual(expect.arrayContaining(["express", "fastify", "dotenv", "pino", "prisma"]))
   })
 
+  it("includes common React routing and state options", () => {
+    const ids = getPackagePresets("react").map((preset) => preset.id)
+    expect(ids).toEqual(
+      expect.arrayContaining(["redux", "zustand", "react-router", "tanstack-router"])
+    )
+  })
+
   it("uses framework-specific i18n packages", () => {
     expect(getSelectedPackagePresets("react", ["i18n"])[0]?.dependencies).toEqual([
       "i18next",

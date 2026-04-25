@@ -33,6 +33,22 @@ export const reactPackagePresets: readonly PackagePreset[] = [
     },
   },
   {
+    id: "redux",
+    label: "Redux Toolkit",
+    description: "Predictable state management for larger React applications.",
+    dependencies: ["@reduxjs/toolkit", "react-redux"],
+    aiRule: {
+      prompt:
+        "Use Redux Toolkit for shared app state that benefits from explicit actions and reducers.",
+      when: "When React state spans multiple domains, needs middleware, or requires predictable debugging.",
+      checklist: [
+        "Prefer `createSlice` and RTK patterns over handwritten Redux boilerplate.",
+        "Keep server cache data in TanStack Query instead of Redux unless there is a clear reason.",
+        "Expose typed hooks for dispatch and selector usage.",
+      ],
+    },
+  },
+  {
     id: "tanstack-query",
     label: "TanStack Query",
     description: "Server-state fetching and cache management for React.",
@@ -44,6 +60,22 @@ export const reactPackagePresets: readonly PackagePreset[] = [
         "Use structured query keys that include every data dependency.",
         "Keep mutation invalidation scoped to affected queries.",
         "Avoid storing query results in separate client state stores.",
+      ],
+    },
+  },
+  {
+    id: "react-router",
+    label: "React Router",
+    description: "Routing primitives for React applications.",
+    dependencies: ["react-router-dom"],
+    aiRule: {
+      prompt:
+        "Use React Router route definitions and navigation APIs instead of hard-coded navigation state.",
+      when: "When adding React routes, nested layouts, navigation links, or route params.",
+      checklist: [
+        "Keep route path constants or definitions centralized enough to avoid string drift.",
+        "Use router APIs for navigation and params instead of manual URL parsing.",
+        "Keep route-level loading and error states consistent.",
       ],
     },
   },
