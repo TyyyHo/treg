@@ -10,7 +10,7 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square&logo=typescript&logoColor=white)
 ![CLI](https://img.shields.io/badge/CLI-Interactive-111827?style=flat-square&logo=gnubash&logoColor=white)
 
-[English](./README.md) | [繁體中文](./README.zh-hant.md) | [Español](./README.es.md) | [日本語](./README.ja.md)
+[English](./README.md) | [繁體中文](./README.zh-hant.md) | [简体中文](./README.zh-hans.md) | [Español](./README.es.md) | [日本語](./README.ja.md)
 
 </div>
 
