@@ -80,7 +80,7 @@ npx @tylercore/treg init --dry-run
 Agrega features a un proyecto existente:
 
 ```bash
-npx @tylercore/treg add --features lint,format
+npx @tylercore/treg add
 ```
 
 ---
@@ -102,7 +102,7 @@ Durante `init`, `Treg` pregunta:
 1. **Package manager**  
    `pnpm | npm | yarn | bun`
 
-2. **Features** (selección múltiple, todas marcadas por defecto)
+2. **Features** (selección múltiple, marcadas por defecto)
    - lint
    - format
    - TypeScript
@@ -126,6 +126,34 @@ Durante `init`, `Treg` pregunta:
 
 ---
 
+## Flujo interactivo de `add`
+
+Durante `add`, `Treg` pregunta:
+
+1. **Features** (selección múltiple)
+   - lint
+   - format
+   - TypeScript
+   - test
+   - husky
+   - AI rules guidance (solo cuando ya existe un archivo de AI rules)
+
+2. **Formatter** (solo si se selecciona `format`)
+   - `prettier`
+   - `oxfmt`
+
+3. **Test runner** (solo si se selecciona `test`)
+   - `jest`
+   - `vitest`
+   - `skip`
+
+4. **AI tools** (solo si se selecciona AI rules guidance)
+   - Claude
+   - Codex
+   - Gemini
+
+---
+
 ## Uso común
 
 Inicializar proyecto:
@@ -143,20 +171,26 @@ npx @tylercore/treg init --dry-run
 Agregar solo lint + format:
 
 ```bash
-npx @tylercore/treg add --features lint,format
+npx @tylercore/treg add
 ```
+
+Luego selecciona `lint` y `format`.
 
 Agregar format usando `oxfmt`:
 
 ```bash
-npx @tylercore/treg add --features format --formatter oxfmt
+npx @tylercore/treg add
 ```
+
+Luego selecciona `format`, y después `oxfmt`.
 
 Agregar test usando `vitest`:
 
 ```bash
-npx @tylercore/treg add --features test --test-runner vitest
+npx @tylercore/treg add
 ```
+
+Luego selecciona `test`, y después `vitest`.
 
 ---
 
@@ -170,6 +204,14 @@ npx @tylercore/treg add --features test --test-runner vitest
 ```
 
 ### `add`
+
+Modo interactivo:
+
+```text
+add
+```
+
+Flags opcionales para automatización:
 
 ```text
 --framework <node|react|next|vue|svelte|nuxt>
@@ -221,7 +263,7 @@ Comportamiento:
 - solo se actualizan las herramientas seleccionadas
 - los documentos faltantes se crean automáticamente
 - las actualizaciones se realizan en la raíz del repositorio
-- los archivos de skill se generan una sola vez por feature habilitada
+- los prompts se escriben directamente dentro de cada documento de guía de AI seleccionado
 
 ---
 

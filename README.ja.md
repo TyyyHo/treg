@@ -80,7 +80,7 @@ npx @tylercore/treg init --dry-run
 既存プロジェクトに feature を追加:
 
 ```bash
-npx @tylercore/treg add --features lint,format
+npx @tylercore/treg add
 ```
 
 ---
@@ -126,6 +126,34 @@ npx @tylercore/treg add --features lint,format
 
 ---
 
+## `add` の対話フロー
+
+`add` 実行時、`Treg` は以下を順に確認します。
+
+1. **Features**（複数選択）
+   - lint
+   - format
+   - TypeScript
+   - test
+   - husky
+   - AI rules guidance（AI rules ファイルが既に存在する場合のみ）
+
+2. **Formatter**（`format` を選んだ場合のみ）
+   - `prettier`
+   - `oxfmt`
+
+3. **Test runner**（`test` を選んだ場合のみ）
+   - `jest`
+   - `vitest`
+   - `skip`
+
+4. **AI tools**（AI rules guidance を選んだ場合のみ）
+   - Claude
+   - Codex
+   - Gemini
+
+---
+
 ## よく使う例
 
 プロジェクトを初期化:
@@ -143,20 +171,26 @@ npx @tylercore/treg init --dry-run
 lint + format のみ追加:
 
 ```bash
-npx @tylercore/treg add --features lint,format
+npx @tylercore/treg add
 ```
+
+その後 `lint` と `format` を選択。
 
 `oxfmt` で format を追加:
 
 ```bash
-npx @tylercore/treg add --features format --formatter oxfmt
+npx @tylercore/treg add
 ```
+
+その後 `format` を選び、続けて `oxfmt` を選択。
 
 `vitest` で test を追加:
 
 ```bash
-npx @tylercore/treg add --features test --test-runner vitest
+npx @tylercore/treg add
 ```
+
+その後 `test` を選び、続けて `vitest` を選択。
 
 ---
 
@@ -170,6 +204,14 @@ npx @tylercore/treg add --features test --test-runner vitest
 ```
 
 ### `add`
+
+対話モード:
+
+```text
+add
+```
+
+自動化用の任意フラグ:
 
 ```text
 --framework <node|react|next|vue|svelte|nuxt>
@@ -221,7 +263,7 @@ nuxt -> next -> react -> vue -> svelte -> node
 - 選択したツールのみ更新
 - 対象ファイルがない場合は自動作成
 - 更新はリポジトリルートで実行
-- 有効化した feature ごとの skill ファイルは 1 回だけ生成
+- プロンプトは選択した各 AI ガイダンス文書へ直接書き込み
 
 ---
 
