@@ -1,4 +1,4 @@
-import type { AiTool, EnabledFeatures, FeatureName, RuleContext } from "../types.ts"
+import type { AiTool, EnabledFeatures, FeatureName, RuleContext, TestRunner } from "../types.ts"
 
 import { existsSync } from "node:fs"
 import { promises as fs } from "node:fs"
@@ -72,10 +72,27 @@ const FEATURE_STEP_LABELS: Record<FeatureName, string> = {
   test: "Test Configuration",
   typescript: "TypeScript Settings",
 }
+const FEATURE_NAME_BY_STEP_LABEL = Object.entries(FEATURE_STEP_LABELS).reduce(
+  (acc, [feature, label]) => {
+    acc[label] = feature as FeatureName
+    return acc
+  },
+  {} as Record<string, FeatureName>
+)
+const TEST_RUNNER_PATTERN = /Current test runner:\s+`(jest|vitest)`/
 
-function resolveAiRulesDocs(projectDir: string, aiTools: AiTool[]): string[] {
+function resolveAiRulesDocs(
+  context: Pick<RuleContext, "projectDir" | "aiTools" | "command">
+): string[] {
+  const { projectDir, aiTools, command } = context
   const docFiles = [...new Set(aiTools.map((tool) => AI_TOOL_DOCS[tool]))]
-  return docFiles.map((fileName) => path.join(projectDir, fileName))
+  const targets = docFiles.map((fileName) => path.join(projectDir, fileName))
+
+  if (command === "add") {
+    return targets.filter((target) => existsSync(target))
+  }
+
+  return targets
 }
 
 function getEnabledFeatures(enabledFeatures: EnabledFeatures): FeatureName[] {
@@ -83,6 +100,63 @@ function getEnabledFeatures(enabledFeatures: EnabledFeatures): FeatureName[] {
     .filter(([, value]) => value)
     .map(([name]) => name)
     .sort((a, b) => a.localeCompare(b))
+}
+
+function buildEnabledFeatureState(features: FeatureName[]): EnabledFeatures {
+  const enabled = new Set(features)
+  return {
+    lint: enabled.has("lint"),
+    format: enabled.has("format"),
+    typescript: enabled.has("typescript"),
+    test: enabled.has("test"),
+    husky: enabled.has("husky"),
+  }
+}
+
+function extractRuleSection(content: string): string | null {
+  const headingStart = content.indexOf(RULE_SECTION_START_PATTERN)
+  if (headingStart === -1) {
+    return null
+  }
+  const nextHeading = content.indexOf("\n## ", headingStart + 1)
+  const sectionEnd = nextHeading === -1 ? content.length : nextHeading + 1
+  return content.slice(headingStart, sectionEnd)
+}
+
+function readFeaturesFromRuleSection(content: string): FeatureName[] {
+  const section = extractRuleSection(content)
+  if (!section) {
+    return []
+  }
+
+  const enabled = new Set<FeatureName>()
+  const matches = section.matchAll(/^\d+\.\s+(.+)$/gm)
+  for (const match of matches) {
+    const label = match[1]?.trim()
+    if (!label) continue
+    const feature = FEATURE_NAME_BY_STEP_LABEL[label]
+    if (feature) {
+      enabled.add(feature)
+    }
+  }
+
+  return [...enabled].sort((a, b) => a.localeCompare(b))
+}
+
+function readTestRunnerFromRuleSection(content: string): TestRunner | null {
+  const section = extractRuleSection(content)
+  if (!section) {
+    return null
+  }
+  const matched = section.match(TEST_RUNNER_PATTERN)
+  if (!matched || (matched[1] !== "jest" && matched[1] !== "vitest")) {
+    return null
+  }
+  return matched[1]
+}
+
+function mergeFeatureNames(current: FeatureName[], incoming: FeatureName[]): FeatureName[] {
+  return [...new Set([...current, ...incoming])].sort((a, b) => a.localeCompare(b))
 }
 
 function buildRuleSection(context: Pick<RuleContext, "enabledFeatures" | "testRunner">): string {
@@ -149,9 +223,9 @@ function upsertRuleSection(content: string, nextSection: string): string {
 }
 
 export async function runAiRulesRule(context: RuleContext): Promise<void> {
-  const { projectDir, dryRun, aiTools } = context
-  const targetFiles = resolveAiRulesDocs(projectDir, aiTools)
-  const section = buildRuleSection(context)
+  const { dryRun } = context
+  const targetFiles = resolveAiRulesDocs(context)
+  const currentFeatures = getEnabledFeatures(context.enabledFeatures)
 
   for (const targetFile of targetFiles) {
     if (dryRun) {
@@ -162,6 +236,16 @@ export async function runAiRulesRule(context: RuleContext): Promise<void> {
 
     const exists = existsSync(targetFile)
     const current = exists ? await fs.readFile(targetFile, "utf8") : ""
+    const existingFeatures = context.command === "add" ? readFeaturesFromRuleSection(current) : []
+    const mergedFeatures = mergeFeatureNames(existingFeatures, currentFeatures)
+    const hasNewTestConfig = context.command !== "add" || context.enabledFeatures.test
+    const testRunner = hasNewTestConfig
+      ? context.testRunner
+      : (readTestRunnerFromRuleSection(current) ?? context.testRunner)
+    const section = buildRuleSection({
+      enabledFeatures: buildEnabledFeatureState(mergedFeatures),
+      testRunner,
+    })
     const updated = upsertRuleSection(current, section)
 
     if (updated !== current) {

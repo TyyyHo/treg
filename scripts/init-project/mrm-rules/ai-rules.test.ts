@@ -64,7 +64,13 @@ describe("ai-rules helpers", () => {
       writeFileSync(path.join(dir, "AGENTS.md"), "# Agents\n", "utf8")
       writeFileSync(path.join(dir, "GEMINI.md"), "# Gemini\n", "utf8")
 
-      expect(__testables__.resolveAiRulesDocs(dir, ["claude", "codex", "gemini"])).toEqual([
+      expect(
+        __testables__.resolveAiRulesDocs({
+          command: "add",
+          projectDir: dir,
+          aiTools: ["claude", "codex", "gemini"],
+        })
+      ).toEqual([
         path.join(dir, "CLAUDE.md"),
         path.join(dir, "AGENTS.md"),
         path.join(dir, "GEMINI.md"),
@@ -74,13 +80,32 @@ describe("ai-rules helpers", () => {
     }
   })
 
-  it("resolves selected docs even when files are missing", () => {
+  it("add resolves only existing selected docs", () => {
     const dir = mkdtempSync(path.join(tmpdir(), "treg-ai-rules-missing-"))
     try {
-      expect(__testables__.resolveAiRulesDocs(dir, ["codex", "gemini"])).toEqual([
-        path.join(dir, "AGENTS.md"),
-        path.join(dir, "GEMINI.md"),
-      ])
+      writeFileSync(path.join(dir, "AGENTS.md"), "# Agents\n", "utf8")
+      expect(
+        __testables__.resolveAiRulesDocs({
+          command: "add",
+          projectDir: dir,
+          aiTools: ["codex", "gemini"],
+        })
+      ).toEqual([path.join(dir, "AGENTS.md")])
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
+    }
+  })
+
+  it("init resolves selected docs even when files are missing", () => {
+    const dir = mkdtempSync(path.join(tmpdir(), "treg-ai-rules-missing-"))
+    try {
+      expect(
+        __testables__.resolveAiRulesDocs({
+          command: "init",
+          projectDir: dir,
+          aiTools: ["codex", "gemini"],
+        })
+      ).toEqual([path.join(dir, "AGENTS.md"), path.join(dir, "GEMINI.md")])
     } finally {
       rmSync(dir, { recursive: true, force: true })
     }
@@ -180,11 +205,49 @@ describe("ai-rules helpers", () => {
     }
   })
 
-  it("creates missing selected ai docs and injects guidance", async () => {
+  it("add does not create missing selected ai docs", async () => {
     const dir = mkdtempSync(path.join(tmpdir(), "treg-ai-rules-create-docs-"))
     try {
       await runAiRulesRule({
         command: "add",
+        projectDir: dir,
+        framework: {
+          id: "node",
+          testEnvironment: "node",
+          tsRequiredExcludes: [],
+        },
+        formatter: "prettier",
+        features: [],
+        testRunner: "jest",
+        pm: "pnpm",
+        force: false,
+        dryRun: false,
+        skipHuskyInstall: false,
+        aiRules: true,
+        aiTools: ["codex", "gemini"],
+        help: false,
+        enabledFeatures: {
+          lint: true,
+          format: false,
+          typescript: false,
+          test: false,
+          husky: false,
+        },
+      })
+
+      expect(existsSync(path.join(dir, "AGENTS.md"))).toBe(false)
+      expect(existsSync(path.join(dir, "GEMINI.md"))).toBe(false)
+      expect(existsSync(path.join(dir, "CLAUDE.md"))).toBe(false)
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
+    }
+  })
+
+  it("init creates missing selected ai docs and injects guidance", async () => {
+    const dir = mkdtempSync(path.join(tmpdir(), "treg-ai-rules-create-docs-"))
+    try {
+      await runAiRulesRule({
+        command: "init",
         projectDir: dir,
         framework: {
           id: "node",
@@ -218,6 +281,75 @@ describe("ai-rules helpers", () => {
       expect(geminiDoc).not.toContain("# GEMINI")
       expect(geminiDoc).toContain("### Git rules")
       expect(existsSync(path.join(dir, "CLAUDE.md"))).toBe(false)
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
+    }
+  })
+
+  it("preserves existing feature guidance when add installs only specific features", async () => {
+    const dir = mkdtempSync(path.join(tmpdir(), "treg-ai-rules-preserve-add-"))
+    try {
+      writeFileSync(path.join(dir, "AGENTS.md"), "# Agents\n", "utf8")
+
+      await runAiRulesRule({
+        command: "add",
+        projectDir: dir,
+        framework: {
+          id: "node",
+          testEnvironment: "node",
+          tsRequiredExcludes: [],
+        },
+        formatter: "prettier",
+        features: ["test"],
+        testRunner: "jest",
+        pm: "pnpm",
+        force: false,
+        dryRun: false,
+        skipHuskyInstall: false,
+        aiRules: true,
+        aiTools: ["codex"],
+        help: false,
+        enabledFeatures: {
+          lint: false,
+          format: false,
+          typescript: false,
+          test: true,
+          husky: false,
+        },
+      })
+
+      await runAiRulesRule({
+        command: "add",
+        projectDir: dir,
+        framework: {
+          id: "node",
+          testEnvironment: "node",
+          tsRequiredExcludes: [],
+        },
+        formatter: "prettier",
+        features: ["format"],
+        testRunner: "vitest",
+        pm: "pnpm",
+        force: false,
+        dryRun: false,
+        skipHuskyInstall: false,
+        aiRules: true,
+        aiTools: ["codex"],
+        help: false,
+        enabledFeatures: {
+          lint: false,
+          format: true,
+          typescript: false,
+          test: false,
+          husky: false,
+        },
+      })
+
+      const agentsDoc = await readFile(path.join(dir, "AGENTS.md"), "utf8")
+
+      expect(agentsDoc).toContain("1. Formatting")
+      expect(agentsDoc).toContain("2. Test Configuration")
+      expect(agentsDoc).toContain("Current test runner: `jest`")
     } finally {
       rmSync(dir, { recursive: true, force: true })
     }
