@@ -53,9 +53,11 @@ export async function main(argv: string[] = process.argv.slice(2)): Promise<void
   let enabledFeatures = resolveFeatures(options)
   let aiRules = options.aiRules
   let aiTools = [...options.aiTools]
+  let selectedPackageIds: string[] = []
 
   if (options.command === "init") {
     const prompted = await collectInitPrompts({
+      frameworkId: framework.id,
       pm,
       formatter,
       testRunner: resolveTestRunner(framework.id, null),
@@ -66,6 +68,7 @@ export async function main(argv: string[] = process.argv.slice(2)): Promise<void
     enabledFeatures = prompted.enabledFeatures
     aiRules = prompted.aiRules
     aiTools = prompted.aiTools
+    selectedPackageIds = prompted.selectedPackageIds
   }
 
   if (options.command === "add" && options.features.length === 0) {
@@ -79,6 +82,7 @@ export async function main(argv: string[] = process.argv.slice(2)): Promise<void
     enabledFeatures = prompted.enabledFeatures
     aiRules = prompted.aiRules
     aiTools = prompted.aiTools
+    selectedPackageIds = []
   }
 
   const context: RuleContext = {
@@ -91,6 +95,7 @@ export async function main(argv: string[] = process.argv.slice(2)): Promise<void
     enabledFeatures,
     aiRules,
     aiTools,
+    selectedPackageIds,
   }
 
   console.log(formatStep(1, TOTAL_STEPS, "Resolve plan", options.dryRun))
@@ -102,7 +107,7 @@ export async function main(argv: string[] = process.argv.slice(2)): Promise<void
       .map(([name]) => name)
       .join(
         ", "
-      )}, formatter=${formatter}, testRunner=${testRunner}, aiTools=${aiRules ? aiTools.join(", ") : "disabled"}`
+      )}, formatter=${formatter}, testRunner=${testRunner}, packages=${selectedPackageIds.length > 0 ? selectedPackageIds.join(", ") : "none"}, aiTools=${aiRules ? aiTools.join(", ") : "disabled"}`
   )
 
   console.log(formatStep(2, TOTAL_STEPS, "Run mrm rules", options.dryRun))

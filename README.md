@@ -124,6 +124,18 @@ During `init`, `Treg` asks for:
    - Codex
    - Gemini
 
+6. **Common package installation**
+   - `No`
+   - `Yes`
+
+7. **Common packages** (only when package installation is selected)
+   - Shared options for every framework, such as Zod and date-fns
+   - Framework-specific options, such as Tailwind CSS, Zustand or Pinia, TanStack Query, TanStack Router, and framework i18n packages
+
+Node.js is treated as a backend target, so its package list focuses on server, configuration, logging, and database tooling.
+
+Selected packages are installed as dependencies or dev dependencies based on how they are used. When AI rules guidance is enabled, selected packages also add package-specific guidance to the selected AI rules files.
+
 ---
 
 ## Add Interactive Flow

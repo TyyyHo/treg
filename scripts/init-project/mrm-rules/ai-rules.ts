@@ -1,4 +1,13 @@
-import type { AiTool, EnabledFeatures, FeatureName, RuleContext, TestRunner } from "../types.ts"
+import { getPackagePresets, getSelectedPackagePresets } from "../frameworks/packages.ts"
+import type {
+  AiTool,
+  EnabledFeatures,
+  FeatureName,
+  Framework,
+  PackagePresetId,
+  RuleContext,
+  TestRunner,
+} from "../types.ts"
 
 import { existsSync } from "node:fs"
 import { promises as fs } from "node:fs"
@@ -80,6 +89,7 @@ const FEATURE_NAME_BY_STEP_LABEL = Object.entries(FEATURE_STEP_LABELS).reduce(
   {} as Record<string, FeatureName>
 )
 const TEST_RUNNER_PATTERN = /Current test runner:\s+`(jest|vitest)`/
+const PACKAGE_SECTION_HEADING = "### Package Rules and Checklist"
 
 function resolveAiRulesDocs(
   context: Pick<RuleContext, "projectDir" | "aiTools" | "command">
@@ -159,9 +169,52 @@ function mergeFeatureNames(current: FeatureName[], incoming: FeatureName[]): Fea
   return [...new Set([...current, ...incoming])].sort((a, b) => a.localeCompare(b))
 }
 
-function buildRuleSection(context: Pick<RuleContext, "enabledFeatures" | "testRunner">): string {
+function readPackageIdsFromRuleSection(content: string, framework: Framework): PackagePresetId[] {
+  const section = extractRuleSection(content)
+  if (!section) {
+    return []
+  }
+
+  const packageHeadingStart = section.indexOf(PACKAGE_SECTION_HEADING)
+  if (packageHeadingStart === -1) {
+    return []
+  }
+
+  const packageSection = section.slice(packageHeadingStart)
+  const packageIdsByLabel = new Map(
+    getPackagePresets(framework.id).map((preset) => [preset.label, preset.id])
+  )
+  const enabled = new Set<PackagePresetId>()
+  const matches = packageSection.matchAll(/^\d+\.\s+(.+)$/gm)
+  for (const match of matches) {
+    const label = match[1]?.trim()
+    if (!label) continue
+    const packageId = packageIdsByLabel.get(label)
+    if (packageId) {
+      enabled.add(packageId)
+    }
+  }
+
+  return [...enabled].sort((a, b) => a.localeCompare(b))
+}
+
+function mergePackageIds(
+  current: PackagePresetId[],
+  incoming: PackagePresetId[]
+): PackagePresetId[] {
+  return [...new Set([...current, ...incoming])].sort((a, b) => a.localeCompare(b))
+}
+
+function buildRuleSection(
+  context: Pick<RuleContext, "enabledFeatures" | "testRunner"> &
+    Partial<Pick<RuleContext, "framework" | "selectedPackageIds">>
+): string {
   const { enabledFeatures, testRunner } = context
   const enabled = getEnabledFeatures(enabledFeatures)
+  const selectedPackagePresets =
+    context.framework && context.selectedPackageIds
+      ? getSelectedPackagePresets(context.framework.id, context.selectedPackageIds)
+      : []
 
   const lines = [
     "### Git rules",
@@ -176,7 +229,6 @@ function buildRuleSection(context: Pick<RuleContext, "enabledFeatures" | "testRu
   if (enabled.length === 0) {
     lines.push("1. No features are enabled in this run, so no rule call is required.")
     lines.push("")
-    return lines.join("\n")
   }
 
   enabled.forEach((feature, index) => {
@@ -195,6 +247,22 @@ function buildRuleSection(context: Pick<RuleContext, "enabledFeatures" | "testRu
     })
     lines.push("")
   })
+
+  if (selectedPackagePresets.length > 0) {
+    lines.push(PACKAGE_SECTION_HEADING)
+    lines.push("")
+
+    selectedPackagePresets.forEach((preset, index) => {
+      lines.push(`${index + 1}. ${preset.label}`)
+      lines.push(`   - Prompt: ${preset.aiRule.prompt}`)
+      lines.push(`   - When to use: ${preset.aiRule.when}`)
+      lines.push("   - Checklist:")
+      preset.aiRule.checklist.forEach((item) => {
+        lines.push(`     - ${item}`)
+      })
+      lines.push("")
+    })
+  }
 
   return lines.join("\n")
 }
@@ -238,12 +306,17 @@ export async function runAiRulesRule(context: RuleContext): Promise<void> {
     const current = exists ? await fs.readFile(targetFile, "utf8") : ""
     const existingFeatures = context.command === "add" ? readFeaturesFromRuleSection(current) : []
     const mergedFeatures = mergeFeatureNames(existingFeatures, currentFeatures)
+    const existingPackageIds =
+      context.command === "add" ? readPackageIdsFromRuleSection(current, context.framework) : []
+    const mergedPackageIds = mergePackageIds(existingPackageIds, context.selectedPackageIds)
     const hasNewTestConfig = context.command !== "add" || context.enabledFeatures.test
     const testRunner = hasNewTestConfig
       ? context.testRunner
       : (readTestRunnerFromRuleSection(current) ?? context.testRunner)
     const section = buildRuleSection({
       enabledFeatures: buildEnabledFeatureState(mergedFeatures),
+      framework: context.framework,
+      selectedPackageIds: mergedPackageIds,
       testRunner,
     })
     const updated = upsertRuleSection(current, section)
@@ -264,6 +337,7 @@ export async function runAiRulesRule(context: RuleContext): Promise<void> {
 export const __testables__ = {
   buildRuleSection,
   getEnabledFeatures,
+  readPackageIdsFromRuleSection,
   resolveAiRulesDocs,
   upsertRuleSection,
 }

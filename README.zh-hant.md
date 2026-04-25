@@ -123,6 +123,18 @@ npx @tylercore/treg add
    - Codex
    - Gemini
 
+6. **常用套件安裝**
+   - `No`
+   - `Yes`
+
+7. **常用套件**（僅在選擇安裝套件時詢問）
+   - 所有 framework 共用選項，例如 Zod、date-fns
+   - framework 專屬選項，例如 Tailwind CSS、Zustand 或 Pinia、TanStack Query、TanStack Router，以及各 framework 對應的 i18n 套件
+
+Node.js 會視為後端目標，因此套件清單會偏向 server、設定、logging 與 database tooling。
+
+選到的套件會依用途安裝到 dependencies 或 devDependencies。若啟用 AI rules guidance，也會把所選套件各自的提示詞寫入所選 AI rules 檔案。
+
 ---
 
 ## add 互動流程

@@ -35,6 +35,58 @@ describe("ai-rules helpers", () => {
     expect(content).not.toContain("SKILL.md")
   })
 
+  it("builds package guidance from selected package presets", () => {
+    const content = __testables__.buildRuleSection({
+      framework: {
+        id: "react",
+        testEnvironment: "jsdom",
+        tsRequiredExcludes: [],
+      },
+      selectedPackageIds: ["tailwind", "zustand", "tanstack-query"],
+      enabledFeatures: {
+        lint: false,
+        format: false,
+        typescript: false,
+        test: false,
+        husky: false,
+      },
+      testRunner: "jest",
+    })
+
+    expect(content).toContain("### Package Rules and Checklist")
+    expect(content).toContain("1. Tailwind CSS")
+    expect(content).toContain("2. Zustand")
+    expect(content).toContain("3. TanStack Query")
+    expect(content).toContain("Prompt: Use Zustand for client-only state")
+  })
+
+  it("reads package guidance from an existing rule section", () => {
+    const content = __testables__.buildRuleSection({
+      framework: {
+        id: "react",
+        testEnvironment: "jsdom",
+        tsRequiredExcludes: [],
+      },
+      selectedPackageIds: ["tailwind", "zustand"],
+      enabledFeatures: {
+        lint: false,
+        format: false,
+        typescript: false,
+        test: false,
+        husky: false,
+      },
+      testRunner: "jest",
+    })
+
+    expect(
+      __testables__.readPackageIdsFromRuleSection(content, {
+        id: "react",
+        testEnvironment: "jsdom",
+        tsRequiredExcludes: [],
+      })
+    ).toEqual(["tailwind", "zustand"])
+  })
+
   it("appends rule section when no existing section is present", () => {
     const replaced = __testables__.upsertRuleSection(
       "# Header\n\nSome existing content.",
@@ -136,6 +188,7 @@ describe("ai-rules helpers", () => {
         aiRules: true,
         aiTools: ["claude", "codex", "gemini"],
         help: false,
+        selectedPackageIds: [],
         enabledFeatures: {
           lint: true,
           format: false,
@@ -184,6 +237,7 @@ describe("ai-rules helpers", () => {
         aiRules: true,
         aiTools: ["codex"],
         help: false,
+        selectedPackageIds: [],
         enabledFeatures: {
           lint: true,
           format: false,
@@ -226,6 +280,7 @@ describe("ai-rules helpers", () => {
         aiRules: true,
         aiTools: ["codex", "gemini"],
         help: false,
+        selectedPackageIds: [],
         enabledFeatures: {
           lint: true,
           format: false,
@@ -264,6 +319,7 @@ describe("ai-rules helpers", () => {
         aiRules: true,
         aiTools: ["codex", "gemini"],
         help: false,
+        selectedPackageIds: [],
         enabledFeatures: {
           lint: true,
           format: false,
@@ -309,6 +365,7 @@ describe("ai-rules helpers", () => {
         aiRules: true,
         aiTools: ["codex"],
         help: false,
+        selectedPackageIds: [],
         enabledFeatures: {
           lint: false,
           format: false,
@@ -336,6 +393,7 @@ describe("ai-rules helpers", () => {
         aiRules: true,
         aiTools: ["codex"],
         help: false,
+        selectedPackageIds: [],
         enabledFeatures: {
           lint: false,
           format: true,

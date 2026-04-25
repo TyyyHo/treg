@@ -9,6 +9,7 @@ export type AiTool = "claude" | "codex" | "gemini"
 export type FeatureName = "lint" | "format" | "typescript" | "test" | "husky"
 export type TestRunner = "jest" | "vitest"
 export type TestEnvironment = "node" | "jsdom"
+export type PackagePresetId = string
 
 export interface PackageJson {
   dependencies?: Record<string, string>
@@ -60,4 +61,18 @@ export interface RuleContext extends Omit<
   pm: PackageManager
   testRunner: TestRunner
   enabledFeatures: EnabledFeatures
+  selectedPackageIds: PackagePresetId[]
+}
+
+export interface PackagePreset {
+  id: PackagePresetId
+  label: string
+  description: string
+  dependencies?: string[]
+  devDependencies?: string[]
+  aiRule: {
+    prompt: string
+    when: string
+    checklist: string[]
+  }
 }

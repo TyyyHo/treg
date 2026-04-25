@@ -6,9 +6,12 @@ import type {
   EnabledFeatures,
   FeatureName,
   Formatter,
+  FrameworkId,
   PackageManager,
+  PackagePresetId,
   TestRunner,
 } from "./types.ts"
+import { getPackagePresets } from "./frameworks/packages.ts"
 
 const DEFAULT_AI_TOOLS: readonly AiTool[] = ["claude", "codex", "gemini"]
 const AI_TOOL_DOCS: Record<AiTool, string> = {
@@ -19,6 +22,7 @@ const AI_TOOL_DOCS: Record<AiTool, string> = {
 
 type InitPromptFeature = FeatureName | "aiRules"
 type AiToolChoice = AiTool | "skip"
+type PackageInstallChoice = "yes" | "no"
 type ClackPrompts = typeof import("@clack/prompts")
 
 interface Choice<T extends string> {
@@ -38,9 +42,11 @@ export interface InitPromptResult {
   enabledFeatures: EnabledFeatures
   aiRules: boolean
   aiTools: AiTool[]
+  selectedPackageIds: PackagePresetId[]
 }
 
 interface InitPromptDefaults {
+  frameworkId: FrameworkId
   pm: PackageManager
   formatter: Formatter
   testRunner: TestRunner
@@ -85,6 +91,11 @@ const AI_TOOL_CHOICES: readonly Choice<AiToolChoice>[] = [
   { value: "codex", label: "Codex" },
   { value: "gemini", label: "Gemini" },
   { value: "skip", label: "skip (disable AI rules guidance)" },
+]
+
+const PACKAGE_INSTALL_CHOICES: readonly Choice<PackageInstallChoice>[] = [
+  { value: "no", label: "No" },
+  { value: "yes", label: "Yes" },
 ]
 
 const FEATURE_CHOICES: readonly Choice<InitPromptFeature>[] = [
@@ -212,6 +223,7 @@ export async function collectInitPrompts(defaults: InitPromptDefaults): Promise<
       },
       aiRules: true,
       aiTools: [...DEFAULT_AI_TOOLS],
+      selectedPackageIds: [],
     }
   }
 
@@ -273,6 +285,27 @@ export async function collectInitPrompts(defaults: InitPromptDefaults): Promise<
     console.log("5) AI tools skipped (AI rules guidance not selected)")
   }
 
+  let selectedPackageIds: PackagePresetId[] = []
+  const shouldInstallPackages = await promptSingleChoice(
+    "6) Install common packages",
+    PACKAGE_INSTALL_CHOICES,
+    "no"
+  )
+  if (shouldInstallPackages === "yes") {
+    const packageChoices = getPackagePresets(defaults.frameworkId).map((preset) => ({
+      value: preset.id,
+      label: `${preset.label} - ${preset.description}`,
+    }))
+    selectedPackageIds = await promptMultiChoice(
+      "7) Common packages (Space to select, A to toggle all)",
+      packageChoices,
+      [],
+      true
+    )
+  } else {
+    console.log("7) Common packages skipped")
+  }
+
   return {
     pm,
     formatter,
@@ -280,6 +313,7 @@ export async function collectInitPrompts(defaults: InitPromptDefaults): Promise<
     enabledFeatures,
     aiRules,
     aiTools,
+    selectedPackageIds,
   }
 }
 
