@@ -5,6 +5,7 @@ export const reactPackagePresets: readonly PackagePreset[] = [
     id: "tailwind",
     label: "Tailwind CSS",
     description: "Utility-first styling for React applications.",
+    dependencies: ["clsx"],
     devDependencies: ["tailwindcss"],
     aiRule: {
       prompt:
@@ -12,6 +13,7 @@ export const reactPackagePresets: readonly PackagePreset[] = [
       when: "When styling React components or shared UI primitives.",
       checklist: [
         "Keep class lists readable and grouped by layout, spacing, color, and state.",
+        "Use the generated `cn` helper when composing conditional class names.",
         "Avoid duplicating long class combinations across components.",
         "Use design tokens or config values instead of one-off arbitrary values when patterns repeat.",
       ],

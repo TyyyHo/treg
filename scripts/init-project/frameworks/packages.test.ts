@@ -23,6 +23,13 @@ describe("framework package presets", () => {
     )
   })
 
+  it("installs clsx with Tailwind presets", () => {
+    const frameworks = ["react", "next", "vue", "nuxt", "svelte"] as const
+    for (const framework of frameworks) {
+      expect(getSelectedPackagePresets(framework, ["tailwind"])[0]?.dependencies).toContain("clsx")
+    }
+  })
+
   it("uses framework-specific i18n packages", () => {
     expect(getSelectedPackagePresets("react", ["i18n"])[0]?.dependencies).toEqual([
       "i18next",

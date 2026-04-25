@@ -5,12 +5,14 @@ export const vuePackagePresets: readonly PackagePreset[] = [
     id: "tailwind",
     label: "Tailwind CSS",
     description: "Utility-first styling for Vue applications.",
+    dependencies: ["clsx"],
     devDependencies: ["tailwindcss"],
     aiRule: {
       prompt: "Use Tailwind utilities consistently in Vue templates and extract repeated patterns.",
       when: "When styling Vue components.",
       checklist: [
         "Keep template class bindings readable.",
+        "Use the generated `cn` helper when composing conditional class names.",
         "Extract repeated class groups into components or computed values.",
         "Check responsive classes across mobile and desktop layouts.",
       ],

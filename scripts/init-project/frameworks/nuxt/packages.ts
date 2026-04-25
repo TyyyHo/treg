@@ -5,6 +5,7 @@ export const nuxtPackagePresets: readonly PackagePreset[] = [
     id: "tailwind",
     label: "Nuxt Tailwind",
     description: "Tailwind CSS module for Nuxt applications.",
+    dependencies: ["clsx"],
     devDependencies: ["@nuxtjs/tailwindcss"],
     aiRule: {
       prompt:
@@ -12,6 +13,7 @@ export const nuxtPackagePresets: readonly PackagePreset[] = [
       when: "When styling Nuxt pages, layouts, or components.",
       checklist: [
         "Configure the module through Nuxt config.",
+        "Use the generated `cn` helper when composing conditional class names.",
         "Keep repeated class groups in reusable components.",
         "Check generated UI across mobile and desktop layouts.",
       ],

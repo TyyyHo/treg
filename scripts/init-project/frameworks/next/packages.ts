@@ -5,12 +5,14 @@ export const nextPackagePresets: readonly PackagePreset[] = [
     id: "tailwind",
     label: "Tailwind CSS",
     description: "Utility-first styling for Next.js applications.",
+    dependencies: ["clsx"],
     devDependencies: ["tailwindcss"],
     aiRule: {
       prompt: "Use Tailwind utilities consistently and keep reusable UI patterns in components.",
       when: "When styling Next.js routes, layouts, or components.",
       checklist: [
         "Keep route layout styling separate from reusable component styling.",
+        "Use the generated `cn` helper when composing conditional class names.",
         "Avoid one-off arbitrary values when a token or shared pattern fits.",
         "Check responsive class combinations for mobile and desktop.",
       ],

@@ -5,6 +5,7 @@ export const sveltePackagePresets: readonly PackagePreset[] = [
     id: "tailwind",
     label: "Tailwind CSS",
     description: "Utility-first styling for Svelte applications.",
+    dependencies: ["clsx"],
     devDependencies: ["tailwindcss"],
     aiRule: {
       prompt:
@@ -12,6 +13,7 @@ export const sveltePackagePresets: readonly PackagePreset[] = [
       when: "When styling Svelte components or routes.",
       checklist: [
         "Keep class directives and class strings readable.",
+        "Use the generated `cn` helper when composing conditional class names.",
         "Extract repeated class groups into components.",
         "Check responsive classes across mobile and desktop layouts.",
       ],
