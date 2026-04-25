@@ -9,7 +9,7 @@ import {
   USAGE,
 } from "./cli.ts"
 import { resolveFramework } from "./frameworks/index.ts"
-import { collectInitPrompts } from "./init-prompts.ts"
+import { collectAddPrompts, collectInitPrompts } from "./init-prompts.ts"
 import { runFeatureRules } from "./mrm-rules/index.ts"
 import { detectPackageManager, runScript } from "./package-manager.ts"
 import { formatStep } from "./utils.ts"
@@ -61,6 +61,19 @@ export async function main(argv: string[] = process.argv.slice(2)): Promise<void
       testRunner: resolveTestRunner(framework.id, null),
     })
     pm = prompted.pm
+    formatter = prompted.formatter
+    testRunner = prompted.testRunner
+    enabledFeatures = prompted.enabledFeatures
+    aiRules = prompted.aiRules
+    aiTools = prompted.aiTools
+  }
+
+  if (options.command === "add" && options.features.length === 0) {
+    const prompted = await collectAddPrompts({
+      projectDir,
+      formatter,
+      testRunner,
+    })
     formatter = prompted.formatter
     testRunner = prompted.testRunner
     enabledFeatures = prompted.enabledFeatures

@@ -80,7 +80,7 @@ npx @tylercore/treg init --dry-run
 Add features to an existing project:
 
 ```bash
-npx @tylercore/treg add --features lint,format
+npx @tylercore/treg add
 ```
 
 ---
@@ -126,6 +126,34 @@ During `init`, `Treg` asks for:
 
 ---
 
+## Add Interactive Flow
+
+During `add`, `Treg` asks for:
+
+1. **Features** (multi-select)
+   - lint
+   - format
+   - TypeScript
+   - test
+   - husky
+   - AI rules guidance (only when an AI rules file already exists)
+
+2. **Formatter** (only when `format` is selected)
+   - `prettier`
+   - `oxfmt`
+
+3. **Test runner** (only when `test` is selected)
+   - `jest`
+   - `vitest`
+   - `skip`
+
+4. **AI tools** (only when AI rules guidance is selected)
+   - Claude
+   - Codex
+   - Gemini
+
+---
+
 ## Common Usage
 
 Initialize project:
@@ -143,20 +171,26 @@ npx @tylercore/treg init --dry-run
 Add only lint + format:
 
 ```bash
-npx @tylercore/treg add --features lint,format
+npx @tylercore/treg add
 ```
+
+Then select `lint` and `format`.
 
 Add format using `oxfmt`:
 
 ```bash
-npx @tylercore/treg add --features format --formatter oxfmt
+npx @tylercore/treg add
 ```
+
+Then select `format`, then `oxfmt`.
 
 Add test using `vitest`:
 
 ```bash
-npx @tylercore/treg add --features test --test-runner vitest
+npx @tylercore/treg add
 ```
+
+Then select `test`, then `vitest`.
 
 ---
 
@@ -170,6 +204,14 @@ npx @tylercore/treg add --features test --test-runner vitest
 ```
 
 ### `add`
+
+Interactive mode:
+
+```text
+add
+```
+
+Optional automation flags:
 
 ```text
 --framework <node|react|next|vue|svelte|nuxt>

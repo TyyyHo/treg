@@ -27,7 +27,7 @@ export const USAGE = `Usage: treg <command> [options]
 
 Commands:
   init                                Initialize infra rules in a project (interactive setup)
-  add                                 Add selected infra features to an existing project
+  add                                 Add selected infra features to an existing project (interactive setup)
   list                                List supported frameworks, features, formatters, and test runners
 
 Options:
@@ -35,10 +35,11 @@ Options:
   -h, --help                          Show help
 
 Add command options:
+  (no add-specific flags)             Start interactive feature selection
   --framework <node|react|next|vue|svelte|nuxt>
                                       Optional framework override (default: auto-detected)
   --features <lint,format,typescript,test,husky>
-                                      Features to install (all selected by default)
+                                      Features to install (optional automation mode)
   --dir <path>                        Target directory (defaults to current directory)
   --formatter <prettier|oxfmt>        Formatter for format feature (default: prettier)
   --test-runner <jest|vitest>         Optional test runner override (default: vue/nuxt=vitest, others=jest)

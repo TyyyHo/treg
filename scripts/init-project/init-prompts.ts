@@ -1,3 +1,5 @@
+import { existsSync } from "node:fs"
+import path from "node:path"
 import { stdin as input, stdout as output } from "node:process"
 import type {
   AiTool,
@@ -9,6 +11,11 @@ import type {
 } from "./types.ts"
 
 const DEFAULT_AI_TOOLS: readonly AiTool[] = ["claude", "codex", "gemini"]
+const AI_TOOL_DOCS: Record<AiTool, string> = {
+  claude: "CLAUDE.md",
+  codex: "AGENTS.md",
+  gemini: "GEMINI.md",
+}
 
 type InitPromptFeature = FeatureName | "aiRules"
 type AiToolChoice = AiTool | "skip"
@@ -35,6 +42,20 @@ export interface InitPromptResult {
 
 interface InitPromptDefaults {
   pm: PackageManager
+  formatter: Formatter
+  testRunner: TestRunner
+}
+
+export interface AddPromptResult {
+  formatter: Formatter
+  testRunner: TestRunner
+  enabledFeatures: EnabledFeatures
+  aiRules: boolean
+  aiTools: AiTool[]
+}
+
+interface AddPromptDefaults {
+  projectDir: string
   formatter: Formatter
   testRunner: TestRunner
 }
@@ -150,6 +171,13 @@ function resolveAiToolSelection(selected: readonly AiToolChoice[]): {
   }
 }
 
+function resolveExistingAiTools(
+  projectDir: string,
+  aiTools: readonly AiTool[] = DEFAULT_AI_TOOLS
+): AiTool[] {
+  return aiTools.filter((tool) => existsSync(path.join(projectDir, AI_TOOL_DOCS[tool])))
+}
+
 async function promptMultiChoice<T extends string>(
   message: string,
   choices: readonly Choice<T>[],
@@ -255,7 +283,99 @@ export async function collectInitPrompts(defaults: InitPromptDefaults): Promise<
   }
 }
 
+export async function collectAddPrompts(defaults: AddPromptDefaults): Promise<AddPromptResult> {
+  const defaultAiTools = resolveExistingAiTools(defaults.projectDir)
+
+  if (!input.isTTY || !output.isTTY) {
+    console.log("Non-interactive shell detected. Use add defaults.")
+    return {
+      formatter: defaults.formatter,
+      testRunner: defaults.testRunner,
+      enabledFeatures: {
+        lint: true,
+        format: true,
+        typescript: true,
+        test: true,
+        husky: true,
+      },
+      aiRules: defaultAiTools.length > 0,
+      aiTools: defaultAiTools,
+    }
+  }
+
+  console.log("\nAdd setup")
+
+  const featureChoices =
+    defaultAiTools.length > 0
+      ? FEATURE_CHOICES
+      : FEATURE_CHOICES.filter((choice) => choice.value !== "aiRules")
+  const featureAnswers = await promptMultiChoice("1) Features", featureChoices, [], true)
+  const featureSelection = toFeatureSelection(featureAnswers)
+
+  let formatter = defaults.formatter
+  if (featureSelection.enabledFeatures.format) {
+    formatter = await promptSingleChoice("2) Formatter", FORMATTER_CHOICES, defaults.formatter)
+  } else {
+    console.log("2) Formatter skipped (format feature not selected)")
+  }
+
+  let testRunner = defaults.testRunner
+  const enabledFeatures = { ...featureSelection.enabledFeatures }
+  if (featureSelection.enabledFeatures.test) {
+    const selectedTestRunner = await promptSingleChoice(
+      "3) Test runner",
+      TEST_RUNNER_CHOICES,
+      defaults.testRunner
+    )
+
+    if (selectedTestRunner === "skip") {
+      enabledFeatures.test = false
+      console.log("Test feature disabled by selection: skip")
+    } else {
+      testRunner = selectedTestRunner
+    }
+  } else {
+    console.log("3) Test runner skipped (test feature not selected)")
+  }
+
+  let aiTools: AiTool[] = []
+  let aiRules = featureSelection.aiRules
+
+  if (aiRules) {
+    const aiToolChoices = AI_TOOL_CHOICES.filter(
+      (choice) => choice.value === "skip" || defaultAiTools.includes(choice.value)
+    )
+    const aiToolAnswers = await promptMultiChoice(
+      "4) AI tools (Space to select, A to toggle all)",
+      aiToolChoices,
+      defaultAiTools,
+      true
+    )
+    const aiToolSelection = resolveAiToolSelection(aiToolAnswers)
+    aiRules = aiToolSelection.aiRules
+    aiTools = aiToolSelection.aiTools
+    if (!aiRules) {
+      console.log("AI rules guidance disabled by selection: skip")
+    }
+  } else {
+    console.log(
+      defaultAiTools.length > 0
+        ? "4) AI tools skipped (AI rules guidance not selected)"
+        : "4) AI tools skipped (no AI rules files found)"
+    )
+  }
+
+  return {
+    formatter,
+    testRunner,
+    enabledFeatures,
+    aiRules,
+    aiTools,
+  }
+}
+
 export const __testables__ = {
+  resolveExistingAiTools,
   toFeatureSelection,
   resolveAiToolSelection,
 }

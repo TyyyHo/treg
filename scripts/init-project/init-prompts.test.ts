@@ -1,5 +1,8 @@
 import { describe, expect, it } from "@jest/globals"
 import { __testables__ } from "./init-prompts.ts"
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs"
+import path from "node:path"
+import { tmpdir } from "node:os"
 
 describe("init prompts helpers", () => {
   it("maps selected features and AI rules toggle", () => {
@@ -45,5 +48,17 @@ describe("init prompts helpers", () => {
       aiRules: false,
       aiTools: [],
     })
+  })
+
+  it("detects existing AI rules files for add prompts", () => {
+    const dir = mkdtempSync(path.join(tmpdir(), "treg-add-prompts-ai-"))
+    try {
+      writeFileSync(path.join(dir, "AGENTS.md"), "# Agents\n", "utf8")
+      writeFileSync(path.join(dir, "GEMINI.md"), "# Gemini\n", "utf8")
+
+      expect(__testables__.resolveExistingAiTools(dir)).toEqual(["codex", "gemini"])
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
+    }
   })
 })

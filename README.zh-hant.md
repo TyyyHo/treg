@@ -79,7 +79,7 @@ npx @tylercore/treg init --dry-run
 為既有專案補上指定功能：
 
 ```bash
-npx @tylercore/treg add --features lint,format
+npx @tylercore/treg add
 ```
 
 ---
@@ -125,6 +125,34 @@ npx @tylercore/treg add --features lint,format
 
 ---
 
+## add 互動流程
+
+執行 `add` 時，`Treg` 會依序詢問：
+
+1. **Features**（可複選）
+   - lint
+   - format
+   - TypeScript
+   - test
+   - husky
+   - AI rules guidance（僅在 AI rules 檔案已存在時顯示）
+
+2. **Formatter**（僅在選到 `format` 時詢問）
+   - `prettier`
+   - `oxfmt`
+
+3. **Test runner**（僅在選到 `test` 時詢問）
+   - `jest`
+   - `vitest`
+   - `skip`
+
+4. **AI tools**（僅在選到 AI rules guidance 時詢問）
+   - Claude
+   - Codex
+   - Gemini
+
+---
+
 ## 常見用法
 
 初始化專案：
@@ -142,20 +170,26 @@ npx @tylercore/treg init --dry-run
 只加入 lint + format：
 
 ```bash
-npx @tylercore/treg add --features lint,format
+npx @tylercore/treg add
 ```
+
+接著選擇 `lint` 與 `format`。
 
 format 使用 `oxfmt`：
 
 ```bash
-npx @tylercore/treg add --features format --formatter oxfmt
+npx @tylercore/treg add
 ```
+
+接著選擇 `format`，再選擇 `oxfmt`。
 
 test 使用 `vitest`：
 
 ```bash
-npx @tylercore/treg add --features test --test-runner vitest
+npx @tylercore/treg add
 ```
+
+接著選擇 `test`，再選擇 `vitest`。
 
 ---
 
@@ -169,6 +203,14 @@ npx @tylercore/treg add --features test --test-runner vitest
 ```
 
 ### `add`
+
+互動模式：
+
+```text
+add
+```
+
+自動化可選參數：
 
 ```text
 --framework <node|react|next|vue|svelte|nuxt>
