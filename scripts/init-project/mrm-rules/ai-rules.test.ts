@@ -152,6 +152,22 @@ describe("ai-rules helpers", () => {
     }
   })
 
+  it("resolves non-delegating docs with AGENTS when another doc delegates", async () => {
+    const dir = mkdtempSync(path.join(tmpdir(), "treg-ai-rules-mixed-"))
+    try {
+      writeFileSync(path.join(dir, "AGENTS.md"), "# Agents\n", "utf8")
+      writeFileSync(path.join(dir, "CLAUDE.md"), "# Claude\n", "utf8")
+      writeFileSync(path.join(dir, "GEMINI.md"), "@AGENTS.md\n", "utf8")
+
+      await expect(__testables__.resolveAiRulesDocs(dir)).resolves.toEqual([
+        { filePath: path.join(dir, "AGENTS.md"), mode: "rules" },
+        { filePath: path.join(dir, "CLAUDE.md"), mode: "rules" },
+      ])
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
+    }
+  })
+
   it("resolves all three docs when none exist", async () => {
     const dir = mkdtempSync(path.join(tmpdir(), "treg-ai-rules-missing-"))
     try {
@@ -215,12 +231,12 @@ describe("ai-rules helpers", () => {
     }
   })
 
-  it("injects guidance only into AGENTS when Claude delegates to AGENTS", async () => {
+  it("injects guidance into AGENTS and non-delegating docs", async () => {
     const dir = mkdtempSync(path.join(tmpdir(), "treg-ai-rules-selective-"))
     try {
-      writeFileSync(path.join(dir, "CLAUDE.md"), "# Claude\n\n@AGENTS.md\n", "utf8")
+      writeFileSync(path.join(dir, "CLAUDE.md"), "# Claude\n", "utf8")
       writeFileSync(path.join(dir, "AGENTS.md"), "# Agents\n", "utf8")
-      writeFileSync(path.join(dir, "GEMINI.md"), "# Gemini\n", "utf8")
+      writeFileSync(path.join(dir, "GEMINI.md"), "# Gemini\n\n@AGENTS.md\n", "utf8")
 
       await runAiRulesRule({
         command: "add",
@@ -255,10 +271,10 @@ describe("ai-rules helpers", () => {
       const agentsDoc = await readFile(path.join(dir, "AGENTS.md"), "utf8")
       const geminiDoc = await readFile(path.join(dir, "GEMINI.md"), "utf8")
 
-      expect(claudeDoc).not.toContain("### Git rules")
-      expect(claudeDoc).toContain("@AGENTS.md")
+      expect(claudeDoc).toContain("### Git rules")
       expect(agentsDoc).toContain("### Git rules")
       expect(geminiDoc).not.toContain("### Git rules")
+      expect(geminiDoc).toContain("@AGENTS.md")
     } finally {
       rmSync(dir, { recursive: true, force: true })
     }

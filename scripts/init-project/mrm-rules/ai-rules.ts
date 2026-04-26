@@ -120,15 +120,23 @@ async function resolveAiRulesDocs(projectDir: string): Promise<AiRulesTarget[]> 
     ]
   }
 
-  const hasDelegatedRules =
-    (await fileContainsAgentsReference(claudePath)) ||
-    (await fileContainsAgentsReference(geminiPath))
+  const claudeDelegates = await fileContainsAgentsReference(claudePath)
+  const geminiDelegates = await fileContainsAgentsReference(geminiPath)
+  const targets: AiRulesTarget[] = []
 
-  if (hasDelegatedRules) {
-    return [{ filePath: agentsPath, mode: "rules" }]
+  if (existsSync(agentsPath) || claudeDelegates || geminiDelegates) {
+    targets.push({ filePath: agentsPath, mode: "rules" })
   }
 
-  return existingPaths.map((filePath) => ({ filePath, mode: "rules" }))
+  if (existsSync(claudePath) && !claudeDelegates) {
+    targets.push({ filePath: claudePath, mode: "rules" })
+  }
+
+  if (existsSync(geminiPath) && !geminiDelegates) {
+    targets.push({ filePath: geminiPath, mode: "rules" })
+  }
+
+  return targets
 }
 
 function getEnabledFeatures(enabledFeatures: EnabledFeatures): FeatureName[] {
