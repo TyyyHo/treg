@@ -1,6 +1,6 @@
 {
   "name": "@tylercore/treg",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Treg is a CLI tool that injects an engineering immune system into existing projects.",
   "keywords": [
     "ai-rules",
