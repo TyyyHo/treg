@@ -149,6 +149,8 @@ Durante `setup`, `Treg` pregunta:
    - Opciones por framework, como Tailwind CSS, Zustand o Pinia, TanStack Query, TanStack Router y paquetes i18n
    - Puedes dejar esta selección vacía y continuar
 
+Cuando se usa pnpm, Treg comprueba si el `node_modules` existente está enlazado a un store diferente del que quiere usar la versión activa de pnpm. Si detecta una diferencia de store, Treg se detiene y muestra una indicación para reconstruirlo, sin borrar archivos automáticamente. Reconstruye `node_modules` manualmente con `rm -rf node_modules` y `pnpm install`, y luego vuelve a ejecutar Treg.
+
 ---
 
 ## Flujo de `add`

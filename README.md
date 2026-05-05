@@ -165,6 +165,8 @@ Node.js is treated as a backend target, so its package list focuses on server, c
 
 Selected packages are installed as dependencies or dev dependencies based on how they are used. When AI rules guidance is enabled, selected packages also add package-specific guidance to the selected AI rules files.
 
+When using pnpm, Treg checks whether the existing `node_modules` is linked to a different pnpm store than the active pnpm version wants to use. If a store mismatch is detected, Treg stops and prints a rebuild hint instead of deleting files automatically. Rebuild `node_modules` manually with `rm -rf node_modules` and `pnpm install`, then rerun Treg.
+
 ---
 
 ## Add Flow

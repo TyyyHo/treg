@@ -148,6 +148,8 @@ npx @tylercore/treg add zustand
    - framework 专属选项，例如 Tailwind CSS、Zustand 或 Pinia、TanStack Query、TanStack Router，以及各 framework 对应的 i18n 套件
    - 可不选任何项目直接进入下一步
 
+使用 pnpm 时，Treg 会检查既有 `node_modules` 是否链接到与当前 pnpm 版本不同的 store。若检测到 store 不一致，Treg 会停止并打印重建提示，不会自动删除文件。请手动执行 `rm -rf node_modules` 和 `pnpm install` 重建后，再重新执行 Treg。
+
 ---
 
 ## add 流程

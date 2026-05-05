@@ -149,6 +149,8 @@ npx @tylercore/treg add zustand
    - Tailwind CSS、Zustand / Pinia、TanStack Query、TanStack Router、framework 別 i18n などの選択肢
    - 何も選ばずに次へ進めます
 
+pnpm を使う場合、Treg は既存の `node_modules` が現在の pnpm が使う store と異なる store にリンクされていないかを確認します。store の不一致を検出した場合、Treg はファイルを自動削除せず、停止して再構築手順を表示します。`rm -rf node_modules` と `pnpm install` を手動で実行してから、Treg を再実行してください。
+
 ---
 
 ## `add` のフロー

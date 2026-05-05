@@ -164,6 +164,8 @@ Node.js 會視為後端目標，因此套件清單會偏向 server、設定、lo
 
 選到的套件會依用途安裝到 dependencies 或 devDependencies。若啟用 AI rules guidance，也會把所選套件各自的提示詞寫入所選 AI rules 檔案。
 
+使用 pnpm 時，Treg 會檢查既有 `node_modules` 是否連到與目前 pnpm 版本不同的 store。若偵測到 store 不一致，Treg 會停止並印出重建提示，不會自動刪除檔案。請手動執行 `rm -rf node_modules` 與 `pnpm install` 重建後，再重新執行 Treg。
+
 ---
 
 ## add 流程
