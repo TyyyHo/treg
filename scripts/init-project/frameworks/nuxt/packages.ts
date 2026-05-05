@@ -15,6 +15,7 @@ export const nuxtPackagePresets: readonly PackagePreset[] = [
         "Configure the module through Nuxt config.",
         "Use the generated `cn` helper when composing conditional class names.",
         "Keep repeated class groups in reusable components.",
+        "Prefer Tailwind built-in utilities or project-defined class names, such as `min-w-37.5` instead of `min-w-[150px]`, and avoid one-off arbitrary values when a token or shared pattern fits.",
         "Check generated UI across mobile and desktop layouts.",
       ],
     },

@@ -21,8 +21,13 @@ describe("ai-rules helpers", () => {
 
     expect(content).toContain("### Git rules")
     expect(content).toContain("1. Never use --no-verify")
+    expect(content).toContain("2. Branch names must use `<type>/<summary-kebab-case>`")
+    expect(content).toContain("3. Commit messages must use `<type>: <summary>`")
     expect(content).toContain(
-      "2. Unless the user asks, never relax TypeScript, lint, or format constraints, and never skip tests."
+      "4. Recommended commit types: `feat`, `fix`, `refactor`, `docs`, `test`, `chore`, `build`, `ci`."
+    )
+    expect(content).toContain(
+      "5. Unless the user asks, never relax TypeScript, lint, or format constraints, and never skip tests."
     )
     expect(content).toContain("### Validation Rules and Checklist")
     expect(content).toContain("1. Formatting")
@@ -58,6 +63,11 @@ describe("ai-rules helpers", () => {
     expect(content).toContain("2. Zustand")
     expect(content).toContain("3. TanStack Query")
     expect(content).toContain("Prompt: Use Zustand for client-only state")
+    expect(content).toContain("Prefer Tailwind built-in utilities or project-defined class names")
+    expect(content).toContain(
+      "Split stores by a single feature that can be described in one sentence"
+    )
+    expect(content).toContain("Before adding global state, verify the state cannot stay local")
   })
 
   it("reads package guidance from an existing rule section", () => {

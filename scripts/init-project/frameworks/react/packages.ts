@@ -15,7 +15,7 @@ export const reactPackagePresets: readonly PackagePreset[] = [
         "Keep class lists readable and grouped by layout, spacing, color, and state.",
         "Use the generated `cn` helper when composing conditional class names.",
         "Avoid duplicating long class combinations across components.",
-        "Use design tokens or config values instead of one-off arbitrary values when patterns repeat.",
+        "Prefer Tailwind built-in utilities or project-defined class names, such as `min-w-37.5` instead of `min-w-[150px]`, and avoid one-off arbitrary values when a token or shared pattern fits.",
       ],
     },
   },
@@ -29,7 +29,8 @@ export const reactPackagePresets: readonly PackagePreset[] = [
       when: "When local component state or context becomes awkward for UI state.",
       checklist: [
         "Do not mirror server cache data in Zustand.",
-        "Keep stores focused on one domain of UI state.",
+        "Split stores by a single feature that can be described in one sentence to avoid cross-feature state coupling and meaningless re-renders.",
+        "Before adding global state, verify the state cannot stay local to a page or feature module; prefer `useState` when it is enough.",
         "Expose actions from the store instead of mutating state directly.",
       ],
     },

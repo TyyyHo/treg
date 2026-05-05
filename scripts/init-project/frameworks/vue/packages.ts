@@ -14,6 +14,7 @@ export const vuePackagePresets: readonly PackagePreset[] = [
         "Keep template class bindings readable.",
         "Use the generated `cn` helper when composing conditional class names.",
         "Extract repeated class groups into components or computed values.",
+        "Prefer Tailwind built-in utilities or project-defined class names, such as `min-w-37.5` instead of `min-w-[150px]`, and avoid one-off arbitrary values when a token or shared pattern fits.",
         "Check responsive classes across mobile and desktop layouts.",
       ],
     },
