@@ -13,7 +13,7 @@ export const nextPackagePresets: readonly PackagePreset[] = [
       checklist: [
         "Keep route layout styling separate from reusable component styling.",
         "Use the generated `cn` helper when composing conditional class names.",
-        "Avoid one-off arbitrary values when a token or shared pattern fits.",
+        "Prefer Tailwind built-in utilities or project-defined class names, such as `min-w-37.5` instead of `min-w-[150px]`, and avoid one-off arbitrary values when a token or shared pattern fits.",
         "Check responsive class combinations for mobile and desktop.",
       ],
     },
@@ -29,6 +29,8 @@ export const nextPackagePresets: readonly PackagePreset[] = [
       checklist: [
         "Do not import Zustand stores into server components.",
         "Do not mirror server-fetched data in Zustand.",
+        "Split stores by a single feature that can be described in one sentence to avoid cross-feature state coupling and meaningless re-renders.",
+        "Before adding global state, verify the state cannot stay local to a page or feature module; prefer `useState` when it is enough.",
         "Keep store modules behind `use client` entry points when needed.",
       ],
     },
