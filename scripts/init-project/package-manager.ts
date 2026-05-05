@@ -72,6 +72,7 @@ export function installPackages(
   let command = ""
 
   if (pm === "pnpm") {
+    assertPnpmStoreCompatible(projectDir, dryRun)
     command = `pnpm add ${isDev ? "-D " : ""}${list}`
   } else if (pm === "bun") {
     command = `bun add ${isDev ? "-d " : ""}${list}`
@@ -91,6 +92,79 @@ export function installPackages(
     `${dryRun ? "[dry-run] " : ""}Installing ${isDev ? "dev " : ""}dependencies: ${packages.join(", ")}`
   )
   runCommand(command, projectDir, dryRun)
+}
+
+interface PnpmStoreMismatch {
+  currentStoreDir: string
+  linkedStoreDir: string
+}
+
+function assertPnpmStoreCompatible(projectDir: string, dryRun: boolean): void {
+  if (dryRun) return
+
+  const mismatch = getPnpmStoreMismatch(projectDir)
+  if (!mismatch) return
+
+  throw new Error(formatPnpmStoreMismatchMessage(mismatch))
+}
+
+function getPnpmStoreMismatch(
+  projectDir: string,
+  currentStoreDir = getCurrentPnpmStoreDir(projectDir)
+): PnpmStoreMismatch | null {
+  const linkedStoreDir = readPnpmLinkedStoreDir(projectDir)
+  if (!linkedStoreDir || !currentStoreDir) return null
+
+  if (isSamePath(linkedStoreDir, currentStoreDir)) return null
+
+  return {
+    currentStoreDir,
+    linkedStoreDir,
+  }
+}
+
+function readPnpmLinkedStoreDir(projectDir: string): string | null {
+  const modulesYamlPath = path.join(projectDir, "node_modules", ".modules.yaml")
+  if (!existsSync(modulesYamlPath)) return null
+
+  try {
+    const content = readFileSync(modulesYamlPath, "utf8")
+    const match = content.match(/^\s*"?storeDir"?\s*:\s*["']([^"']+)["']/m)
+    return match?.[1] ?? null
+  } catch {
+    return null
+  }
+}
+
+function getCurrentPnpmStoreDir(projectDir: string): string | null {
+  try {
+    const storeDir = execSync("pnpm store path", {
+      cwd: projectDir,
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    }).trim()
+    return storeDir.length > 0 ? storeDir : null
+  } catch {
+    return null
+  }
+}
+
+function isSamePath(left: string, right: string): boolean {
+  return path.normalize(left) === path.normalize(right)
+}
+
+function formatPnpmStoreMismatchMessage(mismatch: PnpmStoreMismatch): string {
+  return [
+    "Detected pnpm store mismatch.",
+    `node_modules is currently linked from: ${mismatch.linkedStoreDir}`,
+    `Current pnpm wants to use: ${mismatch.currentStoreDir}`,
+    "This usually happens after switching pnpm major versions.",
+    '`pnpm install` or `pnpm install --force` may report "Already up to date" without rebuilding the old node_modules links.',
+    "Treg will not remove node_modules automatically.",
+    "Fix it manually, then rerun Treg:",
+    "  rm -rf node_modules",
+    "  pnpm install",
+  ].join("\n")
 }
 
 function shouldUseNpmLegacyPeerDeps(projectDir: string): boolean {
@@ -145,4 +219,7 @@ function extractMajorVersion(rawVersion: string): number | null {
 export const __testables__ = {
   shouldUseNpmLegacyPeerDeps,
   extractMajorVersion,
+  readPnpmLinkedStoreDir,
+  getPnpmStoreMismatch,
+  formatPnpmStoreMismatchMessage,
 }

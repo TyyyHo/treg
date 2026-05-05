@@ -58,6 +58,8 @@ npx @tylercore/treg add typescript
 npx @tylercore/treg add zustand
 ```
 
+When using pnpm, Treg stops with a rebuild hint if the existing `node_modules` is linked to a different pnpm store than the active pnpm version wants to use. It does not delete files automatically. Rebuild manually with `rm -rf node_modules` and `pnpm install`, then rerun Treg.
+
 ---
 
 ## Commands

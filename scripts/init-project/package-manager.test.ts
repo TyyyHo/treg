@@ -1,4 +1,4 @@
-import { mkdtemp, writeFile } from "node:fs/promises"
+import { mkdir, mkdtemp, writeFile } from "node:fs/promises"
 import os from "node:os"
 import path from "node:path"
 import { describe, expect, it } from "@jest/globals"
@@ -78,5 +78,56 @@ describe("npm legacy peer dependency fallback", () => {
     )
 
     expect(__testables__.shouldUseNpmLegacyPeerDeps(baseDir)).toBe(false)
+  })
+})
+
+describe("pnpm store mismatch guidance", () => {
+  it("reads the linked store from node_modules metadata", async () => {
+    const baseDir = await mkdtemp(path.join(os.tmpdir(), "treg-pm-"))
+    await mkdir(path.join(baseDir, "node_modules"), { recursive: true })
+    await writeFile(
+      path.join(baseDir, "node_modules", ".modules.yaml"),
+      ['  "layoutVersion": 5,', '  "storeDir": "/Users/test/Library/pnpm/store/v10",'].join("\n")
+    )
+
+    expect(__testables__.readPnpmLinkedStoreDir(baseDir)).toBe("/Users/test/Library/pnpm/store/v10")
+  })
+
+  it("returns mismatch details when the linked and current stores differ", async () => {
+    const baseDir = await mkdtemp(path.join(os.tmpdir(), "treg-pm-"))
+    await mkdir(path.join(baseDir, "node_modules"), { recursive: true })
+    await writeFile(
+      path.join(baseDir, "node_modules", ".modules.yaml"),
+      'storeDir: "/Users/test/Library/pnpm/store/v10"\n'
+    )
+
+    expect(
+      __testables__.getPnpmStoreMismatch(baseDir, "/Users/test/Library/pnpm/store/v11")
+    ).toEqual({
+      currentStoreDir: "/Users/test/Library/pnpm/store/v11",
+      linkedStoreDir: "/Users/test/Library/pnpm/store/v10",
+    })
+  })
+
+  it("does not report a mismatch when the stores match", async () => {
+    const baseDir = await mkdtemp(path.join(os.tmpdir(), "treg-pm-"))
+    await mkdir(path.join(baseDir, "node_modules"), { recursive: true })
+    await writeFile(
+      path.join(baseDir, "node_modules", ".modules.yaml"),
+      'storeDir: "/Users/test/Library/pnpm/store/v11"\n'
+    )
+
+    expect(
+      __testables__.getPnpmStoreMismatch(baseDir, "/Users/test/Library/pnpm/store/v11")
+    ).toBeNull()
+  })
+
+  it("explains how to rebuild node_modules manually", () => {
+    expect(
+      __testables__.formatPnpmStoreMismatchMessage({
+        currentStoreDir: "/Users/test/Library/pnpm/store/v11",
+        linkedStoreDir: "/Users/test/Library/pnpm/store/v10",
+      })
+    ).toContain("rm -rf node_modules")
   })
 })
